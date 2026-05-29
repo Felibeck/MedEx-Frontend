@@ -6,7 +6,7 @@ export type estudio =
     tipoEstudio:string;
     fecha: Date;
     institucion:string;
-    informe:string;
-    medico: medico;
+    informe?:string;
+    medico?: medico;
 
 }
