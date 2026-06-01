@@ -4,7 +4,7 @@ import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 
 import CardEstudio from "./components/cardEstudio"
-
+import MobileHeader from "./components/mobileHeader"
 
 import './App.css'
 
@@ -15,7 +15,7 @@ function App() {
 
   return (
     <>
-
+      <MobileHeader/>
       <CardEstudio fotos={fotosPrueba} tipoEstudio="Mamografia" fecha={new Date(2026, 11, 17)} institucion="Hospital Unidas" />
     </>
   )
