@@ -23,7 +23,7 @@ const infoEstudio = ( {fotos, tipoEstudio, fecha, institucion, informe, medico}:
                     <p>{informe}</p>
 
                     <div>
-                        <img src={medico.foto} alt={medico.nombre} />
+                        <img src={medico.fotoPerfil} alt={medico.nombre} />
                         <p>{medico.especialidad}</p>
                         <p>{medico.nombre}</p>
                     </div>
