@@ -1,4 +1,5 @@
 import type { estudio } from "../../../types/estudio";
+import CarruselFotos from "../carruselFotos";
 
 
 const infoEstudio = ( {fotos, tipoEstudio, fecha, institucion, informe, medico}: estudio ) =>
@@ -13,8 +14,7 @@ const infoEstudio = ( {fotos, tipoEstudio, fecha, institucion, informe, medico}:
             </div>
                 
 
-            <carruselFotos/>
-
+            <CarruselFotos cortes={fotos.map((img, i) => ({ id: `c${i}`, label: `C${i + 1}`, imagen: img }))} />
 
                 <div>
 
