@@ -1,0 +1,4 @@
+export type consulta = 
+{
+    paciente:
+}
