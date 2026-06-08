@@ -1,9 +1,8 @@
-import { useNavigate } from "react-router-dom";
 import type { estudio } from "../../../types/estudio";
+
 
 const infoEstudio = ( {fotos, tipoEstudio, fecha, institucion, informe, medico}: estudio ) =>
 {
-    const navigate = useNavigate();
     return (
         <>
 
@@ -13,12 +12,8 @@ const infoEstudio = ( {fotos, tipoEstudio, fecha, institucion, informe, medico}:
                 <p>institucion: {institucion}</p>    
             </div>
                 
-                <div>
-                {fotos.map((foto, index) =>
-                {
-                    return <img key={index} src={foto} alt={`foto ${index}`} />
-                })}
-                </div>
+
+            <carruselFotos/>
 
 
                 <div>
