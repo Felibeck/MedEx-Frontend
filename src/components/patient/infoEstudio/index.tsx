@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import type { estudio } from "../../../types/estudio";
 
 const infoEstudio = ( {fotos, tipoEstudio, fecha, institucion, informe, medico}: estudio ) =>
 {
+    const navigate = useNavigate();
     return (
         <>
 

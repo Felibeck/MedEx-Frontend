@@ -1,4 +1,4 @@
-import ListaEstudios from "../patient/listaEstudios";
+import ListaEstudios from "./listaEstudios"
 import type { estudio } from "../../types/estudio";
 
 const mockEstudios: estudio[] = [
@@ -18,7 +18,7 @@ const mockEstudios: estudio[] = [
   },
 ];
 
-const DoctorHome = () => {
+const PatientHome = () => {
   return (
     <main style={{ padding: 20 }}>
       <h1>Home Médico — Visualización de estudios</h1>
@@ -27,4 +27,4 @@ const DoctorHome = () => {
   );
 };
 
-export default DoctorHome;
+export default PatientHome;
