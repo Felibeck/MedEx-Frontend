@@ -15,7 +15,7 @@ const sidebar = ( { medico }: {medico:medico} ) =>
             </ul>
 
             <div>
-                <img src={medico.foto} alt={medico.nombre} />
+                <img src={medico.fotoPerfil} alt={medico.nombre} />
                 <p>{medico.nombre} {medico.apellido}</p>
                 <p>{medico.especialidad}</p>
             </div>

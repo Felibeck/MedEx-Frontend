@@ -1,4 +1,3 @@
-import { useState } from "react";
 const SearchBar = ({ setDni }) => {
 
     const handleSubmit = (e) => {
