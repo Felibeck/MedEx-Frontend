@@ -1,59 +1,110 @@
+// src/components/web/registroConsulta/index.tsx
 import { useState } from "react";
 import axios from "axios";
 import "./registroConsulta.css";
 
-const RegistroConsulta = () => {
-	const [otros, setOtros] = useState(""); //comentarios de la consulta
-	const [loading, setLoading] = useState(false);
-	const [result, setResult] = useState<string | null>(null);
+type Props = {
+    pacienteId: number;
+    onGuardado?: () => void;
+};
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-		setLoading(true);
-		setResult(null);
+const RegistroConsulta = ({ pacienteId, onGuardado }: Props) => {
+    const [motivoConsulta, setMotivoConsulta] = useState("");
+    const [recordatorio, setRecordatorio] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
-		try {
-			// Build the URL with query params as provided
-			const base = "http://localhost:3000/api/doctors/consultas";
-			const params = new URLSearchParams({
-				otros: otros || "",
-			});
+    const handleSubmit = async (esBorrador: boolean) => {
+        setLoading(true);
+        setError(null);
 
-			const url = `${base}?${params.toString()}`;
+        try {
+            await axios.post("http://localhost:3000/api/doctors/consultas", {
+                pacienteId,
+                otros: motivoConsulta,
+                recordatorioProximaCita: recordatorio,
+                borrador: esBorrador,
+            });
 
-			// If the endpoint expects POST with body, adjust accordingly.
-			const resp = await axios.post(url);
+            onGuardado?.();
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err)) {
+                setError(err.message);
+            } else {
+                setError("Error inesperado");
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
-			setResult(JSON.stringify(resp.data));
-		} catch (err: any) {
-			setResult(err?.message || "Error");
-		} finally {
-			setLoading(false);
-		} 
-    }
+    return (
+        <div className="registro-consulta">
+            <h2 className="registro-consulta__titulo">Registro de Consulta</h2>
 
+            <section className="registro-consulta__seccion">
+                <p className="registro-consulta__label">Motivo de consulta y síntomas</p>
+                <textarea
+                    className="registro-consulta__textarea"
+                    placeholder="Describa el cuadro actual del paciente..."
+                    value={motivoConsulta}
+                    onChange={(e) => setMotivoConsulta(e.target.value)}
+                    rows={4}
+                />
+            </section>
 
-	return (
-		<div className="registro-consulta">
-			<h2>Registro de Consulta</h2>
-			<form onSubmit={handleSubmit} className="registro-form">
-				<label>
-					Comentarios de la consulta:
-					<textarea value={otros} onChange={(e) => setOtros(e.target.value)} />
-				</label>
+            {/* <section className="registro-consulta__acciones-grid">
+                <button type="button" className="registro-consulta__accion-btn">
+                    <span className="registro-consulta__accion-icon">📋</span>
+                    Cargar Receta
+                </button>
+                <button type="button" className="registro-consulta__accion-btn">
+                    <span className="registro-consulta__accion-icon">✅</span>
+                    Cargar Diagnóstico
+                </button>
+                <button type="button" className="registro-consulta__accion-btn">
+                    <span className="registro-consulta__accion-icon">🔬</span>
+                    Solicitar Estudio
+                </button>
+            </section> */}
 
-				<button type="submit" disabled={loading}>Registrar</button>
-			</form>
+            <section className="registro-consulta__recordatorio">
+                <div className="registro-consulta__recordatorio-info">
+                    <span className="registro-consulta__recordatorio-icon">📅</span>
+                    <span>Recordatorio Próxima Cita</span>
+                </div>
+                <label className="registro-consulta__toggle">
+                    <input
+                        type="checkbox"
+                        checked={recordatorio}
+                        onChange={(e) => setRecordatorio(e.target.checked)}
+                    />
+                    <span className="registro-consulta__toggle-slider" />
+                </label>
+            </section>
 
-			{loading && <p>Enviando...</p>}
-			{result && (
-				<div className="registro-result">
-					<h3>Respuesta</h3>
-					<pre>{result}</pre>
-				</div>
-			)}      
-		</div>
-	);
+            {error && <p className="registro-consulta__error">{error}</p>}
+
+            <div className="registro-consulta__footer">
+                <button
+                    type="button"
+                    className="registro-consulta__btn-borrador"
+                    onClick={() => handleSubmit(true)}
+                    disabled={loading}
+                >
+                    Guardar como Borrador
+                </button>
+                <button
+                    type="button"
+                    className="registro-consulta__btn-guardar"
+                    onClick={() => handleSubmit(false)}
+                    disabled={loading}
+                >
+                    {loading ? "Guardando..." : "Finalizar y Guardar Consulta"}
+                </button>
+            </div>
+        </div>
+    );
 };
 
 export default RegistroConsulta;
