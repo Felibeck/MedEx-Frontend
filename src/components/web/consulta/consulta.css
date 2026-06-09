@@ -1,0 +1,323 @@
+.consulta-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* ── Paciente card ── */
+.consulta-paciente-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #d9e5e2;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.consulta-paciente-card__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.consulta-paciente-card__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #d4eceb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.consulta-paciente-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.consulta-paciente-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.consulta-paciente-card__nombre {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0b3131;
+  margin: 0;
+  text-align: left;
+}
+
+.consulta-paciente-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #416464;
+}
+
+.consulta-paciente-card__dot {
+  color: #bcc9c6;
+}
+
+.consulta-paciente-card__cobertura {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #1f6f6b;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+.consulta-paciente-card__btn-historial {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #1f6f6b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.consulta-paciente-card__btn-historial:hover {
+  background: #185c59;
+}
+
+/* ── Antecedentes ── */
+.consulta-antecedentes {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #d9e5e2;
+  padding: 16px 24px;
+  display: flex;
+  gap: 0;
+}
+
+.consulta-antecedentes__col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.consulta-antecedentes__label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+.consulta-antecedentes__valor {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0b3131;
+  margin: 0;
+}
+
+.consulta-antecedentes__nota {
+  font-size: 12px;
+  color: #416464;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.consulta-antecedentes__divider {
+  width: 1px;
+  background: #d9e5e2;
+  margin: 0 24px;
+  align-self: stretch;
+}
+
+/* ── Formulario de registro ── */
+.consulta-form-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #d9e5e2;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.consulta-form-card__titulo {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1f6f6b;
+  margin: 0;
+  text-align: left;
+}
+
+.consulta-form-card__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.consulta-form-card__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #416464;
+  text-align: left;
+}
+
+.consulta-form-card__textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px 14px;
+  border: 1.5px solid #d9e5e2;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #0b3131;
+  resize: vertical;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+  background: #fff;
+}
+
+.consulta-form-card__textarea:focus {
+  border-color: #1f6f6b;
+}
+
+.consulta-form-card__textarea::placeholder {
+  color: #bcc9c6;
+}
+
+/* Acciones rápidas */
+.consulta-form-card__acciones {
+  display: flex;
+  gap: 16px;
+}
+
+.consulta-accion-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 12px;
+  border: 1.5px dashed #bcc9c6;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  color: #1f6f6b;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.consulta-accion-btn:hover {
+  background: #e8f5f4;
+  border-color: #1f6f6b;
+}
+
+/* Recordatorio toggle */
+.consulta-form-card__recordatorio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border: 1.5px solid #d9e5e2;
+  border-radius: 10px;
+  background: #f9fbfb;
+}
+
+.consulta-form-card__recordatorio-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0b3131;
+}
+
+.consulta-toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  background: #d9e5e2;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.consulta-toggle--on {
+  background: #1f6f6b;
+}
+
+.consulta-toggle__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: left 0.2s;
+}
+
+.consulta-toggle--on .consulta-toggle__thumb {
+  left: 23px;
+}
+
+/* Footer botones */
+.consulta-form-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.consulta-btn {
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.consulta-btn--ghost {
+  background: transparent;
+  color: #416464;
+}
+
+.consulta-btn--ghost:hover {
+  background: #e8f5f4;
+  color: #1f6f6b;
+}
+
+.consulta-btn--primary {
+  background: #1f6f6b;
+  color: #fff;
+}
+
+.consulta-btn--primary:hover {
+  background: #185c59;
+}
