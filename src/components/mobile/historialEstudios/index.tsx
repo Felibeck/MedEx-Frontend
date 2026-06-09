@@ -1,57 +1,48 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import MobileHeader from '../mobileHeader'
+import type { estudio } from '../../../types/estudio'
 import './historialEstudios.css'
-
-type Estudio = {
-  id: number
-  titulo: string
-  fecha: string
-  institucion: string
-  imagen: string
-}
-
-const mockEstudios: Estudio[] = [
-  {
-    id: 1,
-    titulo: 'Rayos X Tórax',
-    fecha: '12 MAYO 2024',
-    institucion: 'HOSPITAL ITALIANO',
-    imagen: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Chest_X-ray_in_influenza_and_Haemophilus_influenzae.jpg/800px-Chest_X-ray_in_influenza_and_Haemophilus_influenzae.jpg',
-  },
-  {
-    id: 2,
-    titulo: 'Rayos X Tórax',
-    fecha: '12 MAYO 2024',
-    institucion: 'HOSPITAL ITALIANO',
-    imagen: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Chest_X-ray_in_influenza_and_Haemophilus_influenzae.jpg/800px-Chest_X-ray_in_influenza_and_Haemophilus_influenzae.jpg',
-  },
-]
 
 type Filtro = 'Todos' | 'Imágenes' | 'Laboratorio' | 'Cirugías'
 const FILTROS: Filtro[] = ['Todos', 'Imágenes', 'Laboratorio', 'Cirugías']
 
-const HistorialEstudios = () => {
+type Props = {
+  estudios: estudio[]
+  titulo?: string
+  subtitulo?: string
+}
+
+const HistorialEstudios = ({
+  estudios,
+  titulo = 'Analisis Completo',
+  subtitulo = 'Un estudio mas profundo de tu salud',
+}: Props) => {
+  const navigate = useNavigate()
   const [filtro, setFiltro] = useState<Filtro>('Todos')
+
+  const estudiosFiltrados = filtro === 'Todos'
+    ? estudios
+    : estudios.filter((e) => e.categoria?.toLowerCase().includes(filtro.toLowerCase()))
 
   return (
     <div className="historial-page">
       <MobileHeader />
 
       <div className="historial-content">
-        {/* Título con flecha */}
+        {/* Título */}
         <div className="historial-titulo-wrap">
           <h1 className="historial-titulo">
             <span className="historial-back-arrow">←</span>
-            Analisis Completo
+            {titulo}
           </h1>
-          <p className="historial-subtitulo">Un estudio mas profundo de tu salud</p>
+          <p className="historial-subtitulo">{subtitulo}</p>
         </div>
 
-        {/* Sección estudios + toggle vista */}
+        {/* Sección header + toggle vista */}
         <div className="historial-seccion-header">
           <h2 className="historial-seccion-titulo">Estudios e Imágenes</h2>
           <div className="historial-vista-toggle">
-            {/* Vista cuadrícula */}
             <button type="button" className="historial-vista-btn historial-vista-btn--active" aria-label="Vista cuadrícula">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="3" y="3" width="7" height="7" rx="1"/>
@@ -60,7 +51,6 @@ const HistorialEstudios = () => {
                 <rect x="14" y="14" width="7" height="7" rx="1"/>
               </svg>
             </button>
-            {/* Vista lista */}
             <button type="button" className="historial-vista-btn" aria-label="Vista lista">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="3" y="4" width="18" height="4" rx="1"/>
@@ -71,7 +61,7 @@ const HistorialEstudios = () => {
           </div>
         </div>
 
-        {/* Filtros chips */}
+        {/* Filtros */}
         <div className="historial-filtros">
           {FILTROS.map((f) => (
             <button
@@ -85,30 +75,38 @@ const HistorialEstudios = () => {
           ))}
         </div>
 
-        {/* Cards de estudios */}
+        {/* Cards */}
         <div className="historial-lista">
-          {mockEstudios.map((est) => (
+          {estudiosFiltrados.map((est) => (
             <div key={est.id} className="estudio-card">
-              {/* Imagen con label encima */}
               <div className="estudio-card__img-wrap">
                 <img
-                  src={est.imagen}
-                  alt={est.titulo}
+                  src={est.fotos[0]}
+                  alt={est.tipoEstudio}
                   className="estudio-card__img"
                 />
-                <span className="estudio-card__label">{est.titulo}</span>
+                <span className="estudio-card__label">{est.tipoEstudio}</span>
               </div>
 
-              {/* Metadata */}
               <div className="estudio-card__meta">
-                <span className="estudio-card__fecha">{est.fecha}</span>
-                <span className="estudio-card__institucion">{est.institucion}</span>
+                <span className="estudio-card__fecha">
+                  {est.fecha.toLocaleDateString('es-AR', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                  }).toUpperCase()}
+                </span>
+                <span className="estudio-card__institucion">
+                  {est.institucion.toUpperCase()}
+                </span>
               </div>
 
-              {/* Acciones */}
               <div className="estudio-card__acciones">
-                <button type="button" className="estudio-card__btn-ver">
-                  {/* Ícono ojo */}
+                <button
+                  type="button"
+                  className="estudio-card__btn-ver"
+                  onClick={() => navigate(`/patients/estudio/${est.id}`)}
+                >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M1 12S5 4 12 4s11 8 11 8-4 8-11 8S1 12 1 12z"/>
                     <circle cx="12" cy="12" r="3"/>
@@ -116,7 +114,6 @@ const HistorialEstudios = () => {
                   Ver
                 </button>
                 <button type="button" className="estudio-card__btn-share" aria-label="Compartir">
-                  {/* Ícono compartir */}
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="18" cy="5" r="3"/>
                     <circle cx="6" cy="12" r="3"/>
