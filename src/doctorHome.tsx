@@ -1,6 +1,5 @@
 import { useState } from "react";
-import type PatientHome from "../mobile/patientHome";
-import SearchBar from "./searchBar";
+import SearchBar from "./components/web/searchBar";
 
 const doctorHome = () => {
 

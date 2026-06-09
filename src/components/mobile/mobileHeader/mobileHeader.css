@@ -1,0 +1,75 @@
+.mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 66px;
+  background-color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Lado izquierdo: logo + texto */
+.mobile-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Círculo teal que envuelve el logo */
+.mobile-header__logo-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #5fafa9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.mobile-header__logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  /* Invertir a blanco para que se vea sobre fondo teal */
+  filter: brightness(0) invert(1);
+}
+
+.mobile-header__title {
+  font-family: var(--heading, system-ui, sans-serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f6f6b;
+  letter-spacing: -0.2px;
+}
+
+/* Lado derecho: iconos */
+.mobile-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mobile-header__icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  color: #0b3131;
+  transition: background-color 0.15s;
+}
+
+.mobile-header__icon-btn:hover {
+  background-color: rgba(95, 175, 169, 0.12);
+}
+
+.mobile-header__icon-btn:active {
+  background-color: rgba(95, 175, 169, 0.25);
+}
