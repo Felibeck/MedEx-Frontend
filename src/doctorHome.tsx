@@ -1,18 +1,28 @@
+// src/doctorHome.tsx
 import { useState } from "react";
 import SearchBar from "./components/web/searchBar";
+import RegistroConsulta from "./components/web/registroConsulta";
+import type { paciente } from "./types/paciente";
 
-const doctorHome = () => {
+const DoctorHome = () => {
+    const [paciente, setPaciente] = useState<paciente | null>(null);
 
-    const [dni, setDni] = useState("");
+    return (
+        <main style={{ padding: 32, display: "flex", flexDirection: "column", gap: 24 }}>
+            <h1>Panel del Médico</h1>
 
-  return (
-    <main style={{ padding: 20 }}>
-      <h1>Pagina del medico</h1>
-      <SearchBar setDni={setDni} />
-        <h1>{dni}</h1>
-    </main>
+            <SearchBar onPacienteEncontrado={setPaciente} />
 
-  );
+            {paciente && (
+                <div>
+                    <h2>Paciente encontrado</h2>
+                    <p>{paciente.nombre} {paciente.apellido} — DNI: {paciente.dni}</p>
+
+                    {/* <RegistroConsulta pacienteId={paciente.id} /> */}
+                </div>
+            )}
+        </main>
+    );
 };
 
-export default doctorHome;
+export default DoctorHome;

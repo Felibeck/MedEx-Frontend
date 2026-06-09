@@ -1,11 +1,12 @@
-import type { usuario } from "./Usuario";
+// src/types/paciente.ts
+import { uuid } from 'uuid';
+import type { usuario } from './Usuario';
 
 export type paciente = usuario & {
-    usuarioId: string;
+    paciente_id: uuid.UUID;
     dni: string;
     edad: number;
-    identidadGenero: string;
+    identidad_genero: string;
     telefono: string;
-    fotoPerfil: string;
-
+    fotoPerfil?: string;
 }

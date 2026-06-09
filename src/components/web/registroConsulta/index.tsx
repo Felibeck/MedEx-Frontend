@@ -4,7 +4,7 @@ import axios from "axios";
 import "./registroConsulta.css";
 
 type Props = {
-    pacienteId: number;
+    pacienteId: string; // antes era number
     onGuardado?: () => void;
 };
 
