@@ -1,0 +1,227 @@
+.historial-page {
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #e8f5f4;
+  display: flex;
+  flex-direction: column;
+}
+
+.historial-content {
+  padding: 0 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Título ── */
+.historial-titulo-wrap {
+  padding: 24px 0 16px;
+}
+
+.historial-titulo {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0b3131;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: -0.5px;
+  text-align: left;
+}
+
+.historial-back-arrow {
+  font-size: 26px;
+  font-weight: 400;
+  color: #0b3131;
+  margin-right: 2px;
+}
+
+.historial-subtitulo {
+  font-size: 14px;
+  color: #416464;
+  margin: 0;
+  text-align: left;
+}
+
+/* ── Sección header ── */
+.historial-seccion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0 12px;
+}
+
+.historial-seccion-titulo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0b3131;
+  margin: 0;
+  text-align: left;
+}
+
+.historial-vista-toggle {
+  display: flex;
+  gap: 4px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 3px;
+  border: 1px solid #bcc9c6;
+}
+
+.historial-vista-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+  color: #416464;
+  transition: background 0.15s, color 0.15s;
+}
+
+.historial-vista-btn--active {
+  background: #1f6f6b;
+  color: #fff;
+}
+
+/* ── Filtros chips ── */
+.historial-filtros {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  margin-bottom: 16px;
+}
+
+.historial-filtros::-webkit-scrollbar {
+  display: none;
+}
+
+.historial-chip {
+  flex-shrink: 0;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1.5px solid #bcc9c6;
+  background: transparent;
+  color: #416464;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.historial-chip--active {
+  background: #1f6f6b;
+  color: #fff;
+  border-color: #1f6f6b;
+}
+
+/* ── Lista de estudios ── */
+.historial-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Card estudio ── */
+.estudio-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.estudio-card__img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: #111;
+  overflow: hidden;
+}
+
+.estudio-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.estudio-card__label {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.estudio-card__meta {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px 0;
+}
+
+.estudio-card__fecha,
+.estudio-card__institucion {
+  font-size: 11px;
+  font-weight: 600;
+  color: #416464;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+/* ── Acciones ── */
+.estudio-card__acciones {
+  display: flex;
+  gap: 10px;
+  padding: 10px 16px 16px;
+  align-items: center;
+}
+
+.estudio-card__btn-ver {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  background: #1f6f6b;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.estudio-card__btn-ver:hover {
+  background: #185c59;
+}
+
+.estudio-card__btn-share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: transparent;
+  border: 1.5px solid #bcc9c6;
+  border-radius: 10px;
+  color: #0b3131;
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.estudio-card__btn-share:hover {
+  background: #e8f5f4;
+}

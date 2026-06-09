@@ -1,0 +1,390 @@
+.detalle-page {
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #e8f5f4;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+.detalle-header {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 64px;
+  background: #e8f5f4;
+  gap: 8px;
+}
+
+.detalle-header__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #0b3131;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.detalle-header__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0b3131;
+  flex: 1;
+}
+
+.detalle-header__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #5fafa9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* ── Contenido scrollable ── */
+.detalle-content {
+  padding: 0 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Info card ── */
+.detalle-info-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detalle-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #416464;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.detalle-titulo {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0b3131;
+  margin: 0;
+  text-align: left;
+}
+
+.detalle-meta-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.detalle-meta-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detalle-meta-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.detalle-meta-value-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.detalle-meta-value {
+  font-size: 13px;
+  color: #0b3131;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.detalle-meta-divider {
+  width: 1px;
+  background: #e5e4e7;
+  align-self: stretch;
+  margin: 0 16px;
+}
+
+/* ── Visor DICOM ── */
+.visor-wrap {
+  background-color: #111827;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: monospace;
+  color: #a0e0d0;
+}
+
+.visor-meta {
+  padding: 8px 12px;
+  font-size: 10px;
+  color: #5eead4;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.5;
+}
+
+.visor-imagen-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+}
+
+.visor-imagen {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(30%) contrast(1.1);
+}
+
+.visor-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background-color 0.2s;
+}
+
+.visor-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.visor-btn--prev { left: 10px; }
+.visor-btn--next { right: 10px; }
+
+.visor-corte-label {
+  background-color: #111827;
+  color: #f0f0f0;
+  text-align: center;
+  font-size: 12px;
+  padding: 7px 0;
+  font-family: sans-serif;
+  letter-spacing: 0.4px;
+}
+
+.visor-footer {
+  background-color: #0d1b2a;
+  padding: 10px 12px 12px;
+}
+
+.visor-footer-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #5eead4;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
+}
+
+.visor-footer-count {
+  color: #7dd3c8;
+}
+
+.visor-miniaturas {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: #2d4a5a transparent;
+}
+
+.visor-miniatura {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: #1a2e3d;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  width: 68px;
+}
+
+.visor-miniatura img {
+  width: 100%;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 4px;
+  filter: grayscale(20%);
+}
+
+.visor-miniatura span {
+  font-size: 10px;
+  color: #9ca3af;
+  font-family: monospace;
+}
+
+.visor-miniatura--activa {
+  border-color: #22d3ee;
+}
+
+.visor-miniatura--activa span {
+  color: #22d3ee;
+}
+
+/* ── Informe Médico ── */
+.detalle-informe-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detalle-informe-titulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0b3131;
+  margin: 0;
+  text-align: left;
+}
+
+.detalle-informe-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.detalle-informe-texto p {
+  font-size: 13px;
+  color: #416464;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.detalle-informe-texto strong {
+  color: #0b3131;
+}
+
+/* Doctor */
+.detalle-doctor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: #f3f6f3;
+  border-radius: 12px;
+  margin-top: 4px;
+}
+
+.detalle-doctor__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #d4eceb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.detalle-doctor__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.detalle-doctor__nombre {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0b3131;
+}
+
+.detalle-doctor__especialidad {
+  font-size: 12px;
+  color: #416464;
+  line-height: 1.4;
+}
+
+.detalle-doctor__badge {
+  flex-shrink: 0;
+}
+
+/* ── Botones ── */
+.detalle-btn {
+  width: 100%;
+  height: 52px;
+  border-radius: 12px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.15s;
+}
+
+.detalle-btn:active {
+  opacity: 0.85;
+}
+
+.detalle-btn--primary {
+  background: #1f6f6b;
+  color: #fff;
+}
+
+.detalle-btn--secondary {
+  background: #fff;
+  color: #1f6f6b;
+  border: 1.5px solid #bcc9c6;
+}
+
+/* ── Nota ── */
+.detalle-nota {
+  font-size: 12px;
+  color: #416464;
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 8px;
+  margin: 0;
+}
