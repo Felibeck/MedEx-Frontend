@@ -1,3 +1,4 @@
+import type { TipoEstudioEnum } from '../config/tiposEstudio'
 import type { medico } from './medico'
 
 export type corteEstudio = {
@@ -7,17 +8,17 @@ export type corteEstudio = {
 }
 
 export type estudio = {
-  id: number
-  tipoEstudio: string   // ej: "Mamografia"
-  categoria: string     // ej: "RESONANCIA" — badge superior
+  id: string | number
+  tipo: TipoEstudioEnum
+  tipoEstudio: string
+  categoria: string
   fecha: Date
   institucion: string
-  fotos: string[]       // usado en historial (primera foto = thumbnail)
-  cortes?: corteEstudio[] // imágenes del visor DICOM, si aplica
+  fotos: string[]
+  cortes?: corteEstudio[]
   informe?: string
   medico?: medico
-  // Metadata DICOM opcional
-  pacienteId?: string   // ej: "#MED-982-S"
-  pacienteDob?: string  // ej: "14/05/1978"
-  metadataDicom?: string // ej: "TE: 12.8ms | TR: 450ms"
+  pacienteId?: string
+  pacienteDob?: string
+  metadataDicom?: string
 }

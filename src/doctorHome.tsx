@@ -7,8 +7,8 @@ import type { turno } from './types/turno'
 import type { paciente } from './types/paciente'
 import type { consulta } from './types/consulta'
 import './doctorHome.css'
+import { v4 as uuidv4 } from 'uuid';
 
-// ── Mock data — reemplazar con fetch real ──────────────────────────
 const MOCK_MEDICO: medico = {
   id: 1,
   nombre: 'Dr. Julian',
@@ -30,7 +30,7 @@ const MOCK_PACIENTE_1: paciente = {
   email: 'martina@email.com',
   password: '',
   esMedico: false,
-  usuarioId: 'pac-001',
+  paciente_id: uuidv4(),
   dni: '32000001',
   edad: 42,
   identidadGenero: 'Femenino',
@@ -89,7 +89,6 @@ const ANTECEDENTES: Record<number, { antecedentes: string; notaAnterior: string;
     motivoAnterior: 'Revisión de estudios periódicos',
   },
 }
-// ────────────────────────────────────────────────────────────────────
 
 const DoctorHome = () => {
   const [activeNav, setActiveNav] = useState('agenda')
@@ -120,7 +119,6 @@ const DoctorHome = () => {
       />
 
       <div className="doctor-main">
-        {/* Search bar */}
         <header className="doctor-topbar">
           <div className="doctor-search-wrap">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -135,7 +133,6 @@ const DoctorHome = () => {
           </div>
         </header>
 
-        {/* Content */}
         <div className="doctor-content">
           <Agenda
             turnos={MOCK_TURNOS}
