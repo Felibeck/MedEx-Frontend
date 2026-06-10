@@ -1,33 +1,3 @@
-<<<<<<< HEAD
-// src/doctorHome.tsx
-import { useState } from "react";
-import SearchBar from "./components/web/searchBar";
-import RegistroConsulta from "./components/web/registroConsulta";
-import type { paciente } from "./types/paciente";
-
-const DoctorHome = () => {
-    const [paciente, setPaciente] = useState<paciente | null>(null);
-
-    return (
-        <main style={{ padding: 32, display: "flex", flexDirection: "column", gap: 24 }}>
-            <h1>Panel del Médico</h1>
-
-            <SearchBar onPacienteEncontrado={setPaciente} />
-
-            {paciente && (
-                <div>
-                    <h2>Paciente encontrado</h2>
-                    <p>{paciente.nombre} {paciente.apellido} — DNI: {paciente.dni}</p>
-
-                    {/* <RegistroConsulta pacienteId={paciente.id} /> */}
-                </div>
-            )}
-        </main>
-    );
-};
-
-export default DoctorHome;
-=======
 import { useState } from 'react'
 import Sidebar from './components/web/sidebar'
 import Agenda from './components/web/agenda'
@@ -38,7 +8,6 @@ import type { paciente } from './types/paciente'
 import type { consulta } from './types/consulta'
 import './doctorHome.css'
 
-// ── Mock data — reemplazar con fetch real ──────────────────────────
 const MOCK_MEDICO: medico = {
   id: 1,
   nombre: 'Dr. Julian',
@@ -119,7 +88,6 @@ const ANTECEDENTES: Record<number, { antecedentes: string; notaAnterior: string;
     motivoAnterior: 'Revisión de estudios periódicos',
   },
 }
-// ────────────────────────────────────────────────────────────────────
 
 const DoctorHome = () => {
   const [activeNav, setActiveNav] = useState('agenda')
@@ -150,7 +118,6 @@ const DoctorHome = () => {
       />
 
       <div className="doctor-main">
-        {/* Search bar */}
         <header className="doctor-topbar">
           <div className="doctor-search-wrap">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -165,7 +132,6 @@ const DoctorHome = () => {
           </div>
         </header>
 
-        {/* Content */}
         <div className="doctor-content">
           <Agenda
             turnos={MOCK_TURNOS}
@@ -190,4 +156,3 @@ const DoctorHome = () => {
 }
 
 export default DoctorHome
->>>>>>> d807e75cb8ce55331b38fa6afa96cbc44fc7154b
