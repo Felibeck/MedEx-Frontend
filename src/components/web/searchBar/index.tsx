@@ -37,14 +37,21 @@ const SearchBar = ({ onPacienteEncontrado }: Props) => {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") buscarPaciente();
+        if (e.key === "Enter") {
+            e.preventDefault();
+            if (!loading && dni.trim()) buscarPaciente();
+        }
     };
 
     return (
-        <div className="search-bar">
+        <>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
             <input
                 type="text"
-                className="search-bar__input"
+                className="doctor-search"
                 placeholder="Buscar paciente por DNI..."
                 value={dni}
                 onChange={(e) => setDni(e.target.value)}
@@ -52,7 +59,7 @@ const SearchBar = ({ onPacienteEncontrado }: Props) => {
             />
             <button
                 type="button"
-                className="search-bar__btn"
+                className="search-bar__btn--hidden"
                 onClick={buscarPaciente}
                 disabled={loading || !dni.trim()}
             >
@@ -60,7 +67,7 @@ const SearchBar = ({ onPacienteEncontrado }: Props) => {
             </button>
 
             {error && <p className="search-bar__error">{error}</p>}
-        </div>
+        </>
     );
 };
 

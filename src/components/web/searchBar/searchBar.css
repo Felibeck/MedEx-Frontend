@@ -1,0 +1,12 @@
+/* Minimal styles to integrate into doctor header layout */
+.search-bar__btn--hidden {
+	display: none;
+}
+
+.search-bar__error {
+	color: #b91c1c;
+	font-size: 12px;
+	margin-left: 8px;
+}
+
+/* keep this file lightweight; main layout comes from doctorHome.css */

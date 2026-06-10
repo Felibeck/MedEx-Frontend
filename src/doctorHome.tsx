@@ -7,6 +7,7 @@ import type { turno } from './types/turno'
 import type { paciente } from './types/paciente'
 import type { consulta } from './types/consulta'
 import './doctorHome.css'
+import SearchBar from './components/web/searchBar'
 import { v4 as uuidv4 } from 'uuid';
 
 const MOCK_MEDICO: medico = {
@@ -93,6 +94,7 @@ const ANTECEDENTES: Record<number, { antecedentes: string; notaAnterior: string;
 const DoctorHome = () => {
   const [activeNav, setActiveNav] = useState('agenda')
   const [turnoActivo, setTurnoActivo] = useState<turno>(MOCK_TURNOS[0])
+  const [pacienteBuscado, setPacienteBuscado] = useState<paciente | null>(null)
 
   const datos = ANTECEDENTES[turnoActivo.id] ?? {
     antecedentes: '',
@@ -108,6 +110,12 @@ const DoctorHome = () => {
     console.log('Guardado como borrador:', data)
   }
 
+  const handlePacienteEncontrado = (p: paciente) => {
+    console.log('Paciente encontrado:', p)
+    setPacienteBuscado(p)
+    setActiveNav('agenda')
+  }
+
   return (
     <div className="doctor-layout">
       <Sidebar
@@ -121,15 +129,7 @@ const DoctorHome = () => {
       <div className="doctor-main">
         <header className="doctor-topbar">
           <div className="doctor-search-wrap">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-            <input
-              type="text"
-              className="doctor-search"
-              placeholder="Buscar pacientes, documentos o códigos CIE-10..."
-            />
+            <SearchBar onPacienteEncontrado={handlePacienteEncontrado} />
           </div>
         </header>
 
@@ -142,7 +142,7 @@ const DoctorHome = () => {
 
           <ConsultaWeb
             key={turnoActivo.id}
-            paciente={turnoActivo.paciente}
+            paciente={pacienteBuscado ?? turnoActivo.paciente}
             antecedentes={datos.antecedentes}
             motivoConsultaPrevia={datos.motivoAnterior}
             notaConsultaPrevia={datos.notaAnterior}
