@@ -6,8 +6,9 @@ const IMAGEN_RX =
 export const MOCK_ESTUDIOS: estudio[] = [
   {
     id: 1,
-    tipoEstudio: 'Mamografia',
-    categoria: 'RESONANCIA',
+    tipo: 'MAMOGRAFIA',
+    tipoEstudio: 'Mamografía',
+    categoria: 'Mamografía',
     fecha: new Date('2024-10-03'),
     institucion: 'Hospital Italiano de Bs As',
     fotos: [IMAGEN_RX],
@@ -38,8 +39,9 @@ export const MOCK_ESTUDIOS: estudio[] = [
   },
   {
     id: 2,
-    tipoEstudio: 'Rayos X Tórax',
-    categoria: 'RADIOGRAFÍA',
+    tipo: 'RESONANCIA',
+    tipoEstudio: 'Resonancia',
+    categoria: 'Resonancia',
     fecha: new Date('2024-05-12'),
     institucion: 'Hospital Italiano',
     fotos: [IMAGEN_RX],

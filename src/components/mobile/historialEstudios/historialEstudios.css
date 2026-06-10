@@ -1,10 +1,12 @@
 .historial-page {
+  width: 100%;
   max-width: 390px;
   margin: 0 auto;
   min-height: 100vh;
   background-color: #e8f5f4;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 .historial-content {
@@ -12,6 +14,8 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 /* ── Título ── */
@@ -90,17 +94,47 @@
 }
 
 /* ── Filtros chips ── */
+.historial-filtros-wrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
 .historial-filtros {
   display: flex;
   gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   overflow-x: auto;
-  padding-bottom: 4px;
-  scrollbar-width: none;
-  margin-bottom: 16px;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #1f6f6b #d9e5e2;
 }
 
 .historial-filtros::-webkit-scrollbar {
+  height: 5px;
+}
+
+.historial-filtros::-webkit-scrollbar-track {
+  background: #d9e5e2;
+  border-radius: 999px;
+}
+
+.historial-filtros::-webkit-scrollbar-thumb {
+  background: #1f6f6b;
+  border-radius: 999px;
+}
+
+.historial-filtros::-webkit-scrollbar-button {
   display: none;
+  width: 0;
+  height: 0;
 }
 
 .historial-chip {
@@ -130,98 +164,14 @@
   gap: 20px;
 }
 
-/* ── Card estudio ── */
-.estudio-card {
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.estudio-card__img-wrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  background: #111;
-  overflow: hidden;
-}
-
-.estudio-card__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.estudio-card__label {
-  position: absolute;
-  bottom: 12px;
-  left: 14px;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-}
-
-.estudio-card__meta {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 16px 0;
-}
-
-.estudio-card__fecha,
-.estudio-card__institucion {
-  font-size: 11px;
-  font-weight: 600;
+.historial-estado {
+  font-size: 14px;
   color: #416464;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
+  text-align: center;
+  padding: 24px 0;
+  margin: 0;
 }
 
-/* ── Acciones ── */
-.estudio-card__acciones {
-  display: flex;
-  gap: 10px;
-  padding: 10px 16px 16px;
-  align-items: center;
-}
-
-.estudio-card__btn-ver {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 48px;
-  background: #1f6f6b;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.estudio-card__btn-ver:hover {
-  background: #185c59;
-}
-
-.estudio-card__btn-share {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: transparent;
-  border: 1.5px solid #bcc9c6;
-  border-radius: 10px;
-  color: #0b3131;
-  cursor: pointer;
-  transition: background 0.15s;
-  flex-shrink: 0;
-}
-
-.estudio-card__btn-share:hover {
-  background: #e8f5f4;
+.historial-estado--error {
+  color: #b42318;
 }
