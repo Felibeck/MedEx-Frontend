@@ -6,37 +6,41 @@ import "./registroConsulta.css";
 type Props = {
     pacienteId: string; // antes era number
     onGuardado?: () => void;
+    organizacionId: string;
+    profesionalId: string;
 };
 
-const RegistroConsulta = ({ pacienteId, onGuardado }: Props) => {
+const RegistroConsulta = ({ pacienteId, onGuardado, organizacionId, profesionalId }: Props) => {
     const [motivoConsulta, setMotivoConsulta] = useState("");
     const [recordatorio, setRecordatorio] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (esBorrador: boolean) => {
-        setLoading(true);
-        setError(null);
+  setLoading(true)
+  setError(null)
 
-        try {
-            await axios.post("http://localhost:3000/api/doctors/consultas", {
-                pacienteId,
-                otros: motivoConsulta,
-                recordatorioProximaCita: recordatorio,
-                borrador: esBorrador,
-            });
+  try {
+    await axios.post("http://localhost:3000/api/doctors/consultas", {
+      dni: pacienteId, // si tienes el DNI, pásalo aquí; si sólo tienes pacienteId, pásalo como prop `dni`
+      profesional_id: profesionalId, // pásalo por props o toma desde contexto/estado
+      organizacion_id: organizacionId, // idem
+      otros: motivoConsulta, // aquí va el textarea
+    //   recordatorioProximaCita: recordatorio,
+    //   borrador: esBorrador,
+    })
 
-            onGuardado?.();
-        } catch (err: unknown) {
-            if (axios.isAxiosError(err)) {
-                setError(err.message);
-            } else {
-                setError("Error inesperado");
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
+    onGuardado?.()
+  } catch (err: unknown) {
+    if (axios.isAxiosError(err)) {
+      setError(err.response?.data?.message ?? err.message)
+    } else {
+      setError("Error inesperado")
+    }
+  } finally {
+    setLoading(false)
+  }
+}
 
     return (
         <div className="registro-consulta">
