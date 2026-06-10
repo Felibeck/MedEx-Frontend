@@ -7,6 +7,7 @@ import type { turno } from './types/turno'
 import type { paciente } from './types/paciente'
 import type { consulta } from './types/consulta'
 import './doctorHome.css'
+import { v4 as uuidv4 } from 'uuid';
 
 const MOCK_MEDICO: medico = {
   id: 1,
@@ -29,7 +30,7 @@ const MOCK_PACIENTE_1: paciente = {
   email: 'martina@email.com',
   password: '',
   esMedico: false,
-  usuarioId: 'pac-001',
+  paciente_id: uuidv4(),
   dni: '32000001',
   edad: 42,
   identidadGenero: 'Femenino',
