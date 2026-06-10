@@ -1,36 +1,69 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 import MobileHeader from '../mobileHeader'
+import ListaEstudios from '../listaEstudios'
+import { fetchEstudiosPaciente } from '../../../api/estudios'
+import { PACIENTE_ID } from '../../../config/constants'
+import { FILTROS_TIPO, type FiltroTipo } from '../../../config/tiposEstudio'
 import type { estudio } from '../../../types/estudio'
 import './historialEstudios.css'
 
-type Filtro = 'Todos' | 'Imágenes' | 'Laboratorio' | 'Cirugías'
-const FILTROS: Filtro[] = ['Todos', 'Imágenes', 'Laboratorio', 'Cirugías']
-
 type Props = {
-  estudios: estudio[]
   titulo?: string
   subtitulo?: string
 }
 
 const HistorialEstudios = ({
-  estudios,
   titulo = 'Analisis Completo',
   subtitulo = 'Un estudio mas profundo de tu salud',
 }: Props) => {
-  const navigate = useNavigate()
-  const [filtro, setFiltro] = useState<Filtro>('Todos')
+  const [estudios, setEstudios] = useState<estudio[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [filtro, setFiltro] = useState<FiltroTipo>('TODOS')
 
-  const estudiosFiltrados = filtro === 'Todos'
-    ? estudios
-    : estudios.filter((e) => e.categoria?.toLowerCase().includes(filtro.toLowerCase()))
+  useEffect(() => {
+    let cancelled = false
+
+    const loadEstudios = async () => {
+      setLoading(true)
+      setError(null)
+
+      try {
+        const data = await fetchEstudiosPaciente(PACIENTE_ID)
+        if (!cancelled) setEstudios(data)
+      } catch (err: unknown) {
+        if (!cancelled) {
+          if (axios.isAxiosError(err)) {
+            setError(err.response?.data?.message ?? err.message)
+          } else if (err instanceof Error) {
+            setError(err.message)
+          } else {
+            setError('No se pudieron cargar los estudios')
+          }
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    loadEstudios()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const estudiosFiltrados =
+    filtro === 'TODOS'
+      ? estudios
+      : estudios.filter((e) => e.tipo === filtro)
 
   return (
     <div className="historial-page">
       <MobileHeader />
 
       <div className="historial-content">
-        {/* Título */}
         <div className="historial-titulo-wrap">
           <h1 className="historial-titulo">
             <span className="historial-back-arrow">←</span>
@@ -39,7 +72,6 @@ const HistorialEstudios = ({
           <p className="historial-subtitulo">{subtitulo}</p>
         </div>
 
-        {/* Sección header + toggle vista */}
         <div className="historial-seccion-header">
           <h2 className="historial-seccion-titulo">Estudios e Imágenes</h2>
           <div className="historial-vista-toggle">
@@ -61,71 +93,35 @@ const HistorialEstudios = ({
           </div>
         </div>
 
-        {/* Filtros */}
-        <div className="historial-filtros">
-          {FILTROS.map((f) => (
-            <button
-              key={f}
-              type="button"
-              className={`historial-chip${filtro === f ? ' historial-chip--active' : ''}`}
-              onClick={() => setFiltro(f)}
-            >
-              {f}
-            </button>
-          ))}
+        <div className="historial-filtros-wrap">
+          <div
+            className="historial-filtros"
+            role="tablist"
+            aria-label="Filtrar por tipo de estudio"
+          >
+            {FILTROS_TIPO.map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={filtro === id}
+                className={`historial-chip${filtro === id ? ' historial-chip--active' : ''}`}
+                onClick={() => setFiltro(id)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Cards */}
-        <div className="historial-lista">
-          {estudiosFiltrados.map((est) => (
-            <div key={est.id} className="estudio-card">
-              <div className="estudio-card__img-wrap">
-                <img
-                  src={est.fotos[0]}
-                  alt={est.tipoEstudio}
-                  className="estudio-card__img"
-                />
-                <span className="estudio-card__label">{est.tipoEstudio}</span>
-              </div>
-
-              <div className="estudio-card__meta">
-                <span className="estudio-card__fecha">
-                  {est.fecha.toLocaleDateString('es-AR', {
-                    day: '2-digit',
-                    month: 'long',
-                    year: 'numeric',
-                  }).toUpperCase()}
-                </span>
-                <span className="estudio-card__institucion">
-                  {est.institucion.toUpperCase()}
-                </span>
-              </div>
-
-              <div className="estudio-card__acciones">
-                <button
-                  type="button"
-                  className="estudio-card__btn-ver"
-                  onClick={() => navigate(`/patients/estudio/${est.id}`)}
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M1 12S5 4 12 4s11 8 11 8-4 8-11 8S1 12 1 12z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                  </svg>
-                  Ver
-                </button>
-                <button type="button" className="estudio-card__btn-share" aria-label="Compartir">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="18" cy="5" r="3"/>
-                    <circle cx="6" cy="12" r="3"/>
-                    <circle cx="18" cy="19" r="3"/>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+        {loading && <p className="historial-estado">Cargando estudios...</p>}
+        {error && <p className="historial-estado historial-estado--error">{error}</p>}
+        {!loading && !error && estudiosFiltrados.length === 0 && (
+          <p className="historial-estado">No hay estudios</p>
+        )}
+        {!loading && !error && estudiosFiltrados.length > 0 && (
+          <ListaEstudios estudios={estudiosFiltrados} />
+        )}
       </div>
     </div>
   )
