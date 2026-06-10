@@ -4,7 +4,7 @@ import type { consulta } from '../../../types/consulta'
 import './consulta.css'
 
 type Props = {
-  paciente: paciente
+  paciente?: paciente | null
   antecedentes?: string
   motivoConsultaPrevia?: string
   notaConsultaPrevia?: string
@@ -26,7 +26,7 @@ const ConsultaWeb = ({
   const [recordatorio, setRecordatorio] = useState(false)
 
   const buildConsulta = (): consulta => ({
-    pacienteId: paciente.id,
+    pacienteId: paciente ? paciente.id : 0,
     motivoConsulta: motivo,
     recordatorioProximaCita: recordatorio,
   })
@@ -38,7 +38,7 @@ const ConsultaWeb = ({
       <div className="consulta-paciente-card">
         <div className="consulta-paciente-card__left">
           <div className="consulta-paciente-card__avatar">
-            {paciente.fotoPerfil ? (
+            {paciente && paciente.fotoPerfil ? (
               <img src={paciente.fotoPerfil} alt={paciente.nombre} />
             ) : (
               <svg width="28" height="28" viewBox="0 0 24 24" fill="#1f6f6b">
@@ -49,12 +49,12 @@ const ConsultaWeb = ({
           </div>
           <div className="consulta-paciente-card__info">
             <h2 className="consulta-paciente-card__nombre">
-              {paciente.nombre} {paciente.apellido}
+              {paciente ? `${paciente.nombre} ${paciente.apellido}` : ''}
             </h2>
             <div className="consulta-paciente-card__meta">
-              <span>{paciente.edad} años</span>
+              <span>{paciente ? `${paciente.edad} años` : ''}</span>
               <span className="consulta-paciente-card__dot">·</span>
-              <span>OSDE 410</span>
+              <span>{paciente ? 'OSDE 410' : ''}</span>
               <span className="consulta-paciente-card__dot">·</span>
               <span className="consulta-paciente-card__cobertura">
                 {/* check */}
@@ -175,6 +175,7 @@ const ConsultaWeb = ({
             type="button"
             className="consulta-btn consulta-btn--ghost"
             onClick={() => onGuardarBorrador?.(buildConsulta())}
+            disabled={!paciente}
           >
             Guardar como Borrador
           </button>
@@ -182,6 +183,7 @@ const ConsultaWeb = ({
             type="button"
             className="consulta-btn consulta-btn--primary"
             onClick={() => onFinalizar?.(buildConsulta())}
+            disabled={!paciente}
           >
             Finalizar y Guardar Consulta
           </button>

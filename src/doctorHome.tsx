@@ -140,16 +140,22 @@ const DoctorHome = () => {
             onSeleccionar={setTurnoActivo}
           />
 
-          <ConsultaWeb
-            key={turnoActivo.id}
-            paciente={pacienteBuscado ?? turnoActivo.paciente}
-            antecedentes={datos.antecedentes}
-            motivoConsultaPrevia={datos.motivoAnterior}
-            notaConsultaPrevia={datos.notaAnterior}
-            onFinalizar={handleFinalizar}
-            onGuardarBorrador={handleBorrador}
-            onVerHistorial={() => console.log('Ver historial:', turnoActivo.paciente.id)}
-          />
+          {pacienteBuscado ? (
+            <ConsultaWeb
+              key={turnoActivo.id}
+              paciente={pacienteBuscado}
+              antecedentes={datos.antecedentes}
+              motivoConsultaPrevia={datos.motivoAnterior}
+              notaConsultaPrevia={datos.notaAnterior}
+              onFinalizar={handleFinalizar}
+              onGuardarBorrador={handleBorrador}
+              onVerHistorial={() => console.log('Ver historial:', pacienteBuscado?.id)}
+            />
+          ) : (
+            <div className="consulta-empty">
+              <p>Busque un paciente por DNI para comenzar la consulta.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -60,3 +60,17 @@
   flex: 1;
   overflow-y: auto;
 }
+
+/* Placeholder when no patient is selected */
+.consulta-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #d9e5e2;
+  border-radius: 8px;
+  padding: 32px;
+  color: #416464;
+  font-size: 16px;
+}
