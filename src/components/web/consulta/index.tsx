@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import type { paciente } from '../../../types/paciente'
 import type { consulta } from '../../../types/consulta'
 import './consulta.css'
@@ -7,6 +6,8 @@ type Props = {
   paciente?: paciente | null
   profesionalId?: string
   organizacionId?: string
+  otros?: string
+  onOtrosChange?: (v: string) => void
   antecedentes?: string
   motivoConsultaPrevia?: string
   notaConsultaPrevia?: string
@@ -18,13 +19,14 @@ const ConsultaWeb = ({
   paciente,
   profesionalId = '',
   organizacionId = '',
+  otros = '',
+  onOtrosChange,
   antecedentes,
   motivoConsultaPrevia,
   notaConsultaPrevia,
   onFinalizar,
   onVerHistorial,
 }: Props) => {
-  const [otros, setOtros] = useState('')
 
   const buildConsulta = (): consulta => ({
     dni: paciente?.dni ?? '',
@@ -118,7 +120,7 @@ const ConsultaWeb = ({
             className="consulta-form-card__textarea"
             placeholder="Describa el cuadro actual del paciente..."
             value={otros}
-            onChange={(e) => setOtros(e.target.value)}
+            onChange={(e) => onOtrosChange?.(e.target.value)}
             rows={4}
           />
         </div>

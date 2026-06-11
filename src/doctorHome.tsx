@@ -24,32 +24,125 @@ const MOCK_MEDICO: medico = {
   fotoPerfil: '',
 }
 
+type EstadoGuardado = 'idle' | 'guardando' | 'ok' | 'error'
+
 const DoctorHome = () => {
   const [activeNav, setActiveNav] = useState('agenda')
   const [turnoActivo, setTurnoActivo] = useState<turno | null>(null)
   const [pacienteBuscado, setPacienteBuscado] = useState<paciente | null>(null)
-  const [guardadoMsg, setGuardadoMsg] = useState<{ tipo: 'ok' | 'error'; texto: string } | null>(null)
+  const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>('idle')
+  const [otrosConsulta, setOtrosConsulta] = useState('')
 
-  const handleGuardar = async (data: consulta) => {
-    setGuardadoMsg(null)
+  const ejecutarGuardado = async (data: consulta) => {
+    setEstadoGuardado('guardando')
     try {
       await postConsulta(data)
-      setGuardadoMsg({ tipo: 'ok', texto: 'Consulta guardada correctamente.' })
+      setEstadoGuardado('ok')
     } catch {
-      setGuardadoMsg({ tipo: 'error', texto: 'Error al guardar la consulta. Intente nuevamente.' })
+      setEstadoGuardado('error')
     }
+  }
+
+  const handleFinalizar = (data: consulta) => {
+    ejecutarGuardado(data)
+  }
+
+  const handleReintentar = () => {
+    // Vuelve al formulario con los datos que el médico había cargado
+    setEstadoGuardado('idle')
+  }
+
+  const handleAceptarOk = () => {
+    setPacienteBuscado(null)
+    setEstadoGuardado('idle')
+    setOtrosConsulta('')
   }
 
   const handlePacienteEncontrado = (p: paciente) => {
     setPacienteBuscado(p)
-    setGuardadoMsg(null)
+    setEstadoGuardado('idle')
+    setOtrosConsulta('')
     setActiveNav('agenda')
   }
 
-  const handleSeleccionarTurno = (turno: turno) => {
-    // Si hay una consulta activa por búsqueda de DNI, ignorar el click
+  const handleSeleccionarTurno = (t: turno) => {
     if (pacienteBuscado) return
-    setTurnoActivo(turno)
+    setTurnoActivo(t)
+  }
+
+  const renderAreaConsulta = () => {
+    if (!pacienteBuscado) {
+      return (
+        <div className="consulta-empty">
+          <p>Busque un paciente por DNI para comenzar la consulta.</p>
+        </div>
+      )
+    }
+
+    if (estadoGuardado === 'guardando') {
+      return (
+        <div className="consulta-estado">
+          <div className="consulta-estado__spinner" aria-label="Guardando consulta" />
+          <p className="consulta-estado__texto">Guardando consulta...</p>
+        </div>
+      )
+    }
+
+    if (estadoGuardado === 'ok') {
+      return (
+        <div className="consulta-estado consulta-estado--ok">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="11" fill="#1f6f6b" />
+            <path d="M7 12l4 4 6-7" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <p className="consulta-estado__texto">Consulta creada correctamente</p>
+          <button
+            type="button"
+            className="consulta-btn consulta-btn--primary"
+            onClick={handleAceptarOk}
+          >
+            Aceptar
+          </button>
+        </div>
+      )
+    }
+
+    if (estadoGuardado === 'error') {
+      return (
+        <div className="consulta-estado consulta-estado--error">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="11" fill="#e55353" />
+            <path d="M12 7v5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" />
+            <circle cx="12" cy="16.5" r="1.2" fill="#fff" />
+          </svg>
+          <p className="consulta-estado__texto">Hubo un error al guardar la consulta</p>
+          <button
+            type="button"
+            className="consulta-btn consulta-btn--primary"
+            onClick={handleReintentar}
+          >
+            Volver al formulario
+          </button>
+        </div>
+      )
+    }
+
+    // idle — mostrar formulario
+    return (
+      <ConsultaWeb
+        key={pacienteBuscado.paciente_id}
+        paciente={pacienteBuscado}
+        profesionalId={MOCK_MEDICO.usuarioId}
+        organizacionId={MOCK_MEDICO.organizacionId}
+        otros={otrosConsulta}
+        onOtrosChange={setOtrosConsulta}
+        antecedentes=""
+        motivoConsultaPrevia=""
+        notaConsultaPrevia=""
+        onFinalizar={handleFinalizar}
+        onVerHistorial={() => console.log('Ver historial:', pacienteBuscado.paciente_id)}
+      />
+    )
   }
 
   return (
@@ -76,30 +169,7 @@ const DoctorHome = () => {
             onSeleccionar={handleSeleccionarTurno}
           />
 
-          {pacienteBuscado ? (
-            <>
-              {guardadoMsg && (
-                <div className={`consulta-msg consulta-msg--${guardadoMsg.tipo}`}>
-                  {guardadoMsg.texto}
-                </div>
-              )}
-              <ConsultaWeb
-                key={pacienteBuscado.paciente_id}
-                paciente={pacienteBuscado}
-                profesionalId={MOCK_MEDICO.usuarioId}
-                organizacionId={MOCK_MEDICO.organizacionId}
-                antecedentes=""
-                motivoConsultaPrevia=""
-                notaConsultaPrevia=""
-                onFinalizar={handleGuardar}
-                onVerHistorial={() => console.log('Ver historial:', pacienteBuscado.paciente_id)}
-              />
-            </>
-          ) : (
-            <div className="consulta-empty">
-              <p>Busque un paciente por DNI para comenzar la consulta.</p>
-            </div>
-          )}
+          {renderAreaConsulta()}
         </div>
       </div>
     </div>
