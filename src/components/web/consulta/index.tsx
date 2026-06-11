@@ -5,30 +5,32 @@ import './consulta.css'
 
 type Props = {
   paciente?: paciente | null
+  profesionalId?: string
+  organizacionId?: string
   antecedentes?: string
   motivoConsultaPrevia?: string
   notaConsultaPrevia?: string
-  onGuardarBorrador?: (data: consulta) => void
   onFinalizar?: (data: consulta) => void
   onVerHistorial?: () => void
 }
 
 const ConsultaWeb = ({
   paciente,
+  profesionalId = '',
+  organizacionId = '',
   antecedentes,
   motivoConsultaPrevia,
   notaConsultaPrevia,
-  onGuardarBorrador,
   onFinalizar,
   onVerHistorial,
 }: Props) => {
-  const [motivo, setMotivo] = useState('')
-  const [recordatorio, setRecordatorio] = useState(false)
+  const [otros, setOtros] = useState('')
 
   const buildConsulta = (): consulta => ({
-    pacienteId: paciente ? paciente.id : 0,
-    motivoConsulta: motivo,
-    recordatorioProximaCita: recordatorio,
+    dni: paciente?.dni ?? '',
+    profesional_id: profesionalId,
+    organizacion_id: organizacionId,
+    otros: otros || undefined,
   })
 
   return (
@@ -115,8 +117,8 @@ const ConsultaWeb = ({
           <textarea
             className="consulta-form-card__textarea"
             placeholder="Describa el cuadro actual del paciente..."
-            value={motivo}
-            onChange={(e) => setMotivo(e.target.value)}
+            value={otros}
+            onChange={(e) => setOtros(e.target.value)}
             rows={4}
           />
         </div>
@@ -147,35 +149,13 @@ const ConsultaWeb = ({
           </button>
         </div>
 
-        {/* Recordatorio */}
-        <div className="consulta-form-card__recordatorio">
-          <div className="consulta-form-card__recordatorio-left">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f6f6b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2"/>
-              <line x1="16" y1="2" x2="16" y2="6"/>
-              <line x1="8" y1="2" x2="8" y2="6"/>
-              <line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-            <span>Recordatorio Próxima Cita</span>
-          </div>
-          <button
-            type="button"
-            className={`consulta-toggle${recordatorio ? ' consulta-toggle--on' : ''}`}
-            onClick={() => setRecordatorio((v) => !v)}
-            aria-pressed={recordatorio}
-            aria-label="Toggle recordatorio próxima cita"
-          >
-            <span className="consulta-toggle__thumb" />
-          </button>
-        </div>
-
         {/* Botones finales */}
         <div className="consulta-form-card__footer">
           <button
             type="button"
             className="consulta-btn consulta-btn--ghost"
-            onClick={() => onGuardarBorrador?.(buildConsulta())}
-            disabled={!paciente}
+            disabled
+            title="Función no disponible aún"
           >
             Guardar como Borrador
           </button>
