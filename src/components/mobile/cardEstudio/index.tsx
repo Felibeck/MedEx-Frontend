@@ -1,31 +1,19 @@
 import { useNavigate } from 'react-router-dom'
-import type { estudio } from '../../../types/estudio'
+import type { estudioResumen } from '../../../types/estudio'
 import './cardEstudio.css'
 
 type Props = {
-  estudio: estudio
+  estudio: estudioResumen
 }
-
-const isImageUrl = (url: string) => /\.(jpe?g|png|gif|webp|bmp)(\?|$)/i.test(url)
 
 const CardEstudio = ({ estudio }: Props) => {
   const navigate = useNavigate()
-  const { id, fotos, tipoEstudio, fecha, institucion } = estudio
-  const thumbnail = fotos[0]
-  const showImage = thumbnail && isImageUrl(thumbnail)
+  const { id, tipoEstudio, fecha, institucion } = estudio
 
   return (
     <div className="estudio-card">
       <div className="estudio-card__img-wrap">
-        {showImage ? (
-          <img
-            src={thumbnail}
-            alt={tipoEstudio}
-            className="estudio-card__img"
-          />
-        ) : (
-          <div className="estudio-card__placeholder">PDF</div>
-        )}
+        <div className="estudio-card__placeholder">{tipoEstudio}</div>
         <span className="estudio-card__label">{tipoEstudio}</span>
       </div>
 

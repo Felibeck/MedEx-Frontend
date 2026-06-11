@@ -1,5 +1,5 @@
 import type { TipoEstudioEnum } from '../config/tiposEstudio'
-import type { medico } from './medico'
+import type { medicoEnEstudio } from './medico'
 
 export type corteEstudio = {
   id: string
@@ -7,18 +7,25 @@ export type corteEstudio = {
   imagen: string
 }
 
-export type estudio = {
-  id: string | number
+// Versión reducida que devuelve el listado /:id/estudios
+export type estudioResumen = {
+  id: string
   tipo: TipoEstudioEnum
   tipoEstudio: string
   categoria: string
   fecha: Date
   institucion: string
+}
+
+// Versión completa que devuelve /:id/estudios/:estudioId
+export type estudio = estudioResumen & {
   fotos: string[]
   cortes?: corteEstudio[]
   informe?: string
-  medico?: medico
-  pacienteId?: string
+  medico?: medicoEnEstudio
   pacienteDob?: string
   metadataDicom?: string
+  nombreArchivo?: string
+  urlArchivo?: string
+  descripcion?: string
 }

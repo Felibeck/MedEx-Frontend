@@ -1,7 +1,7 @@
-import type { estudio } from '../../../types/estudio'
+import type { estudioResumen } from '../../../types/estudio'
 import CardEstudio from '../cardEstudio'
 
-const ListaEstudios = ({ estudios }: { estudios: estudio[] }) => {
+const ListaEstudios = ({ estudios }: { estudios: estudioResumen[] }) => {
   return (
     <div className="historial-lista">
       {estudios.map((est) => (

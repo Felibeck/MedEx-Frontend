@@ -1,25 +1,18 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import type { estudio } from '../../../types/estudio'
+import type { estudio as Estudio } from '../../../types/estudio'
 import './detalleEstudio.css'
 
 type Props = {
-  estudio: estudio
+  estudio: Estudio
   onDescargarPdf?: () => void
   onCompartir?: () => void
   onVolver?: () => void
 }
 
-const ORDINAL = ['Primer', 'Segundo', 'Tercer', 'Cuarto', 'Quinto', 'Sexto']
-const getLabelCorte = (i: number) => `${ORDINAL[i] ?? `${i + 1}°`} Corte - Axial`
+const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect fill="%23111827" width="400" height="300"/><text fill="%235eead4" font-family="monospace" font-size="16" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle">Imagen no disponible</text></svg>'
 
 const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Props) => {
   const navigate = useNavigate()
-  const cortes = estudio.cortes ?? []
-  const [indexActual, setIndexActual] = useState(0)
-
-  const anterior = () => setIndexActual((p) => (p - 1 + cortes.length) % cortes.length)
-  const siguiente = () => setIndexActual((p) => (p + 1) % cortes.length)
 
   const handleVolver = () => {
     if (onVolver) onVolver()
@@ -31,6 +24,8 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
     month: 'long',
     year: 'numeric',
   })
+
+  const fotos = estudio.fotos.length > 0 ? estudio.fotos : [PLACEHOLDER_IMG]
 
   return (
     <div className="detalle-page">
@@ -88,64 +83,40 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
           </div>
         </div>
 
-        {/* ── Visor DICOM (solo si hay cortes) ── */}
-        {cortes.length > 0 && (
-          <div className="visor-wrap">
+        {/* ── Visor de imágenes ── */}
+        <div className="visor-wrap">
+          {estudio.metadataDicom && (
             <div className="visor-meta">
-              {estudio.pacienteId && <span>ID: {estudio.pacienteId}</span>}
               {estudio.pacienteDob && <span>DOB: {estudio.pacienteDob}</span>}
-              {estudio.metadataDicom && <span>{estudio.metadataDicom}</span>}
-              <span>Slice: {indexActual + 1}/{cortes.length}</span>
+              <span>{estudio.metadataDicom}</span>
             </div>
-
-            <div className="visor-imagen-wrap">
-              <button className="visor-btn visor-btn--prev" onClick={anterior} aria-label="Anterior">&#8249;</button>
-              <img
-                className="visor-imagen"
-                src={cortes[indexActual].imagen}
-                alt={cortes[indexActual].label}
-              />
-              <button className="visor-btn visor-btn--next" onClick={siguiente} aria-label="Siguiente">&#8250;</button>
-            </div>
-
-            <div className="visor-corte-label">{getLabelCorte(indexActual)}</div>
-
+          )}
+          <div className="visor-imagen-wrap">
+            <img
+              className="visor-imagen"
+              src={fotos[0]}
+              alt={estudio.tipoEstudio}
+            />
+          </div>
+          {fotos.length > 1 && (
             <div className="visor-footer">
               <div className="visor-footer-header">
-                <span className="visor-footer-titulo">SECUENCIA DE CORTES</span>
-                <span className="visor-footer-count">{cortes.length} Imágenes cargadas</span>
+                <span className="visor-footer-titulo">IMÁGENES</span>
+                <span className="visor-footer-count">{fotos.length} imágenes</span>
               </div>
               <div className="visor-miniaturas">
-                {cortes.map((c, i) => (
-                  <button
-                    key={c.id}
-                    className={`visor-miniatura${i === indexActual ? ' visor-miniatura--activa' : ''}`}
-                    onClick={() => setIndexActual(i)}
-                    aria-label={`Ir al corte ${c.label}`}
-                  >
-                    <img src={c.imagen} alt={c.label}/>
-                    <span>{c.label}</span>
-                  </button>
+                {fotos.map((src, i) => (
+                  <div key={i} className="visor-miniatura">
+                    <img src={src} alt={`Imagen ${i + 1}`} />
+                    <span>{i + 1}</span>
+                  </div>
                 ))}
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* ── Imagen simple (si no hay cortes pero sí fotos) ── */}
-        {cortes.length === 0 && estudio.fotos.length > 0 && (
-          <div className="visor-wrap">
-            <div className="visor-imagen-wrap">
-              <img
-                className="visor-imagen"
-                src={estudio.fotos[0]}
-                alt={estudio.tipoEstudio}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* ── Informe Médico (solo si hay informe o médico) ── */}
+        {/* ── Informe Médico ── */}
         {(estudio.informe || estudio.medico) && (
           <div className="detalle-informe-card">
             <h2 className="detalle-informe-titulo">
@@ -168,10 +139,10 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
             {estudio.medico && (
               <div className="detalle-doctor">
                 <div className="detalle-doctor__avatar">
-                  {estudio.medico.fotoPerfil ? (
+                  {estudio.medico.profile_picture ? (
                     <img
-                      src={estudio.medico.fotoPerfil}
-                      alt={estudio.medico.nombre}
+                      src={estudio.medico.profile_picture}
+                      alt={estudio.medico.usuario.nombre}
                       className="detalle-doctor__foto"
                     />
                   ) : (
@@ -183,9 +154,11 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
                 </div>
                 <div className="detalle-doctor__info">
                   <span className="detalle-doctor__nombre">
-                    {estudio.medico.nombre} {estudio.medico.apellido}
+                    {estudio.medico.usuario.nombre} {estudio.medico.usuario.apellido}
                   </span>
-                  <span className="detalle-doctor__especialidad">{estudio.medico.especialidad}</span>
+                  <span className="detalle-doctor__especialidad">
+                    {estudio.medico.especialidad_medica}
+                  </span>
                 </div>
                 <div className="detalle-doctor__badge">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -199,18 +172,20 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
         )}
 
         {/* ── Botones de acción ── */}
-        <button
-          type="button"
-          className="detalle-btn detalle-btn--primary"
-          onClick={onDescargarPdf}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Descargar PDF
-        </button>
+        {estudio.urlArchivo && (
+          <button
+            type="button"
+            className="detalle-btn detalle-btn--primary"
+            onClick={onDescargarPdf}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Descargar PDF
+          </button>
+        )}
 
         <button
           type="button"

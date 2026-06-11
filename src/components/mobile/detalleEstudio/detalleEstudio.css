@@ -1,4 +1,5 @@
 .detalle-page {
+  width: 100%;
   max-width: 390px;
   margin: 0 auto;
   min-height: 100vh;
@@ -387,4 +388,38 @@
   line-height: 1.5;
   padding: 0 8px;
   margin: 0;
+}
+
+/* ── Estados de carga / error ── */
+.detalle-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 16px;
+  padding: 32px;
+  text-align: center;
+  color: #416464;
+}
+
+.detalle-estado p {
+  font-size: 15px;
+  margin: 0;
+}
+
+.detalle-estado button {
+  margin-top: 8px;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: 1.5px solid #bcc9c6;
+  background: #fff;
+  color: #1f6f6b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.detalle-estado--error p {
+  color: #c0392b;
 }

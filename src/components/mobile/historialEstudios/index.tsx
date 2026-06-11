@@ -5,7 +5,7 @@ import ListaEstudios from '../listaEstudios'
 import { fetchEstudiosPaciente } from '../../../api/estudios'
 import { PACIENTE_ID } from '../../../config/constants'
 import { FILTROS_TIPO, type FiltroTipo } from '../../../config/tiposEstudio'
-import type { estudio } from '../../../types/estudio'
+import type { estudioResumen } from '../../../types/estudio'
 import './historialEstudios.css'
 
 type Props = {
@@ -17,7 +17,7 @@ const HistorialEstudios = ({
   titulo = 'Analisis Completo',
   subtitulo = 'Un estudio mas profundo de tu salud',
 }: Props) => {
-  const [estudios, setEstudios] = useState<estudio[]>([])
+  const [estudios, setEstudios] = useState<estudioResumen[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [filtro, setFiltro] = useState<FiltroTipo>('TODOS')
