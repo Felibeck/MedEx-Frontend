@@ -146,11 +146,22 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
               <div className="detalle-doctor">
                 <div className="detalle-doctor__avatar">
                   {estudio.medico.profile_picture ? (
-                    <img
-                      src={estudio.medico.profile_picture}
-                      alt={estudio.medico.usuario.nombre}
-                      className="detalle-doctor__foto"
-                    />
+                    <>
+                      <img
+                        src={estudio.medico.profile_picture}
+                        alt={estudio.medico.usuario.nombre}
+                        className="detalle-doctor__foto"
+                        onError={(e) => {
+                          const img = e.currentTarget
+                          img.style.display = 'none'
+                          img.nextElementSibling?.removeAttribute('style')
+                        }}
+                      />
+                      <svg style={{ display: 'none' }} width="22" height="22" viewBox="0 0 24 24" fill="#1f6f6b">
+                        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12z"/>
+                        <path d="M12 13.6c-4.8 0-8.4 2.4-8.4 5.4v1.2h16.8V19c0-3-3.6-5.4-8.4-5.4z"/>
+                      </svg>
+                    </>
                   ) : (
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="#1f6f6b">
                       <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12z"/>
