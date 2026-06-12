@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import MobileHeader from '../mobileHeader'
 import ListaEstudios from '../listaEstudios'
@@ -17,6 +18,7 @@ const HistorialEstudios = ({
   titulo = 'Analisis Completo',
   subtitulo = 'Un estudio mas profundo de tu salud',
 }: Props) => {
+  const navigate = useNavigate()
   const [estudios, setEstudios] = useState<estudioResumen[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -66,7 +68,14 @@ const HistorialEstudios = ({
       <div className="historial-content">
         <div className="historial-titulo-wrap">
           <h1 className="historial-titulo">
-            <span className="historial-back-arrow">←</span>
+            <button
+              type="button"
+              className="historial-back-arrow"
+              aria-label="Volver al inicio"
+              onClick={() => navigate('/')}
+            >
+              ←
+            </button>
             {titulo}
           </h1>
           <p className="historial-subtitulo">{subtitulo}</p>

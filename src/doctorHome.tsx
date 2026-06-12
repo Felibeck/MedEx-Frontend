@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Sidebar from './components/web/sidebar'
 import Agenda from './components/web/agenda'
 import ConsultaWeb from './components/web/consulta'
@@ -27,6 +28,7 @@ const MOCK_MEDICO: medico = {
 type EstadoGuardado = 'idle' | 'guardando' | 'ok' | 'error'
 
 const DoctorHome = () => {
+  const navigate = useNavigate()
   const [activeNav, setActiveNav] = useState('agenda')
   const [turnoActivo, setTurnoActivo] = useState<turno | null>(null)
   const [pacienteBuscado, setPacienteBuscado] = useState<paciente | null>(null)
@@ -152,7 +154,7 @@ const DoctorHome = () => {
         activeNav={activeNav}
         onNavChange={setActiveNav}
         onChatbot={() => console.log('Abrir chatbot')}
-        onCerrarSesion={() => console.log('Cerrar sesión')}
+        onCerrarSesion={() => navigate('/')}
       />
 
       <div className="doctor-main">

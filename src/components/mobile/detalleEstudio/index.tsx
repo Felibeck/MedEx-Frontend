@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import type { estudio as Estudio } from '../../../types/estudio'
 import './detalleEstudio.css'
+import radiografiaTorax from '../../../assets/radiografía_Torax.webp'
 
 type Props = {
   estudio: Estudio
@@ -96,6 +97,7 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
               className="visor-imagen"
               src={fotos[0]}
               alt={estudio.tipoEstudio}
+              onError={(e) => { (e.currentTarget as HTMLImageElement).src = radiografiaTorax }}
             />
           </div>
           {fotos.length > 1 && (
@@ -107,7 +109,11 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
               <div className="visor-miniaturas">
                 {fotos.map((src, i) => (
                   <div key={i} className="visor-miniatura">
-                    <img src={src} alt={`Imagen ${i + 1}`} />
+                    <img
+                    src={src}
+                    alt={`Imagen ${i + 1}`}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = radiografiaTorax }}
+                  />
                     <span>{i + 1}</span>
                   </div>
                 ))}
