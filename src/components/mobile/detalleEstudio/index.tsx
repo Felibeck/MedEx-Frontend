@@ -56,7 +56,7 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
 
         {/* ── Info card ── */}
         <div className="detalle-info-card">
-          <span className="detalle-badge">{estudio.categoria}</span>
+          <span className="detalle-badge">{estudio.tipoEstudio}</span>
           <h1 className="detalle-titulo">{estudio.tipoEstudio}</h1>
           <div className="detalle-meta-row">
             <div className="detalle-meta-item">

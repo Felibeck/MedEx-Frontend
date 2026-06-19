@@ -22,9 +22,7 @@ type ApiMedico = {
 // Forma reducida — listado /:pacienteId/estudios
 type ApiEstudioResumenRaw = {
   id: string
-  tipo: string
   tipo_estudio: string
-  categoria: string
   fecha: string
   institucion: string
 }
@@ -54,10 +52,15 @@ type ApiEstudioResponse = {
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-const normalizeTipo = (tipo: string) => {
-  const normalized = tipo.toUpperCase()
+const normalizeTipo = (tipoEstudio: string) => {
+  const normalized = tipoEstudio
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase()
+    .trim()
+
   if (!isTipoEstudio(normalized)) {
-    throw new Error(`Tipo de estudio no reconocido: ${tipo}`)
+    throw new Error(`Tipo de estudio no reconocido: ${tipoEstudio}`)
   }
   return normalized
 }
@@ -74,9 +77,8 @@ const mapMedico = (raw: ApiMedico): medicoEnEstudio => ({
 
 export const mapEstudioResumenFromApi = (raw: ApiEstudioResumenRaw): estudioResumen => ({
   id: raw.id,
-  tipo: normalizeTipo(raw.tipo),
+  tipo: normalizeTipo(raw.tipo_estudio),
   tipoEstudio: raw.tipo_estudio,
-  categoria: raw.categoria,
   fecha: new Date(raw.fecha),
   institucion: raw.institucion,
 })

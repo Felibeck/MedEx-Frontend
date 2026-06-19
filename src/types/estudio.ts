@@ -12,7 +12,6 @@ export type estudioResumen = {
   id: string
   tipo: TipoEstudioEnum
   tipoEstudio: string
-  categoria: string
   fecha: Date
   institucion: string
 }

@@ -2,7 +2,7 @@ export const TIPOS_ESTUDIO = [
   'MAMOGRAFIA',
   'ECOGRAFIA',
   'LABORATORIO',
-  'RESONANCIA',
+  'RESONANCIA MAGNETICA',
   'BIOPSIA',
 ] as const
 
@@ -12,7 +12,7 @@ export const TIPO_LABELS: Record<TipoEstudioEnum, string> = {
   MAMOGRAFIA: 'Mamografía',
   ECOGRAFIA: 'Ecografía',
   LABORATORIO: 'Laboratorio',
-  RESONANCIA: 'Resonancia',
+  'RESONANCIA MAGNETICA': 'Resonancia magnética',
   BIOPSIA: 'Biopsia',
 }
 
@@ -20,7 +20,7 @@ export const TIPO_FILTRO_LABELS: Record<TipoEstudioEnum, string> = {
   MAMOGRAFIA: 'Mamografías',
   ECOGRAFIA: 'Ecografías',
   LABORATORIO: 'Laboratorio',
-  RESONANCIA: 'Resonancia',
+  'RESONANCIA MAGNETICA': 'Resonancia magnética',
   BIOPSIA: 'Biopsia',
 }
 
