@@ -29,10 +29,14 @@ const ConsultaWeb = ({
 }: Props) => {
 
   const buildConsulta = (): consulta => ({
-    dni: paciente?.dni ?? '',
+    paciente_id: paciente?.paciente_id,
+    dni: paciente?.dni,
     profesional_id: profesionalId,
     organizacion_id: organizacionId,
-    otros: otros || undefined,
+    solicitud_estudio: false,
+    solicitud_receta: false,
+    solicitud_citaprox: false,
+    notas: otros ? { nota: otros } : undefined,
   })
 
   return (

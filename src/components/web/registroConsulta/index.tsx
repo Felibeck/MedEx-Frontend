@@ -22,12 +22,11 @@ const RegistroConsulta = ({ pacienteId, onGuardado, organizacionId, profesionalI
 
   try {
     await axios.post("http://localhost:3000/api/doctors/consultas", {
-      dni: pacienteId, // si tienes el DNI, pásalo aquí; si sólo tienes pacienteId, pásalo como prop `dni`
-      profesional_id: profesionalId, // pásalo por props o toma desde contexto/estado
-      organizacion_id: organizacionId, // idem
-      otros: motivoConsulta, // aquí va el textarea
-    //   recordatorioProximaCita: recordatorio,
-    //   borrador: esBorrador,
+      paciente_id: pacienteId,
+      profesional_id: profesionalId,
+      organizacion_id: organizacionId,
+      solicitud_citaProx: recordatorio,
+      notas: motivoConsulta ? { nota: motivoConsulta.trim() } : undefined,
     })
 
     onGuardado?.()
