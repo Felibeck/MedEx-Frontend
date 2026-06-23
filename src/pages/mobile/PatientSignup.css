@@ -1,0 +1,483 @@
+.patient-signup {
+  background: #e3fffd;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.patient-signup__shell {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 512px;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  box-sizing: border-box;
+}
+
+/* ── Brand ───────────────────────────────────────────────── */
+.patient-signup__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.patient-signup__logo-wrap {
+  width: 96px;
+  height: 96px;
+  border-radius: 9999px;
+  background: #c2eae8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.05));
+  flex-shrink: 0;
+}
+
+.patient-signup__logo {
+  width: 62px;
+  height: 70px;
+  object-fit: cover;
+}
+
+.patient-signup__brand-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.patient-signup__brand-name {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: 36px;
+  color: #1f6f6b;
+  text-align: center;
+  letter-spacing: -1.8px;
+  line-height: 40px;
+  margin: 0;
+}
+
+.patient-signup__brand-sub {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 14px;
+  color: #416464;
+  text-align: center;
+  letter-spacing: 0.35px;
+  line-height: 20px;
+  margin: 0;
+}
+
+/* ── Card ────────────────────────────────────────────────── */
+.patient-signup__card {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  background: rgba(227, 255, 253, 0.7);
+  border-radius: 40px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 25px 25px 20px -12px rgba(3, 76, 73, 0.05);
+}
+
+.patient-signup__card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.patient-signup__title {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 24px;
+  color: #00201f;
+  text-align: center;
+  letter-spacing: -0.6px;
+  line-height: 32px;
+  margin: 0;
+}
+
+.patient-signup__subtitle {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 16px;
+  color: #3d4947;
+  text-align: center;
+  line-height: 24px;
+  margin: 0;
+}
+
+/* ── Form ────────────────────────────────────────────────── */
+.patient-signup__form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.patient-signup__fields-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.patient-signup__fields-group .patient-signup__field {
+  margin: 0;
+}
+
+.patient-signup__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  align-items: flex-end;
+}
+
+.patient-signup__label {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 14px;
+  color: #00201f;
+  line-height: 20px;
+  width: 100%;
+  max-width: 290px;
+  align-self: flex-start;
+}
+
+.patient-signup__input {
+  background: white;
+  border: none;
+  border-radius: 16px;
+  height: 56px;
+  padding: 0 20px;
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 18px;
+  color: #00201f;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  display: flex;
+  align-items: center;
+}
+
+.patient-signup__input::placeholder {
+  color: #bcc9c6;
+}
+
+.patient-signup__input--bordered {
+  background: white;
+  border: 1px solid rgba(65, 100, 100, 0.55);
+  padding: 0;
+}
+
+/* ── Password ────────────────────────────────────────────── */
+.patient-signup__password-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.patient-signup__password-wrap .patient-signup__input {
+  padding-right: 52px;
+  display: block;
+}
+
+.patient-signup__eye-btn {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.patient-signup__eye-icon {
+  width: 22px;
+  height: 15px;
+  display: block;
+}
+
+/* ── Select / Dropdown ───────────────────────────────────── */
+.patient-signup__select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.patient-signup__select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  padding: 0 44px 0 20px;
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 18px;
+  color: #00201f;
+  cursor: pointer;
+  min-height: 54px;
+  box-sizing: border-box;
+}
+
+.patient-signup__select option {
+  color: #00201f;
+}
+
+.patient-signup__dropdown-arrow {
+  position: absolute;
+  right: 20px;
+  width: 15px;
+  height: 9px;
+  pointer-events: none;
+  display: block;
+}
+
+/* ── Identity verification ───────────────────────────────── */
+.patient-signup__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.patient-signup__identity-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.patient-signup__identity-title {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 24px;
+  color: #00201f;
+  letter-spacing: -0.6px;
+  line-height: 32px;
+  margin: 0;
+}
+
+.patient-signup__identity-sub {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 16px;
+  color: #3d4947;
+  line-height: 24px;
+  margin: 0;
+}
+
+.patient-signup__identity-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* DNI scan card */
+.patient-signup__dni-card {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  min-height: 152px;
+  justify-content: center;
+}
+
+.patient-signup__dni-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: rgba(0, 106, 102, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.patient-signup__dni-icon {
+  width: 30px;
+  height: 33px;
+  display: block;
+}
+
+.patient-signup__dni-text {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 16px;
+  color: #00201f;
+  text-align: center;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+/* CUIL card */
+.patient-signup__cuil-card {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 118px;
+  justify-content: center;
+}
+
+.patient-signup__cuil-label {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: 12px;
+  color: #6d7a77;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  line-height: 16px;
+}
+
+.patient-signup__cuil-input-wrap {
+  border: 1px solid #bcc9c6;
+  border-radius: 4px;
+  padding: 12px 1px 13px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.patient-signup__cuil-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 18px;
+  color: #00201f;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+.patient-signup__cuil-input::placeholder {
+  color: #bcc9c6;
+  font-weight: 400;
+}
+
+/* Info box */
+.patient-signup__info-box {
+  background: rgba(0, 106, 102, 0.05);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+
+.patient-signup__info-icon {
+  width: 20px;
+  height: 24px;
+  display: block;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.patient-signup__info-text {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 14px;
+  color: #3d4947;
+  line-height: 22.75px;
+  margin: 0;
+}
+
+.patient-signup__info-highlight {
+  font-weight: 700;
+  color: #006a66;
+}
+
+/* ── Submit ──────────────────────────────────────────────── */
+.patient-signup__submit-wrap {
+  padding-top: 8px;
+  width: 100%;
+}
+
+.patient-signup__btn-primary {
+  width: 100%;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(143deg, #006a66 0%, #006a63 100%);
+  box-shadow:
+    0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0px 4px 6px -4px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 18px;
+  color: white;
+  text-align: center;
+  line-height: 28px;
+}
+
+/* ── Divider ─────────────────────────────────────────────── */
+.patient-signup__divider {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  width: 100%;
+}
+
+.patient-signup__divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(0, 106, 102, 0.1);
+}
+
+.patient-signup__divider-text {
+  padding: 0 16px;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 14px;
+  color: #bcc9c6;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 16px;
+}
+
+.patient-signup__btn-secondary {
+  width: 100%;
+  height: 56px;
+  border-radius: 16px;
+  background: #c8f0ee;
+  border: none;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 18px;
+  color: #006a66;
+  text-align: center;
+  line-height: 28px;
+}
