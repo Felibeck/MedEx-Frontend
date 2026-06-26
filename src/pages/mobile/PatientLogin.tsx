@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+ 
 import './PatientLogin.css'
+import { loginPatient } from '../../api/patientAuth'
 
 const LOGO_URL = 'https://www.figma.com/api/mcp/asset/8fef63a7-1b51-484b-8702-c508916c10e1'
 const EYE_ICON_URL = 'https://www.figma.com/api/mcp/asset/2541fda4-daaa-4a00-a80c-9ce56b81bb37'
@@ -14,10 +16,16 @@ const PatientLogin = () => {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    navigate('/patients')
-  }
+    try {
+      const userSession = await loginPatient(email, password)
+      localStorage.setItem('user', JSON.stringify(userSession))
+      navigate('/patients')
+    } catch (err: any) {
+      console.error(err.response?.data?.message || err.message)
+    }
+  } // ◄ AQUÍ cerraba la función handleLogin
 
   return (
     <div className="patient-login">
@@ -121,6 +129,6 @@ const PatientLogin = () => {
       </div>
     </div>
   )
-}
+} // ◄ AQUÍ cierra PatientLogin de forma correcta
 
 export default PatientLogin
