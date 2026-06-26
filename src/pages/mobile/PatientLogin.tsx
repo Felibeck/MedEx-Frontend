@@ -1,12 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-<<<<<<< HEAD
-import { loginPatient, extractErrorMessage } from '../../api/auth'
-=======
- 
->>>>>>> 32a88d54712f494b551dd8c8c591806c747d8e05
 import './PatientLogin.css'
 import { loginPatient } from '../../api/patientAuth'
+import axios from 'axios'
 
 const LOGO_URL = 'https://www.figma.com/api/mcp/asset/8fef63a7-1b51-484b-8702-c508916c10e1'
 const EYE_ICON_URL = 'https://www.figma.com/api/mcp/asset/2541fda4-daaa-4a00-a80c-9ce56b81bb37'
@@ -24,31 +20,25 @@ const PatientLogin = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-<<<<<<< HEAD
     setError(null)
     setIsLoading(true)
     try {
-      const { user, token } = await loginPatient(email, password)
-      localStorage.setItem('medex_token', token)
-      localStorage.setItem('medex_user_id', user.id)
-      localStorage.setItem('medex_user', JSON.stringify(user))
+      const userSession = await loginPatient(email, password)
+      localStorage.setItem('medex_user_id', userSession.id)
+      localStorage.setItem('medex_user', JSON.stringify(userSession))
       navigate('/patients')
     } catch (err) {
-      setError(extractErrorMessage(err, 'Error al iniciar sesión'))
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message ?? 'Error al iniciar sesión')
+      } else if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('Error al iniciar sesión')
+      }
     } finally {
       setIsLoading(false)
     }
   }
-=======
-    try {
-      const userSession = await loginPatient(email, password)
-      localStorage.setItem('user', JSON.stringify(userSession))
-      navigate('/patients')
-    } catch (err: any) {
-      console.error(err.response?.data?.message || err.message)
-    }
-  } // ◄ AQUÍ cerraba la función handleLogin
->>>>>>> 32a88d54712f494b551dd8c8c591806c747d8e05
 
   return (
     <div className="patient-login">
@@ -156,6 +146,6 @@ const PatientLogin = () => {
       </div>
     </div>
   )
-} // ◄ AQUÍ cierra PatientLogin de forma correcta
+}
 
 export default PatientLogin

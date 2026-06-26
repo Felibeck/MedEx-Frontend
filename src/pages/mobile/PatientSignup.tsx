@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { registerPatient, extractErrorMessage } from '../../api/auth'
+import axios from 'axios'
+import { registerPatient } from '../../api/patientAuth'
 import './PatientSignup.css'
 
 const LOGO_URL = 'https://www.figma.com/api/mcp/asset/9b0d94e4-e4f9-43fd-a2af-eadfe0ee66aa'
@@ -30,18 +31,26 @@ const PatientSignup = () => {
     setIsLoading(true)
     try {
       await registerPatient({
+        nombre,
+        apellido,
         firstName: nombre,
         lastName: apellido,
         email,
         password,
-        phoneNumber: telefono,
-        dateOfBirth: fechaNacimiento,
-        gender: sexo,
-        dni: cuil || undefined,
+        phoneNumber: telefono || null,
+        dateOfBirth: fechaNacimiento || null,
+        gender: sexo || null,
+        dni: cuil || null,
       })
       navigate('/patients/login')
     } catch (err) {
-      setError(extractErrorMessage(err, 'Error al registrarse'))
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message ?? 'Error al registrarse')
+      } else if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('Error al registrarse')
+      }
     } finally {
       setIsLoading(false)
     }
