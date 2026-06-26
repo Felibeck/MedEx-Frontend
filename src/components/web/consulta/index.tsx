@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { paciente } from '../../../types/paciente'
 import type { consulta } from '../../../types/consulta'
 import './consulta.css'
@@ -27,6 +28,7 @@ const ConsultaWeb = ({
   onFinalizar,
   onVerHistorial,
 }: Props) => {
+  const [proximaCita, setProximaCita] = useState(false)
 
   const buildConsulta = (): consulta => ({
     paciente_id: paciente?.paciente_id,
@@ -35,7 +37,7 @@ const ConsultaWeb = ({
     organizacion_id: organizacionId,
     solicitud_estudio: false,
     solicitud_receta: false,
-    solicitud_citaprox: false,
+    solicitud_citaprox: proximaCita,
     notas: otros ? { nota: otros } : undefined,
   })
 
@@ -127,6 +129,31 @@ const ConsultaWeb = ({
             onChange={(e) => onOtrosChange?.(e.target.value)}
             rows={4}
           />
+        </div>
+
+        <div className="consulta-form-card__recordatorio">
+          <div className="consulta-form-card__recordatorio-left">
+            <span className="consulta-form-card__recordatorio-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+            </span>
+            <div>
+              <div className="consulta-form-card__label">Recordatorio Próxima Cita</div>
+              <div className="consulta-form-card__nota">Activa para agendar una próxima visita del paciente.</div>
+            </div>
+          </div>
+          <button
+            type="button"
+            className={`consulta-toggle ${proximaCita ? 'consulta-toggle--on' : ''}`}
+            onClick={() => setProximaCita((prev) => !prev)}
+            aria-pressed={proximaCita}
+          >
+            <span className="consulta-toggle__thumb" />
+          </button>
         </div>
 
         {/* Acciones rápidas */}
