@@ -104,7 +104,7 @@ const ConsultaWeb = ({
         </div>
         <div className="consulta-antecedentes__divider" />
         <div className="consulta-antecedentes__col">
-          <span className="consulta-antecedentes__label">MOTIVO CONSULTA PREVIA</span>
+          <span className="consulta-antecedentes__label">ÚLTIMO MOTIVO DE CONSULTA</span>
           <p className="consulta-antecedentes__valor">
             {motivoConsultaPrevia ?? '—'}
           </p>
