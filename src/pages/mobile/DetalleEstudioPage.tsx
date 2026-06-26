@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import DetalleEstudio from '../../components/mobile/detalleEstudio'
 import { fetchEstudioById } from '../../api/estudios'
-import { PACIENTE_ID } from '../../config/constants'
+import { getPacienteId } from '../../config/constants'
 import type { estudio as Estudio } from '../../types/estudio'
 
 const DetalleEstudioPage = () => {
@@ -27,7 +27,7 @@ const DetalleEstudioPage = () => {
       setLoading(true)
       setError(null)
       try {
-        const data = await fetchEstudioById(PACIENTE_ID, estudioId)
+        const data = await fetchEstudioById(getPacienteId(), estudioId)
         if (!cancelled) setEstudio(data)
       } catch (err: unknown) {
         if (!cancelled) {

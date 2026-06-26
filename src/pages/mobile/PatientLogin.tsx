@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { loginPatient, extractErrorMessage } from '../../api/auth'
 import './PatientLogin.css'
 
 const LOGO_URL = 'https://www.figma.com/api/mcp/asset/8fef63a7-1b51-484b-8702-c508916c10e1'
@@ -13,10 +14,24 @@ const PatientLogin = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    navigate('/patients')
+    setError(null)
+    setIsLoading(true)
+    try {
+      const { user, token } = await loginPatient(email, password)
+      localStorage.setItem('medex_token', token)
+      localStorage.setItem('medex_user_id', user.id)
+      localStorage.setItem('medex_user', JSON.stringify(user))
+      navigate('/patients')
+    } catch (err) {
+      setError(extractErrorMessage(err, 'Error al iniciar sesión'))
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -48,6 +63,7 @@ const PatientLogin = () => {
                 placeholder="ejemplo@correo.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
+                required
               />
             </div>
 
@@ -65,6 +81,7 @@ const PatientLogin = () => {
                   placeholder="••••••••"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
+                  required
                 />
                 <button
                   type="button"
@@ -76,9 +93,11 @@ const PatientLogin = () => {
               </div>
             </div>
 
+            {error && <p className="patient-login__error">{error}</p>}
+
             <div className="patient-login__actions">
-              <button type="submit" className="patient-login__btn-primary">
-                Iniciar Sesión
+              <button type="submit" className="patient-login__btn-primary" disabled={isLoading}>
+                {isLoading ? 'Iniciando...' : 'Iniciar Sesión'}
               </button>
               <button type="button" className="patient-login__btn-biometric">
                 <img src={FINGERPRINT_URL} alt="Biométrico" className="patient-login__fingerprint" />
