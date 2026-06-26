@@ -236,10 +236,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px;
-  border: 1.5px solid #d9e5e2;
-  border-radius: 10px;
-  background: #f9fbfb;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1.5px solid #d4eceb;
+  border-radius: 14px;
+  background: #eaf7f5;
 }
 
 .consulta-form-card__recordatorio-left {
@@ -249,6 +250,25 @@
   font-size: 14px;
   font-weight: 500;
   color: #0b3131;
+}
+
+.consulta-form-card__nota {
+  margin: 0;
+  font-size: 13px;
+  color: #416464;
+  line-height: 1.4;
+}
+
+.consulta-form-card__recordatorio-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #1f6f6b;
+  flex-shrink: 0;
 }
 
 .consulta-toggle {

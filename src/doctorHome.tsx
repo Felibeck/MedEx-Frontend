@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Sidebar from './components/web/sidebar'
 import Agenda from './components/web/agenda'
@@ -7,7 +7,7 @@ import type { medico } from './types/medico'
 import type { turno } from './types/turno'
 import type { paciente } from './types/paciente'
 import type { consulta } from './types/consulta'
-import { postConsulta } from './api/consultas'
+import { getUltimaNotaPorProfesional, postConsulta } from './api/consultas'
 import './doctorHome.css'
 import SearchBar from './components/web/searchBar'
 
@@ -34,6 +34,8 @@ const DoctorHome = () => {
   const [pacienteBuscado, setPacienteBuscado] = useState<paciente | null>(null)
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>('idle')
   const [otrosConsulta, setOtrosConsulta] = useState('')
+  const [ultimoMotivoConsulta, setUltimoMotivoConsulta] = useState('')
+  const [motivoConsultaLoading, setMotivoConsultaLoading] = useState(false)
 
   const ejecutarGuardado = async (data: consulta) => {
     setEstadoGuardado('guardando')
@@ -44,6 +46,31 @@ const DoctorHome = () => {
       setEstadoGuardado('error')
     }
   }
+
+  const cargarUltimoMotivo = async () => {
+    if (!MOCK_MEDICO.usuarioId) {
+      setUltimoMotivoConsulta('')
+      return
+    }
+
+    setMotivoConsultaLoading(true)
+    try {
+      const nota = await getUltimaNotaPorProfesional(MOCK_MEDICO.usuarioId)
+      setUltimoMotivoConsulta(nota ?? '')
+    } catch {
+      setUltimoMotivoConsulta('')
+    } finally {
+      setMotivoConsultaLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (pacienteBuscado) {
+      cargarUltimoMotivo()
+    } else {
+      setUltimoMotivoConsulta('')
+    }
+  }, [pacienteBuscado])
 
   const handleFinalizar = (data: consulta) => {
     ejecutarGuardado(data)
@@ -139,7 +166,7 @@ const DoctorHome = () => {
         otros={otrosConsulta}
         onOtrosChange={setOtrosConsulta}
         antecedentes=""
-        motivoConsultaPrevia=""
+        motivoConsultaPrevia={motivoConsultaLoading ? 'Cargando...' : ultimoMotivoConsulta}
         notaConsultaPrevia=""
         onFinalizar={handleFinalizar}
         onVerHistorial={() => console.log('Ver historial:', pacienteBuscado.paciente_id)}
