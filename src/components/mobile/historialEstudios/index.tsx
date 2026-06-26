@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import MobileHeader from '../mobileHeader'
 import ListaEstudios from '../listaEstudios'
+import BottomNavBar from '../bottomNavBar'
 import { fetchEstudiosPaciente } from '../../../api/estudios'
 import { getPacienteId } from '../../../config/constants'
 import { FILTROS_TIPO, type FiltroTipo } from '../../../config/tiposEstudio'
@@ -132,6 +133,7 @@ const HistorialEstudios = ({
           <ListaEstudios estudios={estudiosFiltrados} />
         )}
       </div>
+      <BottomNavBar />
     </div>
   )
 }

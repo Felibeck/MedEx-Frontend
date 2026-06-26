@@ -1,0 +1,86 @@
+/* ── Bar ─────────────────────────────────────────────────────────────── */
+.bottom-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 1px 20px 0 25px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.8);
+  border-top: 1px solid rgba(190, 201, 199, 0.15);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0px -12px 32px 0px rgba(0, 32, 31, 0.06);
+  z-index: 100;
+}
+
+/* ── Tab button ──────────────────────────────────────────────────────── */
+.bottom-nav-bar__tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 51px;
+  border-radius: 12px;
+  padding: 0 8px;
+  flex: 1;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  gap: 4px;
+  transition: background 0.15s ease;
+}
+
+.bottom-nav-bar__tab--active {
+  background: #006a66;
+}
+
+/* ── Icon ────────────────────────────────────────────────────────────── */
+.bottom-nav-bar__icon {
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.bottom-nav-bar__tab--inicio .bottom-nav-bar__icon {
+  width: 16px;
+  height: 18px;
+}
+
+.bottom-nav-bar__tab--familia .bottom-nav-bar__icon {
+  width: 21px;
+  height: 20px;
+}
+
+.bottom-nav-bar__tab--cuidados .bottom-nav-bar__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.bottom-nav-bar__tab--historial .bottom-nav-bar__icon {
+  width: 18px;
+  height: 18px;
+}
+
+.bottom-nav-bar__tab--perfil .bottom-nav-bar__icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Label ───────────────────────────────────────────────────────────── */
+.bottom-nav-bar__label {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 16.5px;
+  white-space: nowrap;
+  color: #657878;
+}
+
+.bottom-nav-bar__tab--active .bottom-nav-bar__label {
+  color: #ffffff;
+}

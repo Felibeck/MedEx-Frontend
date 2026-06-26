@@ -10,7 +10,7 @@
 }
 
 .historial-content {
-  padding: 0 16px 32px;
+  padding: 0 16px 114px; /* 82px nav + 32px breathing room */
   display: flex;
   flex-direction: column;
   gap: 0;
