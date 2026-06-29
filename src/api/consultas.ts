@@ -2,20 +2,12 @@ import { api } from './client'
 import type { consulta } from '../types/consulta'
 
 type notaAPI = {
+  consulta_id?: string
   nota?: string
-  fecha?: string
-  createdAt?: string
-  created_at?: string
-}
-
-const parseNotaFecha = (nota: notaAPI): number => {
-  const fecha = nota.fecha ?? nota.createdAt ?? nota.created_at ?? ''
-  const timestamp = Date.parse(String(fecha))
-  return Number.isNaN(timestamp) ? 0 : timestamp
 }
 
 export const getUltimaNotaPorProfesional = async (profesionalId: string): Promise<string | null> => {
-  const response = await api.get(`/doctors/${profesionalId}/notas`)
+  const response = await api.get(`/doctor/${profesionalId}/notas`)
   const data = response.data
   const notas: notaAPI[] = Array.isArray(data)
     ? data
@@ -23,18 +15,17 @@ export const getUltimaNotaPorProfesional = async (profesionalId: string): Promis
     ? data.data
     : []
 
-  const notasConTexto = notas.filter(
-    (nota): nota is { nota: string } => typeof nota?.nota === 'string' && nota.nota.trim().length > 0
-  )
+  const notasConTexto = notas
+    .filter((nota): nota is { nota: string } => typeof nota?.nota === 'string' && nota.nota.trim().length > 0)
+    .map((nota) => nota.nota.trim())
 
   if (!notasConTexto.length) {
     return null
   }
 
-  notasConTexto.sort((a, b) => parseNotaFecha(b) - parseNotaFecha(a))
-  return notasConTexto[0].nota.trim()
+  return notasConTexto[notasConTexto.length - 1]
 }
 
 export const postConsulta = async (data: consulta): Promise<void> => {
-  await api.post('/doctors/consultas', data)
+  await api.post('/doctor/consultas', data)
 }

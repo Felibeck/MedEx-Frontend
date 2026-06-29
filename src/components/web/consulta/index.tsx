@@ -31,14 +31,13 @@ const ConsultaWeb = ({
   const [proximaCita, setProximaCita] = useState(false)
 
   const buildConsulta = (): consulta => ({
-    paciente_id: paciente?.paciente_id,
     dni: paciente?.dni,
     profesional_id: profesionalId,
     organizacion_id: organizacionId,
     solicitud_estudio: false,
     solicitud_receta: false,
     solicitud_citaprox: proximaCita,
-    notas: otros ? { nota: otros } : undefined,
+    notas: otros ? otros.trim() : undefined,
   })
 
   return (
