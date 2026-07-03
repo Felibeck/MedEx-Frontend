@@ -5,6 +5,7 @@ import DoctorHome from "./doctorHome";
 import DetalleEstudioPage from "./pages/mobile/DetalleEstudioPage";
 import PatientLogin from "./pages/mobile/PatientLogin";
 import PatientSignup from "./pages/mobile/PatientSignup";
+import DoctorLogin from "./pages/doctor/DoctorLogin";
 
 const App = () => {
   return (
@@ -14,6 +15,8 @@ const App = () => {
       <Route path="/patients/signup" element={<PatientSignup />} />
       <Route path="/patients" element={<PatientHome />} />
       <Route path="/patients/estudio/:estudioId" element={<DetalleEstudioPage />} />
+      <Route path="/doctors/login" element={<DoctorLogin />} />
+      {/* <Route path="/doctors/register" element={<DoctorSignup />} /> */}
       <Route path="/doctor" element={<DoctorHome />} />
     </Routes>
   );

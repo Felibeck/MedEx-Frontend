@@ -10,26 +10,14 @@ import type { consulta } from './types/consulta'
 import { getUltimaNotaPorProfesional, postConsulta } from './api/consultas'
 import './doctorHome.css'
 import SearchBar from './components/web/searchBar'
-
-const MOCK_MEDICO: medico = {
-  id: 1,
-  nombre: 'Dr. Julian',
-  apellido: 'Rivera',
-  email: 'julian@medex.com',
-  password: '',
-  esMedico: true,
-  usuarioId: '7c4f0c93-2b4c-4c79-a5f6-1e8d4f6a9d21',
-  organizacionId: '02e27451-a22b-40ae-b080-9f924b861495',
-  matricula: '12345',
-  especialidad: 'Cirujano',
-  fotoPerfil: '',
-}
+import { getCurrentMedico } from './utils/session'
 
 type EstadoGuardado = 'idle' | 'guardando' | 'ok' | 'error'
 
 const DoctorHome = () => {
   const navigate = useNavigate()
   const [activeNav, setActiveNav] = useState('agenda')
+  const [medico, setMedico] = useState<medico | null>(null)
   const [turnoActivo, setTurnoActivo] = useState<turno | null>(null)
   const [pacienteBuscado, setPacienteBuscado] = useState<paciente | null>(null)
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>('idle')
@@ -48,14 +36,14 @@ const DoctorHome = () => {
   }
 
   const cargarUltimoMotivo = async () => {
-    if (!MOCK_MEDICO.usuarioId) {
+    if (!medico?.usuarioId) {
       setUltimoMotivoConsulta('')
       return
     }
 
     setMotivoConsultaLoading(true)
     try {
-      const nota = await getUltimaNotaPorProfesional(MOCK_MEDICO.usuarioId)
+      const nota = await getUltimaNotaPorProfesional(medico.usuarioId)
       setUltimoMotivoConsulta(nota ?? '')
     } catch {
       setUltimoMotivoConsulta('')
@@ -71,6 +59,18 @@ const DoctorHome = () => {
       setUltimoMotivoConsulta('')
     }
   }, [pacienteBuscado])
+
+  useEffect(() => {
+    const current = getCurrentMedico()
+    if (!current) {
+      // No session — redirigir al login de doctores
+      navigate('/doctors/login')
+      return
+    }
+    setMedico(current)
+  }, [navigate])
+
+  if (medico === null) return null
 
   const handleFinalizar = (data: consulta) => {
     ejecutarGuardado(data)
@@ -161,8 +161,8 @@ const DoctorHome = () => {
       <ConsultaWeb
         key={pacienteBuscado.paciente_id}
         paciente={pacienteBuscado}
-        profesionalId={MOCK_MEDICO.usuarioId}
-        organizacionId={MOCK_MEDICO.organizacionId}
+        profesionalId={medico.usuarioId}
+        organizacionId={medico.organizacionId}
         otros={otrosConsulta}
         onOtrosChange={setOtrosConsulta}
         antecedentes=""
@@ -177,7 +177,7 @@ const DoctorHome = () => {
   return (
     <div className="doctor-layout">
       <Sidebar
-        medico={MOCK_MEDICO}
+        medico={medico}
         activeNav={activeNav}
         onNavChange={setActiveNav}
         onChatbot={() => console.log('Abrir chatbot')}
