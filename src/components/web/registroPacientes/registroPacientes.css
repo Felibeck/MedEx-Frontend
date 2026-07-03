@@ -1,0 +1,255 @@
+.registro-pacientes {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  padding: 8px 4px 32px;
+}
+
+/* ── Header ── */
+.registro-pacientes__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.registro-pacientes__titulo {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 29px;
+  color: #006562;
+  margin: 0 0 4px;
+}
+
+.registro-pacientes__subtitulo {
+  font-family: 'Inter', var(--sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #3e4948;
+  margin: 0;
+}
+
+.registro-pacientes__acciones {
+  display: flex;
+  gap: 16px;
+}
+
+.registro-pacientes__btn-secundario {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #d9e5e3;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #3e4948;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* ── Estados ── */
+.registro-pacientes__estado {
+  font-family: 'Inter', var(--sans);
+  font-size: 16px;
+  color: #3e4948;
+  padding: 32px 0;
+  text-align: center;
+}
+
+.registro-pacientes__estado--error {
+  color: #ba1a1a;
+}
+
+/* ── Lista ── */
+.registro-pacientes__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.registro-pacientes__card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #ffffff;
+  border: 1px solid #006562;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.registro-pacientes__card--alerta {
+  border-color: #ba1a1a;
+}
+
+.registro-pacientes__avatar {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 9999px;
+  background: #c4eae9;
+  color: #006562;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.registro-pacientes__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.registro-pacientes__avatar--alerta {
+  background: #ffdad6;
+  color: #ba1a1a;
+}
+
+.registro-pacientes__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.registro-pacientes__info-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.registro-pacientes__nombre {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25px;
+  color: #131d1d;
+  margin: 0;
+}
+
+.registro-pacientes__badge {
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 15px;
+  letter-spacing: 0.3px;
+  padding: 2px 12px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.registro-pacientes__campos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+}
+
+.registro-pacientes__campo {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #3e4948;
+  white-space: nowrap;
+}
+
+.registro-pacientes__btn-detalle {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #006562;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #e3fffc;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.registro-pacientes__btn-detalle:hover {
+  background: #00504d;
+}
+
+/* ── Paginación ── */
+.registro-pacientes__paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+}
+
+.registro-pacientes__paginacion-info {
+  font-family: 'Inter', var(--sans);
+  font-size: 16px;
+  line-height: 24px;
+  color: #3e4948;
+}
+
+.registro-pacientes__paginacion-controles {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.registro-pacientes__pagina-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  color: #131d1d;
+  font-family: 'Inter', var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.registro-pacientes__pagina-btn:hover:not(:disabled) {
+  background: #d9e5e3;
+}
+
+.registro-pacientes__pagina-btn:disabled {
+  color: #bec9c7;
+  cursor: default;
+}
+
+.registro-pacientes__pagina-btn--activo {
+  background: #006562;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.registro-pacientes__pagina-btn--activo:hover {
+  background: #006562;
+}
+
+.registro-pacientes__pagina-ellipsis {
+  width: 30px;
+  text-align: center;
+  color: #6e7978;
+  font-family: 'Inter', var(--sans);
+  font-size: 16px;
+}

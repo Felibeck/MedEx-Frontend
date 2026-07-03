@@ -1,0 +1,491 @@
+.ficha-paciente {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  padding: 8px 4px 32px;
+}
+
+.ficha-paciente__estado {
+  font-family: 'Inter', var(--sans);
+  font-size: 16px;
+  color: #3e4948;
+  padding: 32px;
+  text-align: center;
+}
+
+.ficha-paciente__estado--error {
+  color: #ba1a1a;
+}
+
+.ficha-paciente__vacio {
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #6e7978;
+  margin: 0;
+}
+
+/* ── Header ── */
+.ficha-paciente__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.ficha-paciente__identidad {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.ficha-paciente__avatar {
+  width: 96px;
+  height: 96px;
+  min-width: 96px;
+  border-radius: 16px;
+  background: #c4eae9;
+  border: 4px solid #f0fcfa;
+  color: #006562;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.ficha-paciente__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ficha-paciente__nombre {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 29px;
+  color: #131d1d;
+  margin: 0 0 6px;
+}
+
+.ficha-paciente__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #3e4948;
+}
+
+.ficha-paciente__meta-dot {
+  color: #bec9c7;
+}
+
+.ficha-paciente__btn-imprimir {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid #6e7978;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: 'Inter', var(--sans);
+  font-size: 16px;
+  color: #3e4948;
+  cursor: not-allowed;
+}
+
+/* ── Vitales ── */
+.ficha-paciente__vitales {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.ficha-paciente__card {
+  flex: 1;
+  min-width: 260px;
+  background: #ffffff;
+  border: 1px solid #006562;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ficha-paciente__card--alergias {
+  border-color: #ba1a1a;
+}
+
+.ficha-paciente__card-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ficha-paciente__card-titulo h3 {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 18px;
+  color: #131d1d;
+  margin: 0;
+}
+
+.ficha-paciente__lista-puntos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ficha-paciente__lista-puntos li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #3e4948;
+}
+
+.ficha-paciente__punto {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ficha-paciente__punto--rojo {
+  background: #ba1a1a;
+}
+
+.ficha-paciente__sangre {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ficha-paciente__sangre-tipo {
+  font-family: 'Inter', var(--sans);
+  font-weight: 800;
+  font-size: 36px;
+  color: #006562;
+}
+
+.ficha-paciente__sangre-compat {
+  font-family: 'Inter', var(--sans);
+  font-size: 12px;
+  color: #6e7978;
+}
+
+.ficha-paciente__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ficha-paciente__chip {
+  background: #a2f1e7;
+  color: #00201d;
+  font-family: 'Inter', var(--sans);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.ficha-paciente__ultimo-control {
+  font-family: 'Inter', var(--sans);
+  font-size: 12px;
+  color: #bec9c7;
+  margin: 0;
+}
+
+/* ── Tabs ── */
+.ficha-paciente__tabs {
+  display: flex;
+  border-bottom: 1px solid #bec9c7;
+}
+
+.ficha-paciente__tab {
+  background: transparent;
+  border: none;
+  padding: 16px 32px;
+  font-family: 'Inter', var(--sans);
+  font-size: 16px;
+  color: #3e4948;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.ficha-paciente__tab--activo {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 18px;
+  color: #006562;
+  border-bottom-color: #006562;
+}
+
+/* ── Split view: consultas ── */
+.ficha-paciente__split {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.ficha-paciente__lista-consultas {
+  width: 313px;
+  min-width: 313px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ficha-paciente__consulta-card {
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid #bec9c7;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: 'Inter', var(--sans);
+}
+
+.ficha-paciente__consulta-card--activa {
+  background: #c4eae9;
+  border-color: #006562;
+}
+
+.ficha-paciente__consulta-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  color: #3e4948;
+}
+
+.ficha-paciente__consulta-card--activa .ficha-paciente__consulta-card-top {
+  color: #476a6a;
+}
+
+.ficha-paciente__pill-reciente {
+  background: #006562;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 400;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.ficha-paciente__consulta-especialidad {
+  font-family: 'Manrope', var(--heading);
+  font-size: 16px;
+  color: #131d1d;
+  margin: 0;
+}
+
+.ficha-paciente__consulta-card--activa .ficha-paciente__consulta-especialidad {
+  color: #476a6a;
+}
+
+.ficha-paciente__consulta-profesional {
+  font-size: 12px;
+  color: #3e4948;
+  margin: 0;
+}
+
+.ficha-paciente__consulta-card--activa .ficha-paciente__consulta-profesional {
+  color: #476a6a;
+}
+
+/* ── Detalle panel ── */
+.ficha-paciente__detalle-panel {
+  flex: 1;
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid #bec9c7;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ficha-paciente__detalle-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  background: #ebf6f4;
+  border-bottom: 1px solid #bec9c7;
+  padding: 24px;
+}
+
+.ficha-paciente__detalle-header h3 {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 20px;
+  color: #006562;
+  margin: 0 0 8px;
+}
+
+.ficha-paciente__detalle-header p {
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #3e4948;
+  margin: 0;
+}
+
+.ficha-paciente__detalle-estado {
+  text-align: right;
+}
+
+.ficha-paciente__pill-finalizada {
+  display: inline-block;
+  background: #a2f1e7;
+  color: #00201d;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 3px 16px;
+  border-radius: 9999px;
+  margin-bottom: 4px;
+}
+
+.ficha-paciente__detalle-body {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px;
+}
+
+.ficha-paciente__seccion h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 18px;
+  color: #006562;
+  margin: 0 0 16px;
+}
+
+.ficha-paciente__caja {
+  background: #f0fcfa;
+  border: 1px solid #006562;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.ficha-paciente__caja p {
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #3e4948;
+  margin: 0;
+  white-space: pre-line;
+}
+
+.ficha-paciente__prescripciones {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ficha-paciente__prescripcion {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #e5f0ef;
+  border: 1px solid #006562;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.ficha-paciente__prescripcion-icono {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 9999px;
+  background: #2d7e7b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ficha-paciente__prescripcion-nombre {
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 16px;
+  color: #131d1d;
+  margin: 0;
+}
+
+.ficha-paciente__prescripcion-indicaciones {
+  font-family: 'Inter', var(--sans);
+  font-size: 12px;
+  color: #3e4948;
+  margin: 2px 0 0;
+}
+
+.ficha-paciente__prescripcion-estado {
+  margin-left: auto;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 12px;
+  color: #006562;
+  white-space: nowrap;
+}
+
+.ficha-paciente__adjuntos {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ficha-paciente__adjunto {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #d9e5e3;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 12px;
+  color: #131d1d;
+  text-decoration: none;
+}
+
+/* ── Estudios tab ── */
+.ficha-paciente__estudios {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ficha-paciente__estudio-card {
+  background: #ffffff;
+  border: 1px solid #bec9c7;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.ficha-paciente__estudio-tipo {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 16px;
+  color: #131d1d;
+  margin: 0 0 4px;
+}
+
+.ficha-paciente__estudio-meta {
+  font-family: 'Inter', var(--sans);
+  font-size: 12px;
+  color: #3e4948;
+  margin: 0;
+}

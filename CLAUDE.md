@@ -207,3 +207,4 @@ These rules define how to translate Figma inputs into code for this project.
 - **Web (doctor)** components are under `src/components/web/` — desktop layout, sidebar navigation
 - **Mobile (patient)** components are under `src/components/mobile/` — mobile-first, header nav, card-based UI
 - When implementing a Figma design, determine which surface it belongs to before placing the file
+

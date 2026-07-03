@@ -61,6 +61,11 @@
   overflow-y: auto;
 }
 
+.doctor-content--columna {
+  flex-direction: column;
+  align-items: stretch;
+}
+
 /* Placeholder when no patient is selected */
 .consulta-empty {
   flex: 1;

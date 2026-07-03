@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Sidebar from './components/web/sidebar'
 import Agenda from './components/web/agenda'
 import ConsultaWeb from './components/web/consulta'
+import RegistroPacientes from './components/web/registroPacientes'
 import type { medico } from './types/medico'
 import type { turno } from './types/turno'
 import type { paciente } from './types/paciente'
@@ -29,7 +30,10 @@ type EstadoGuardado = 'idle' | 'guardando' | 'ok' | 'error'
 
 const DoctorHome = () => {
   const navigate = useNavigate()
-  const [activeNav, setActiveNav] = useState('agenda')
+  const location = useLocation()
+  const [activeNav, setActiveNav] = useState(
+    () => (location.state as { activeNav?: string } | null)?.activeNav ?? 'agenda'
+  )
   const [turnoActivo, setTurnoActivo] = useState<turno | null>(null)
   const [pacienteBuscado, setPacienteBuscado] = useState<paciente | null>(null)
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>('idle')
@@ -192,13 +196,19 @@ const DoctorHome = () => {
         </header>
 
         <div className="doctor-content">
-          <Agenda
-            turnos={[]}
-            turnoActivoId={turnoActivo?.id}
-            onSeleccionar={handleSeleccionarTurno}
-          />
+          {activeNav === 'pacientes' ? (
+            <RegistroPacientes onVerDetalle={(pacienteId) => navigate(`/doctor/pacientes/${pacienteId}`)} />
+          ) : (
+            <>
+              <Agenda
+                turnos={[]}
+                turnoActivoId={turnoActivo?.id}
+                onSeleccionar={handleSeleccionarTurno}
+              />
 
-          {renderAreaConsulta()}
+              {renderAreaConsulta()}
+            </>
+          )}
         </div>
       </div>
     </div>
