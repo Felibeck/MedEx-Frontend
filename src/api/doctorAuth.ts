@@ -8,6 +8,11 @@ type ApiUserPublic = {
   nombre: string
   apellido: string
   es_medico: boolean
+  usuario_id?: string
+  organizacion_id?: string
+  matricula?: string
+  especialidad_medica?: string
+  profile_picture?: string
 }
 
 type ApiLoginResponse = {
@@ -24,6 +29,11 @@ export interface DoctorSession {
   nombre: string
   apellido: string
   esMedico: boolean
+  usuarioId?: string
+  organizacionId?: string
+  matricula?: string
+  especialidad?: string
+  fotoPerfil?: string
 }
 
 const mapDoctorFromApi = (raw: ApiUserPublic): DoctorSession => ({
@@ -32,6 +42,11 @@ const mapDoctorFromApi = (raw: ApiUserPublic): DoctorSession => ({
   nombre: raw.nombre,
   apellido: raw.apellido,
   esMedico: raw.es_medico,
+  usuarioId: raw.usuario_id,
+  organizacionId: raw.organizacion_id,
+  matricula: raw.matricula,
+  especialidad: raw.especialidad_medica,
+  fotoPerfil: raw.profile_picture,
 })
 
 export const loginDoctor = async (email: string, password: string): Promise<DoctorSession> => {

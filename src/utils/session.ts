@@ -25,17 +25,16 @@ export const getCurrentMedico = (): medico | null => {
   const s = getStoredDoctor()
   if (!s) return null
 
-  // Map loosely from stored session to the `medico` shape expected in the app
-  const idNum = typeof s.id === 'number' ? s.id : parseInt(String(s.id || '0'), 10) || 0
+  const idValue = typeof s.id === 'number' ? s.id : String(s.id ?? '')
 
   const mapped: medico = {
-    id: idNum,
+    id: idValue,
     nombre: s.nombre ?? s.firstName ?? '',
     apellido: s.apellido ?? s.lastName ?? '',
     email: s.email ?? '',
     password: '',
     esMedico: typeof s.esMedico === 'boolean' ? s.esMedico : !!s.es_medico,
-    usuarioId: s.usuarioId ?? String(s.id ?? ''),
+    usuarioId: s.usuarioId ?? s.usuario_id ?? String(s.id ?? ''),
     organizacionId: s.organizacionId ?? s.organizacion_id ?? '',
     matricula: s.matricula ?? '',
     especialidad: s.especialidad ?? s.especialidad_medica ?? '',
