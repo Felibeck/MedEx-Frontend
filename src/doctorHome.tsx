@@ -17,15 +17,11 @@ type EstadoGuardado = 'idle' | 'guardando' | 'ok' | 'error'
 
 const DoctorHome = () => {
   const navigate = useNavigate()
-<<<<<<< HEAD
   const location = useLocation()
   const [activeNav, setActiveNav] = useState(
     () => (location.state as { activeNav?: string } | null)?.activeNav ?? 'agenda'
   )
-=======
-  const [activeNav, setActiveNav] = useState('agenda')
   const [medico, setMedico] = useState<medico | null>(null)
->>>>>>> 6363dd203d9c38c4a6d6f432112812f35fdea4f7
   const [turnoActivo, setTurnoActivo] = useState<turno | null>(null)
   const [pacienteBuscado, setPacienteBuscado] = useState<paciente | null>(null)
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>('idle')
