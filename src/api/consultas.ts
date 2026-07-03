@@ -7,7 +7,7 @@ type notaAPI = {
 }
 
 export const getUltimaNotaPorProfesional = async (profesionalId: string): Promise<string | null> => {
-  const response = await api.get(`/doctor/${profesionalId}/notas`)
+  const response = await api.get(`/doctors/${profesionalId}/notas`)
   const data = response.data
   const notas: notaAPI[] = Array.isArray(data)
     ? data
@@ -27,5 +27,5 @@ export const getUltimaNotaPorProfesional = async (profesionalId: string): Promis
 }
 
 export const postConsulta = async (data: consulta): Promise<void> => {
-  await api.post('/doctor/consultas', data)
+  await api.post('/doctors/consultas', data)
 }

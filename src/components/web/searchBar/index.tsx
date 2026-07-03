@@ -1,5 +1,5 @@
-// src/components/web/searchBar/index.tsx
 import { useState } from "react";
+import { api } from "../../../api/client";
 import axios from "axios";
 import type { paciente } from "../../../types/paciente";
 import "./searchBar.css";
@@ -20,14 +20,15 @@ const SearchBar = ({ onPacienteEncontrado }: Props) => {
         setError(null);
 
         try {
-            const resp = await axios.get(
-                "http://localhost:3000/api/doctors/pacientes/buscar",
-                { params: { dni } }
-            );
+            const resp = await api.get("/doctors/pacientes/buscar", {
+                params: { dni },
+            });
             onPacienteEncontrado(resp.data.data);
         } catch (err: unknown) {
             if (axios.isAxiosError(err) && err.response?.status === 404) {
                 setError("No se encontró ningún paciente con ese DNI.");
+            } else if (axios.isAxiosError(err) && err.response?.status === 401) {
+                setError("No autorizado. Por favor inicia sesión como doctor.");
             } else {
                 setError("Error al conectar con el servidor.");
             }

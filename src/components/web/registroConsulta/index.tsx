@@ -22,7 +22,7 @@ const RegistroConsulta = ({ pacienteId, onGuardado, organizacionId, profesionalI
   setError(null)
 
   try {
-    await api.post("/doctor/consultas", {
+    await api.post("/doctors/consultas", {
       paciente_id: pacienteId,
       profesional_id: profesionalId,
       organizacion_id: organizacionId,
