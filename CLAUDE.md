@@ -1,209 +1,378 @@
-# MedEx Frontend — Design System Rules
+# CLAUDE.md — MedEx Frontend
 
-## Project Overview
+Este archivo le da contexto a Claude Code cada vez que trabaja en este repositorio.
+Se carga automáticamente al iniciar una sesión acá. Mantenerlo actualizado a medida
+que el proyecto cambia.
 
-MedEx is a React + TypeScript + Vite medical platform with two surfaces:
-- **Web** (desktop) — doctor-facing UI: sidebar, agenda, patient consultation form, search bar
-- **Mobile** — patient-facing UI: bottom nav, multiple screens per feature area
-
-**Figma file:** `PL4sxuPdmLdcAZOuKMwYnI` — file key to use in all MCP tool calls.
+Este archivo combina dos cosas: **arquitectura/stack de código** y **design system
+(Figma)**. Antes vivían en documentos separados; se unificaron acá porque Claude
+Code solo lee un `CLAUDE.md` por carpeta.
 
 ---
 
-## Screen Inventory (from Figma)
+# PARTE 1 — Proyecto, stack y arquitectura de código
 
-### Mobile — Patient App (390px wide)
+## Qué es MedEx Frontend
 
-| Frame | Node ID | Description |
+Interfaz web y mobile de MedEx, plataforma de gestión de citas/consultas médicas
+que conecta Pacientes y Doctores. Tiene dos superficies dentro de la misma app:
+
+- **Mobile** (mobile-first) — vista Paciente: historial de estudios, detalle con
+  visor DICOM, perfil, familia, cuidados, etc.
+- **Web** (desktop) — vista Doctor/Médico: agenda, panel de consulta, búsqueda de
+  paciente por DNI, reporte semanal.
+
+Consume la API REST del repo backend (`http://localhost:3000/api` en desarrollo).
+
+## Stack
+
+- **React 19** + TypeScript (~6.0.2)
+- **Vite 8** (bundler y dev server)
+- **react-router-dom v7** para navegación
+- **Axios** (^1.18) como cliente HTTP, instancia centralizada en `src/api/client.ts`
+- **@heroicons/react** (^2.2) para iconos — no instalar otras librerías de íconos
+- **ESLint 10** para lint
+- CSS plano colocado junto a cada componente — no Tailwind, no CSS-in-JS, no
+  styled-components
+
+## Estructura real de carpetas
+
+```
+src/
+├── api/                     # Clientes y helpers de la API REST
+│   ├── client.ts            # Instancia base de Axios + interceptor de auth
+│   ├── patientAuth.ts       # Login/registro de paciente (ver patrón de mappers)
+│   └── estudios.ts          # Fetch y mapeo de estudios del paciente
+│
+├── assets/                  # SVGs usados en código (imports)
+│
+├── components/
+│   ├── mobile/               # Vista Paciente (mobile-first)
+│   │   ├── cardEstudio/
+│   │   ├── carruselFotos/
+│   │   ├── detalleEstudio/
+│   │   ├── historialEstudios/
+│   │   ├── listaEstudios/
+│   │   └── mobileHeader/
+│   └── web/                  # Vista Médico (desktop)
+│       ├── agenda/
+│       ├── consulta/
+│       ├── sidebar/
+│       ├── searchBar/
+│       └── registroConsulta/
+│
+├── config/
+│   ├── constants.ts          # Constantes globales (ej: PACIENTE_ID por defecto)
+│   └── tiposEstudio.ts       # Enum y labels de tipos de estudio + filtros
+│
+├── data/
+│   └── mockEstudios.ts       # Datos mock para desarrollo local
+│
+├── pages/
+│   └── mobile/
+│       ├── PatientLogin.tsx
+│       └── DetalleEstudioPage.tsx
+│
+├── types/                    # Tipos TS compartidos (DTOs y props)
+│   ├── estudio.ts
+│   ├── medico.ts
+│   ├── paciente.ts
+│   ├── turno.ts
+│   ├── consulta.ts
+│   ├── corte.ts
+│   └── Usuario.ts
+│
+├── App.tsx                   # Definición de rutas
+├── HomePage.tsx               # Selección de vista (Paciente / Doctor)
+├── patientHome.tsx
+├── doctorHome.tsx
+├── index.css                 # Variables CSS globales, reset base
+└── main.tsx                  # Bootstrap, monta BrowserRouter
+```
+
+Component Organization (regla de oro):
+- Web → `src/components/web/<componentName>/index.tsx` + `<componentName>.css`
+- Mobile → `src/components/mobile/<componentName>/index.tsx` + `<componentName>.css`
+- Páginas de nivel superior van directo en `src/` (`doctorHome.tsx`, etc.)
+- **Antes de crear un componente nuevo, revisar si ya existe uno similar** en
+  `src/components/web/` o `src/components/mobile/`.
+
+## Rutas actuales
+
+| Ruta | Componente | Descripción |
+|------|-----------|-------------|
+| `/` | `HomePage` | Selección de vista (Paciente / Doctor) |
+| `/patients` | `PatientHome` | Historial de estudios del paciente |
+| `/patients/estudio/:id` | `DetalleEstudioPage` | Detalle de estudio con visor DICOM |
+| `/doctor` | `DoctorHome` | Dashboard del médico: agenda y consulta |
+
+Rutas nuevas se agregan en `App.tsx`. Navegación interna con el hook `useNavigate()`.
+
+## Patrón de API y mappers (importante)
+
+Los archivos en `src/api/` no exponen los shapes crudos del backend directamente.
+Siguen este patrón (ver `src/api/patientAuth.ts` como referencia):
+
+1. Tipos `ApiXxx` que reflejan exactamente lo que devuelve el backend (snake_case,
+   ej: `es_medico`, `fecha_nacimiento`).
+2. Interfaces internas en camelCase (ej: `UserSession` con `esMedico`) que son las
+   que consume el resto de la app.
+3. Una función `mapXxxFromApi()` que traduce de una a otra.
+4. La función exportada (ej: `loginPatient`) hace la llamada con `api` (instancia de
+   Axios), valida `success` en la respuesta, y devuelve el tipo mapeado — nunca el
+   crudo del backend.
+
+Al integrar un endpoint nuevo, seguir este mismo patrón de 3 capas (tipo API →
+mapper → tipo interno), no consumir la respuesta cruda directo en el componente.
+
+## Autenticación
+
+- El token JWT se guarda en `localStorage` bajo la key `token` (más `medex_user_id`
+  y `medex_user` para la sesión del paciente — ver `PatientLogin.tsx`).
+- `src/api/client.ts` tiene un interceptor de request que inyecta automáticamente
+  `Authorization: Bearer <token>` en cada llamada si el token existe. No repetir esa
+  lógica manualmente en cada llamada a la API.
+
+## Convención de respuesta esperada del backend
+
+El backend responde siempre con el envelope `{ success, message?, data? }`. Los
+mappers en `src/api/` deben validar `data.success` antes de usar `data.data`, y
+lanzar `Error(data.message)` en caso de `success: false`.
+
+## TypeScript
+
+Todos los tipos de dominio están en `src/types/`:
+
+- `paciente.ts` — extiende `Usuario`, agrega `dni`, `edad`, `identidadGenero`,
+  `telefono`, `fotoPerfil`
+- `medico.ts` — extiende `Usuario`, agrega `usuarioId`, `organizacionId`,
+  `matricula`, `especialidad`, `fotoPerfil`
+- `estudio.ts` — `fotos[]`, `tipoEstudio`, `fecha`, `institucion`, `informe?`, `medico?`
+- `consulta.ts`, `corte.ts` — tipos de dominio adicionales
+- `Usuario.ts` — tipo base de usuario
+
+Siempre importar tipos con `import type { ... }` (no `import { ... }`).
+
+## Tipos de estudio soportados
+
+| Código | Label |
+|--------|-------|
+| `MAMOGRAFIA` | Mamografía |
+| `ECOGRAFIA` | Ecografía |
+| `LABORATORIO` | Laboratorio |
+| `RESONANCIA` | Resonancia |
+| `BIOPSIA` | Biopsia |
+
+Definidos en `src/config/tiposEstudio.ts`. Si el backend introduce un tipo de
+estudio nuevo (vía la tabla catálogo `tipos_estudio`), reflejarlo acá también.
+
+## Trabajo pendiente conocido
+
+Integración frontend para dos campos ya implementados en el backend (`consultas`):
+- `tipo_consulta` — string, uno de: `primera_vez`, `seguimiento`, `control`,
+  `urgencia`, `telemedicina` (ENUM en el backend)
+- `tipo_estudio_id` — FK nullable, requerida condicionalmente cuando
+  `solicitud_estudio` es true; el backend resuelve el nombre legible vía join
+
+Esto afecta principalmente `src/types/consulta.ts` y el formulario en
+`src/components/web/registroConsulta/`.
+
+## Configuración / variables de entorno
+
+La URL base de la API está **hardcodeada** en `src/api/client.ts`
+(`http://localhost:3000/api`), no usa variable de entorno todavía. Si se necesita
+apuntar a otro entorno, migrar a `VITE_API_URL` en vez de hardcodear un segundo
+valor en otro lugar.
+
+## Comandos
+
+- Instalar dependencias: `npm install`
+- Dev: `npm run dev` (Vite)
+- Build: `npm run build` (corre `tsc -b` antes de `vite build` — resolver errores de
+  TypeScript antes de que el build pueda completar)
+- Preview del build: `npm run preview`
+- Lint: `npm run lint` (ESLint, configuración en `eslint.config.js`)
+- Test: no hay tests configurados en el repo actualmente
+
+## Notas del repo
+
+- El repo tiene `express` en `package.json` pero **no hay código de servidor acá**
+  — no asumir ni modificar comportamiento de backend desde este repo.
+- No agregar un framework de testing sin aprobación explícita.
+
+## Fuera de alcance para este repo
+
+Migraciones, lógica de negocio del backend, acceso a Supabase, y cualquier cambio
+de la API en sí van en el repo backend, no acá. Backend y frontend se tratan como
+tareas secuenciales y desacopladas.
+
+---
+
+# PARTE 2 — Design System (Figma)
+
+**Figma file:** `PL4sxuPdmLdcAZOuKMwYnI` — file key a usar en todas las llamadas MCP.
+
+## Inventario de pantallas (Figma)
+
+### Mobile — App Paciente (390px de ancho)
+
+| Frame | Node ID | Descripción |
 |---|---|---|
-| Inicio | `1:1816` | Home — obra social card, guardias cercanas con mapa |
-| Cuidados | `1:1328` | Medications — smart reminders, treatment tracking, inventory, pharmacy map |
-| Boton: Historial | `1:1927` | Full history — timeline, charts (glucose/blood pressure/cholesterol), studies grid |
-| Linea de tiempo: ver mas | `57:288` | Timeline expanded view |
-| Historial de estudios: ver mas | `90:1281` | Studies grid — list view and compact view with filters |
-| Boton: Perfil | `19:1299` | Profile — blood type, allergies, conditions, historial medico button |
-| Familia | `19:661` | Family — multi-profile selector, member cards with alerts |
-| Configuracion | `19:1530` | Settings — dark mode variant also available (`54:1100`) |
-| Boton Header: Chatbot | `291:1071` | AI chatbot screen |
-| Notificaciones | `147:140` | Notifications list |
-| Registro | `1:1697` | Registration form |
-| Inicio Sesion | `291:1013` | Login — profile picker |
+| Inicio | `1:1816` | Home — card de obra social, guardias cercanas con mapa |
+| Cuidados | `1:1328` | Medicación — recordatorios, seguimiento de tratamiento, inventario, farmacias |
+| Boton: Historial | `1:1927` | Historial completo — timeline, gráficos (glucosa/presión/colesterol), grid de estudios |
+| Linea de tiempo: ver mas | `57:288` | Vista expandida de timeline |
+| Historial de estudios: ver mas | `90:1281` | Grid de estudios — vista lista y compacta con filtros |
+| Boton: Perfil | `19:1299` | Perfil — grupo sanguíneo, alergias, condiciones, botón historial médico |
+| Familia | `19:661` | Selector multi-perfil, tarjetas de miembros con alertas |
+| Configuracion | `19:1530` | Ajustes — variante dark mode también disponible (`54:1100`) |
+| Boton Header: Chatbot | `291:1071` | Pantalla de chatbot IA |
+| Notificaciones | `147:140` | Lista de notificaciones |
+| Registro | `1:1697` | Formulario de registro |
+| Inicio Sesion | `291:1013` | Login — selector de perfil |
 
-**Modals/overlays:** Modal Notificaciones (`113:3531`), Modal QR Emergencias (`315:1168`), Modal Compartir (`119:166`), The Modal Card (document upload `94:860`)
+**Modals/overlays:** Modal Notificaciones (`113:3531`), Modal QR Emergencias
+(`315:1168`), Modal Compartir (`119:166`), Modal Card / subida de documento (`94:860`)
 
-### Web — Doctor App (1610px wide)
+### Web — App Médico (1610px de ancho)
 
-| Frame | Node ID | Description |
+| Frame | Node ID | Descripción |
 |---|---|---|
-| Inicio Web | `392:1103` | Dashboard — quick access bento grid (Ver Agenda / Buscar Paciente / Nueva Consulta) |
-| Web boton Agenda | `392:1346` | Agenda — daily schedule list with appointment rows |
-| Web agenda persona | `388:445` | Consultation view — sidebar + patient card + consultation form |
-| Web Agregar una consulta | `394:1613` | New appointment — patient picker, date/time, time slots |
-| Web Ver Reporte Semanal | `395:1933` | Weekly report — KPIs, charts, consultation reasons, alerts |
-| Inicio de Sesion web | `390:811` | Web login page |
+| Inicio Web | `392:1103` | Dashboard — bento grid de accesos rápidos (Ver Agenda / Buscar Paciente / Nueva Consulta) |
+| Web boton Agenda | `392:1346` | Agenda — lista diaria de turnos |
+| Web agenda persona | `388:445` | Vista de consulta — sidebar + card de paciente + formulario |
+| Web Agregar una consulta | `394:1613` | Nuevo turno — selector de paciente, fecha/hora, slots |
+| Web Ver Reporte Semanal | `395:1933` | Reporte semanal — KPIs, gráficos, motivos de consulta, alertas |
+| Inicio de Sesion web | `390:811` | Login web |
 
----
+## Navegación
 
-## Navigation Structure
+### Bottom nav mobile (5 tabs)
+1. Inicio — home con obra social y hospitales cercanos
+2. Familia — gestión de miembros de familia
+3. Cuidados — medicación, tratamientos, farmacia
+4. Historial — historial médico, estudios, timeline
+5. Perfil — perfil de usuario y configuración
 
-### Mobile Bottom Navigation (5 tabs)
-1. **Inicio** — home with obra social and nearby hospitals
-2. **Familia** — family members management
-3. **Cuidados** — medications, treatments, pharmacy
-4. **Historial** — medical history, studies, timeline
-5. **Perfil** — user profile and settings
+### Sidebar web
+Agenda · Registro de Pacientes · Notificaciones · Configuración · (abajo: perfil del
+doctor + Chatbot + Cerrar Sesión)
 
-### Web Sidebar Navigation
-- Agenda
-- Registro de Pacientes
-- Notificaciones
-- Configuración
-- Doctor profile + Chatbot + Cerrar Sesión (bottom)
+## Paleta de colores (Figma)
 
----
+Paleta primaria **teal/verde** (estética médica, limpia) — distinta al morado que
+hay actualmente en `index.css`. Al implementar pantallas desde Figma, usar estos
+valores:
 
-## Component Organization
-
-- Web components → `src/components/web/<componentName>/index.tsx`
-- Mobile components → `src/components/mobile/<componentName>/index.tsx`
-- Each component lives in its own folder with its CSS file: `<componentName>.css`
-- Page-level files live directly in `src/`: `doctorHome.tsx`, `patientHome.tsx`, `HomePage.tsx`
-- Types live in `src/types/` as individual `.ts` files
-
-Before creating a new component, always check `src/components/web/` and `src/components/mobile/` for existing ones.
-
----
-
-## Design System — Visual Language (from Figma)
-
-### Color Palette
-The Figma design uses a **teal/green primary palette** (medical, clean), not the purple currently in index.css. When implementing screens from Figma, match these values:
-
-| Token | Value | Usage |
+| Token | Valor | Uso |
 |---|---|---|
-| Primary 1 | `#1F6F6B` | Primary actions, active states |
-| Primary 2 | `#5FAFA9` | Secondary/hover states |
-| Secondary 1 | `#D4ECEB` | Backgrounds, subtle fills |
-| Secondary 2 | `#0B3131` | Dark text on light |
-| Black | `#00201F` | Primary text |
-| Gray 1 | `#416464` | Muted text |
-| Gray 3 | `#BCC9C6` | Borders, dividers |
-| Gray 6 | `#D9E5E2` | Card backgrounds |
-| Gray 7 | `#F3F6F3` | Page backgrounds |
-| White | `#FFFFFF` | Card surfaces |
+| Primary 1 | `#1F6F6B` | Acciones primarias, estados activos |
+| Primary 2 | `#5FAFA9` | Estados secundarios/hover |
+| Secondary 1 | `#D4ECEB` | Fondos, rellenos sutiles |
+| Secondary 2 | `#0B3131` | Texto oscuro sobre fondo claro |
+| Black | `#00201F` | Texto principal |
+| Gray 1 | `#416464` | Texto atenuado |
+| Gray 3 | `#BCC9C6` | Bordes, separadores |
+| Gray 6 | `#D9E5E2` | Fondos de card |
+| Gray 7 | `#F3F6F3` | Fondos de página |
+| White | `#FFFFFF` | Superficies de card |
 
-### Design Tokens (CSS Variables in index.css)
-The current CSS variables use purple (`--accent: #aa3bff`). When implementing Figma screens, map the Figma teal colors to these variables OR use the Figma hex values directly for new components until a full token migration is done.
+### Design tokens (variables CSS en `index.css`)
 
-Dark mode is defined under `@media (prefers-color-scheme: dark)` in `src/index.css`.
+Las variables actuales usan morado (`--accent: #aa3bff`). Al implementar pantallas
+de Figma: mapear los colores teal de Figma a estas variables, **o** usar los valores
+hex de Figma directamente en componentes nuevos hasta que se haga una migración
+completa de tokens.
 
-### Typography (from Figma UI Kit)
-- Font: **Inter** (matches system-ui stack in index.css)
-- Headings: weight 500, sizes H1=40px, H2=32-36px, H3=28px, H4=24-28px
+Dark mode está definido bajo `@media (prefers-color-scheme: dark)` en `src/index.css`.
+
+## Tipografía (Figma UI Kit)
+
+- Fuente: **Inter** (coincide con el stack `system-ui` de `index.css`)
+- Headings: peso 500, tamaños H1=40px, H2=32-36px, H3=28px, H4=24-28px
 - Body: 18px (desktop), 16px (mobile)
 - Labels/captions: 15-16px
 
-### Layout Patterns
-- Mobile screens: 390px wide, 24px horizontal padding, content at 342px
-- Cards: 16-24px padding, border-radius ~12px, subtle box-shadow
-- Bento grid layout used extensively (asymmetric card grids)
-- Bottom nav: 82px height, 5 tabs
-- Mobile header (TopAppBar): 98px height
+## Patrones de layout
 
-### Button Styles (from Figma)
-- Primary: filled teal background, white text, 56px height, full-width or auto
-- Secondary: outlined/ghost, same height
-- Small: 36-40px height
-- Border-radius: consistent ~8-12px across all buttons
+- Pantallas mobile: 390px de ancho, 24px de padding horizontal, contenido a 342px
+- Cards: 16-24px de padding, border-radius ~12px, box-shadow sutil
+- Bento grid usado extensivamente (grillas de cards asimétricas)
+- Bottom nav: 82px de alto, 5 tabs
+- Header mobile (TopAppBar): 98px de alto
 
----
+## Estilos de botones (Figma)
 
-## Styling Rules
+- Primary: fondo teal sólido, texto blanco, 56px de alto, full-width o auto
+- Secondary: outlined/ghost, mismo alto
+- Small: 36-40px de alto
+- Border-radius: ~8-12px consistente en todos los botones
 
-- Use **plain CSS** with class names — no Tailwind, no CSS-in-JS, no styled-components
-- Each component has a co-located CSS file imported as `import './componentName.css'`
-- CSS class names use **kebab-case** (e.g. `mobile-header`, `card-estudio`)
-- IMPORTANT: Never use inline `style={{ }}` for anything other than quick prototyping
-- Spacing: use multiples of 4px / 8px as base units
-- Typography: use `var(--sans)` for body, `var(--heading)` for headings, `var(--mono)` for code
+## Reglas de estilo (CSS)
 
----
+- CSS plano con nombres de clase — nada de Tailwind, CSS-in-JS ni styled-components
+- Cada componente tiene un CSS co-ubicado, importado como `import './componentName.css'`
+- Clases CSS en **kebab-case** (ej: `mobile-header`, `card-estudio`)
+- **Nunca** usar `style={{ }}` inline salvo prototipado rápido
+- Espaciado: múltiplos de 4px / 8px como unidad base
+- Tipografía: `var(--sans)` para body, `var(--heading)` para headings, `var(--mono)`
+  para código
 
-## Naming Conventions
+## Convenciones de nombres
 
-- Component functions: **PascalCase** (e.g. `MobileHeader`, `CardEstudio`)
-- Component files: `index.tsx` inside a named folder
-- CSS files: camelCase matching the folder name (e.g. `mobileHeader.css`, `cardEstudio.css`)
-- Type files: camelCase lowercase (e.g. `paciente.ts`, `medico.ts`, `estudio.ts`)
-- Props interface: inline type or `type Props = { ... }` — no separate interface files needed for small components
+- Funciones de componente: **PascalCase** (ej: `MobileHeader`, `CardEstudio`)
+- Archivos de componente: `index.tsx` dentro de una carpeta con nombre propio
+- Archivos CSS: camelCase igual al nombre de la carpeta (ej: `mobileHeader.css`)
+- Archivos de tipos: camelCase en minúscula (ej: `paciente.ts`, `medico.ts`)
+- Props: tipo inline o `type Props = { ... }` — no hace falta un archivo de
+  interfaz separado para componentes chicos
 
----
+## Iconos
 
-## TypeScript Types
+- Usar **@heroicons/react** (ya instalado)
+- Importar desde `@heroicons/react/16/solid` o `@heroicons/react/24/solid`
+- Para SVG inline en JSX, preferir heroicons antes que escribir SVG crudo
+- **No instalar librerías de íconos nuevas**
 
-All domain types are in `src/types/`:
+## Integración Figma MCP — flujo obligatorio
 
-- `paciente.ts` — extends `usuario`, adds dni, edad, identidadGenero, telefono, fotoPerfil
-- `medico.ts` — extends `usuario`, adds usuarioId, organizacionId, matricula, especialidad, fotoPerfil
-- `estudio.ts` — fotos[], tipoEstudio, fecha, institucion, informe?, medico?
-- `consulta.ts`, `corte.ts` — additional domain types
-- `Usuario.ts` — base user type
+Al traducir un diseño de Figma a código, no saltear pasos:
 
-Always import types with `import type { ... }` (not `import { ... }`).
+1. Correr `get_design_context` para obtener la representación estructurada del nodo
+2. Si la respuesta es muy grande, correr primero `get_metadata` para el mapa de
+   nodos, y volver a pedir nodos específicos
+3. Correr `get_screenshot` como referencia visual de la variante exacta a implementar
+4. Solo después de tener `get_design_context` y `get_screenshot`, empezar a implementar
+5. Traducir el output de Figma a las convenciones de MedEx (CSS plano, variables
+   CSS, heroicons, tipos existentes)
+6. Validar contra el screenshot de Figma para paridad visual 1:1 antes de dar
+   por terminado
 
----
+### Mapeo Figma → Código
 
-## Icons
+- Colores de Figma → variables CSS de `src/index.css` (mapear por valor, elegir el
+  token más cercano)
+- Tipografía de Figma → usar `var(--sans)`, `var(--heading)` o `var(--mono)` + tamaño en px
+- Espaciado de Figma → redondear al múltiplo de 4px más cercano
+- Íconos de Figma → equivalente en `@heroicons/react` cuando sea posible
+- Componentes de Figma → revisar si ya existe algo similar en `src/components/`
+  antes de crear uno nuevo
+- Componente web nuevo → `src/components/web/<name>/index.tsx` + `<name>.css`
+- Componente mobile nuevo → `src/components/mobile/<name>/index.tsx` + `<name>.css`
 
-- Use **@heroicons/react** for icons (already installed)
-- Import from `@heroicons/react/16/solid` or `@heroicons/react/24/solid`
-- For inline SVG icons used directly in JSX, use heroicons when possible instead of writing raw SVG
-- IMPORTANT: Do NOT install new icon libraries
+### Manejo de assets
 
----
+- Si el servidor MCP de Figma devuelve una URL `localhost` para una imagen o SVG,
+  usarla directamente como `src`
+- **No** crear imágenes placeholder ni importar paquetes de assets nuevos
+- Assets estáticos (logos, imágenes) van en `public/`
+- SVGs usados en código van en `src/assets/`
 
-## Routing
+## Separación de superficies
 
-- Uses `react-router-dom` v7
-- Routes defined in `src/App.tsx`
-- Navigation inside components: use `useNavigate()` hook
-
----
-
-## Figma MCP Integration Rules
-
-These rules define how to translate Figma inputs into code for this project.
-
-### Required Flow (do not skip)
-
-1. Run `get_design_context` to fetch the structured representation of the node
-2. If response is too large, run `get_metadata` first to get the node map, then re-fetch specific nodes
-3. Run `get_screenshot` for a visual reference of the exact variant being implemented
-4. Only after having both `get_design_context` and `get_screenshot`, start implementation
-5. Translate the Figma output into MedEx conventions (plain CSS, CSS variables, heroicons, existing types)
-6. Validate against the Figma screenshot for 1:1 visual parity before marking complete
-
-### Figma → Code Mapping
-
-- Figma colors → CSS variables from `src/index.css` (match by value, pick closest token)
-- Figma typography → use `var(--sans)`, `var(--heading)`, or `var(--mono)` + size in px
-- Figma spacing → round to nearest 4px multiple
-- Figma icons → use `@heroicons/react` equivalent when possible
-- Figma components → check if component already exists in `src/components/` before creating new
-- New web component → `src/components/web/<name>/index.tsx` + `<name>.css`
-- New mobile component → `src/components/mobile/<name>/index.tsx` + `<name>.css`
-
-### Asset Handling
-
-- IMPORTANT: If the Figma MCP server returns a `localhost` URL for an image or SVG, use it directly as the `src`
-- IMPORTANT: Do NOT create placeholder images or import new asset packages
-- Static assets (logos, images) go in `public/`
-- SVG assets used in code go in `src/assets/`
-
----
-
-## Surface Separation
-
-- **Web (doctor)** components are under `src/components/web/` — desktop layout, sidebar navigation
-- **Mobile (patient)** components are under `src/components/mobile/` — mobile-first, header nav, card-based UI
-- When implementing a Figma design, determine which surface it belongs to before placing the file
+- Componentes **web** (doctor) van en `src/components/web/` — layout desktop,
+  navegación por sidebar
+- Componentes **mobile** (paciente) van en `src/components/mobile/` — mobile-first,
+  navegación por header, UI basada en cards
+- Al implementar un diseño de Figma, determinar primero a qué superficie
+  pertenece antes de decidir dónde va el archivo
