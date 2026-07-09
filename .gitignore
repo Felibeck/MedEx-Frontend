@@ -24,3 +24,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+#claude stuff
+
+.claude/settings.local.json
