@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import MobileHeader from '../mobileHeader'
 import ListaEstudios from '../listaEstudios'
+import BottomNavBar from '../bottomNavBar'
 import { fetchEstudiosPaciente } from '../../../api/estudios'
-import { PACIENTE_ID } from '../../../config/constants'
+import { getPacienteId } from '../../../config/constants'
 import { FILTROS_TIPO, type FiltroTipo } from '../../../config/tiposEstudio'
 import type { estudioResumen } from '../../../types/estudio'
 import './historialEstudios.css'
@@ -32,7 +33,7 @@ const HistorialEstudios = ({
       setError(null)
 
       try {
-        const data = await fetchEstudiosPaciente(PACIENTE_ID)
+        const data = await fetchEstudiosPaciente(getPacienteId())
         if (!cancelled) setEstudios(data)
       } catch (err: unknown) {
         if (!cancelled) {
@@ -132,6 +133,7 @@ const HistorialEstudios = ({
           <ListaEstudios estudios={estudiosFiltrados} />
         )}
       </div>
+      <BottomNavBar />
     </div>
   )
 }

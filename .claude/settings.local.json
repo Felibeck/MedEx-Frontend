@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"c:/Users/49255481/Downloads/\")",
+      "Read(//c/Users/49255481/Downloads/**)",
+      "Bash(curl -s --ssl-no-revoke -m 5 \"http://localhost:3000/api/doctors/mis-pacientes\" -i)",
+      "Read(//c/Users/49552251/Downloads/MedEx-Backend/**)",
+      "Bash(npm run *)"
+    ]
+  }
+}

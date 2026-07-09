@@ -7,5 +7,5 @@ export type consulta = {
   solicitud_estudio?: boolean
   solicitud_receta?: boolean
   solicitud_citaprox?: boolean
-  notas?: string | { nota: string } | Array<{ nota: string }>
+  notas?: string | Record<string, unknown> | Array<Record<string, unknown>>
 }

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { registerPatient } from '../../api/patientAuth'
 import './PatientSignup.css'
 
 const LOGO_URL = 'https://www.figma.com/api/mcp/asset/9b0d94e4-e4f9-43fd-a2af-eadfe0ee66aa'
@@ -11,17 +13,47 @@ const DROPDOWN_ARROW_URL = 'https://www.figma.com/api/mcp/asset/94f8d3d5-4db0-4f
 const PatientSignup = () => {
   const navigate = useNavigate()
   const [nombre, setNombre] = useState('')
+  const [apellido, setApellido] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [fechaNacimiento, setFechaNacimiento] = useState('')
   const [sexo, setSexo] = useState('')
   const [obraSocial, setObraSocial] = useState('')
+  const [telefono, setTelefono] = useState('')
   const [cuil, setCuil] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-    navigate('/patients')
+    setError(null)
+    setIsLoading(true)
+    try {
+      await registerPatient({
+        nombre,
+        apellido,
+        firstName: nombre,
+        lastName: apellido,
+        email,
+        password,
+        phoneNumber: telefono || null,
+        dateOfBirth: fechaNacimiento || null,
+        gender: sexo || null,
+        dni: cuil || null,
+      })
+      navigate('/patients/login')
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message ?? 'Error al registrarse')
+      } else if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('Error al registrarse')
+      }
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -46,29 +78,44 @@ const PatientSignup = () => {
 
           <form className="patient-signup__form" onSubmit={handleSignup}>
 
-            {/* Nombre y Apellido + Email (grouped in Figma) */}
+            {/* Nombre + Apellido */}
             <div className="patient-signup__fields-group">
               <div className="patient-signup__field">
-                <label className="patient-signup__label">Nombre y Apellido</label>
+                <label className="patient-signup__label">Nombre</label>
                 <input
                   className="patient-signup__input"
                   type="text"
-                  placeholder="ejemplo@correo.com"
+                  placeholder="Juan"
                   value={nombre}
                   onChange={e => setNombre(e.target.value)}
+                  required
                 />
               </div>
 
               <div className="patient-signup__field">
-                <label className="patient-signup__label">Email o Teléfono</label>
+                <label className="patient-signup__label">Apellido</label>
                 <input
                   className="patient-signup__input"
                   type="text"
-                  placeholder="ejemplo@correo.com"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  placeholder="García"
+                  value={apellido}
+                  onChange={e => setApellido(e.target.value)}
+                  required
                 />
               </div>
+            </div>
+
+            {/* Email */}
+            <div className="patient-signup__field">
+              <label className="patient-signup__label">Email</label>
+              <input
+                className="patient-signup__input"
+                type="email"
+                placeholder="ejemplo@correo.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+              />
             </div>
 
             {/* Contraseña */}
@@ -78,9 +125,10 @@ const PatientSignup = () => {
                 <input
                   className="patient-signup__input"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
+                  placeholder="Mín. 8 caracteres, mayúscula y número"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
+                  required
                 />
                 <button
                   type="button"
@@ -92,15 +140,28 @@ const PatientSignup = () => {
               </div>
             </div>
 
+            {/* Teléfono */}
+            <div className="patient-signup__field">
+              <label className="patient-signup__label">Teléfono</label>
+              <input
+                className="patient-signup__input"
+                type="tel"
+                placeholder="+54 11 1234-5678"
+                value={telefono}
+                onChange={e => setTelefono(e.target.value)}
+                required
+              />
+            </div>
+
             {/* Fecha de nacimiento */}
             <div className="patient-signup__field">
               <label className="patient-signup__label">Fecha de nacimiento</label>
               <input
                 className="patient-signup__input"
-                type="text"
-                placeholder="yyyy/mm/dd"
+                type="date"
                 value={fechaNacimiento}
                 onChange={e => setFechaNacimiento(e.target.value)}
+                required
               />
             </div>
 
@@ -112,12 +173,13 @@ const PatientSignup = () => {
                   className="patient-signup__select"
                   value={sexo}
                   onChange={e => setSexo(e.target.value)}
+                  required
                 >
                   <option value="" disabled />
                   <option value="masculino">Masculino</option>
                   <option value="femenino">Femenino</option>
                   <option value="otro">Otro</option>
-                  <option value="no_especifica">Prefiero no especificar</option>
+                  <option value="prefiero_no_decir">Prefiero no especificar</option>
                 </select>
               </div>
             </div>
@@ -186,10 +248,12 @@ const PatientSignup = () => {
               </div>
             </div>
 
+            {error && <p className="patient-signup__error">{error}</p>}
+
             {/* Submit */}
             <div className="patient-signup__submit-wrap">
-              <button type="submit" className="patient-signup__btn-primary">
-                Registrate
+              <button type="submit" className="patient-signup__btn-primary" disabled={isLoading}>
+                {isLoading ? 'Registrando...' : 'Registrate'}
               </button>
             </div>
 

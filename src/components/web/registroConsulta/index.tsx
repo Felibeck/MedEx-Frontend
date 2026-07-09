@@ -1,6 +1,7 @@
 // src/components/web/registroConsulta/index.tsx
 import { useState } from "react";
 import axios from "axios";
+import { api } from "../../../api/client";
 import "./registroConsulta.css";
 
 type Props = {
@@ -21,12 +22,14 @@ const RegistroConsulta = ({ pacienteId, onGuardado, organizacionId, profesionalI
   setError(null)
 
   try {
-    await axios.post("http://localhost:3000/api/doctors/consultas", {
+    await api.post("/doctors/consultas", {
       paciente_id: pacienteId,
       profesional_id: profesionalId,
       organizacion_id: organizacionId,
-      solicitud_citaProx: recordatorio,
-      notas: motivoConsulta ? { nota: motivoConsulta.trim() } : undefined,
+      solicitud_estudio: false,
+      solicitud_receta: false,
+      solicitud_citaprox: recordatorio,
+      notas: motivoConsulta ? motivoConsulta.trim() : undefined,
     })
 
     onGuardado?.()
