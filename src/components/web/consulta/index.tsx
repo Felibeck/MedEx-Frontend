@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { paciente } from '../../../types/paciente'
 import type { consulta } from '../../../types/consulta'
+import { TIPOS_CONSULTA, TIPO_CONSULTA_LABELS, type TipoConsulta } from '../../../config/tiposConsulta'
 import './consulta.css'
 
 type Props = {
@@ -29,16 +30,33 @@ const ConsultaWeb = ({
   onVerHistorial,
 }: Props) => {
   const [proximaCita, setProximaCita] = useState(false)
+  const [tipoConsulta, setTipoConsulta] = useState<TipoConsulta | ''>('')
+  const [solicitudEstudio, setSolicitudEstudio] = useState(false)
+  const [errorFormulario, setErrorFormulario] = useState<string | null>(null)
+
+  const handleToggleSolicitudEstudio = () => {
+    setSolicitudEstudio((prev) => !prev)
+  }
 
   const buildConsulta = (): consulta => ({
     dni: paciente?.dni,
     profesional_id: profesionalId,
     organizacion_id: organizacionId,
-    solicitud_estudio: false,
+    tipo_consulta: tipoConsulta as TipoConsulta,
+    solicitud_estudio: solicitudEstudio,
     solicitud_receta: false,
     solicitud_citaprox: proximaCita,
     notas: otros ? otros.trim() : undefined,
   })
+
+  const handleFinalizarClick = () => {
+    if (!tipoConsulta) {
+      setErrorFormulario('Debe seleccionar un tipo de consulta.')
+      return
+    }
+    setErrorFormulario(null)
+    onFinalizar?.(buildConsulta())
+  }
 
   return (
     <div className="consulta-panel">
@@ -116,6 +134,28 @@ const ConsultaWeb = ({
       <div className="consulta-form-card">
         <h3 className="consulta-form-card__titulo">Registro de Consulta</h3>
 
+        {/* Tipo de consulta */}
+        <div className="consulta-form-card__field">
+          <label className="consulta-form-card__label" htmlFor="tipo-consulta">
+            Tipo de Consulta
+          </label>
+          <select
+            id="tipo-consulta"
+            className="consulta-form-card__select"
+            value={tipoConsulta}
+            onChange={(e) => setTipoConsulta(e.target.value as TipoConsulta)}
+          >
+            <option value="" disabled>
+              Seleccione un tipo de consulta
+            </option>
+            {TIPOS_CONSULTA.map((tipo) => (
+              <option key={tipo} value={tipo}>
+                {TIPO_CONSULTA_LABELS[tipo]}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {/* Textarea */}
         <div className="consulta-form-card__field">
           <label className="consulta-form-card__label">
@@ -173,13 +213,20 @@ const ConsultaWeb = ({
             </svg>
             <span>Cargar Diagnóstico</span>
           </button>
-          <button type="button" className="consulta-accion-btn">
+          <button
+            type="button"
+            className={`consulta-accion-btn ${solicitudEstudio ? 'consulta-accion-btn--active' : ''}`}
+            onClick={handleToggleSolicitudEstudio}
+            aria-pressed={solicitudEstudio}
+          >
             <svg width="18" height="22" viewBox="0 0 24 24" fill="none" stroke="#1f6f6b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
             </svg>
             <span>Solicitar Estudio</span>
           </button>
         </div>
+
+        {errorFormulario && <p className="consulta-form-card__error">{errorFormulario}</p>}
 
         {/* Botones finales */}
         <div className="consulta-form-card__footer">
@@ -194,7 +241,7 @@ const ConsultaWeb = ({
           <button
             type="button"
             className="consulta-btn consulta-btn--primary"
-            onClick={() => onFinalizar?.(buildConsulta())}
+            onClick={handleFinalizarClick}
             disabled={!paciente}
           >
             Finalizar y Guardar Consulta

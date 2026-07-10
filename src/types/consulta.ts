@@ -1,9 +1,12 @@
+import type { TipoConsulta } from '../config/tiposConsulta'
+
 export type consulta = {
   paciente_id?: string
   dni?: string          // DNI del paciente (el backend resuelve el paciente_id internamente)
   profesional_id: string
   organizacion_id: string
   fecha?: string
+  tipo_consulta: TipoConsulta
   solicitud_estudio?: boolean
   solicitud_receta?: boolean
   solicitud_citaprox?: boolean

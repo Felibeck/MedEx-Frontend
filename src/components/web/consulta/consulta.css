@@ -202,6 +202,33 @@
   color: #bcc9c6;
 }
 
+.consulta-form-card__select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #d9e5e2;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #0b3131;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.consulta-form-card__select:focus {
+  border-color: #1f6f6b;
+}
+
+.consulta-form-card__error {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #b91c1c;
+  text-align: left;
+}
+
 /* Acciones rápidas */
 .consulta-form-card__acciones {
   display: flex;
@@ -228,6 +255,12 @@
 
 .consulta-accion-btn:hover {
   background: #e8f5f4;
+  border-color: #1f6f6b;
+}
+
+.consulta-accion-btn--active {
+  background: #e8f5f4;
+  border-style: solid;
   border-color: #1f6f6b;
 }
 
