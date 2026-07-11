@@ -107,16 +107,21 @@
   flex: 1;
   min-width: 260px;
   background: #ffffff;
-  border: 1px solid #006562;
+  border-left: 4px solid #006562;
   border-radius: 12px;
-  padding: 24px;
+  padding: 24px 24px 24px 28px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
 .ficha-paciente__card--alergias {
-  border-color: #ba1a1a;
+  border-left-color: #ba1a1a;
+}
+
+.ficha-paciente__card--condiciones {
+  border-left-color: #00665f;
 }
 
 .ficha-paciente__card-titulo {
@@ -248,19 +253,20 @@
 .ficha-paciente__consulta-card {
   text-align: left;
   background: #ffffff;
-  border: 1px solid #bec9c7;
+  border-left: 4px solid #bec9c7;
   border-radius: 12px;
-  padding: 16px;
+  padding: 16px 16px 16px 20px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 8px;
   font-family: 'Inter', var(--sans);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
 .ficha-paciente__consulta-card--activa {
   background: #c4eae9;
-  border-color: #006562;
+  border-left-color: #006562;
 }
 
 .ficha-paciente__consulta-card-top {
@@ -311,9 +317,10 @@
   flex: 1;
   min-width: 0;
   background: #ffffff;
-  border: 1px solid #bec9c7;
+  border: 1px solid rgba(190, 201, 199, 0.2);
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
 }
 
 .ficha-paciente__detalle-header {
@@ -321,8 +328,9 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  background: #ebf6f4;
-  border-bottom: 1px solid #bec9c7;
+  background: rgba(235, 246, 244, 0.7);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(190, 201, 199, 0.3);
   padding: 24px;
 }
 

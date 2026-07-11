@@ -173,7 +173,7 @@ const DoctorHome = () => {
         motivoConsultaPrevia={motivoConsultaLoading ? 'Cargando...' : ultimoMotivoConsulta}
         notaConsultaPrevia=""
         onFinalizar={handleFinalizar}
-        onVerHistorial={() => console.log('Ver historial:', pacienteBuscado.paciente_id)}
+        onVerHistorial={() => navigate(`/doctor/pacientes/${pacienteBuscado.paciente_id}`)}
       />
     )
   }

@@ -222,21 +222,41 @@ const FichaPaciente = ({ pacienteId }: Props) => {
 
                 <div className="ficha-paciente__detalle-body">
                   <section className="ficha-paciente__seccion">
-                    <h4>Diagnóstico Principal</h4>
+                    <h4>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006562" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                        <path d="m9 14 2 2 4-4" />
+                      </svg>
+                      Diagnóstico Principal
+                    </h4>
                     <div className="ficha-paciente__caja">
                       <p>{consultaActiva.diagnostico || 'Sin diagnóstico registrado.'}</p>
                     </div>
                   </section>
 
                   <section className="ficha-paciente__seccion">
-                    <h4>Notas</h4>
+                    <h4>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006562" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                        <path d="m9 14 2 2 4-4" />
+                      </svg>
+                      Notas
+                    </h4>
                     <div className="ficha-paciente__caja">
                       <p>{consultaActiva.notas || 'Sin notas registradas.'}</p>
                     </div>
                   </section>
 
                   <section className="ficha-paciente__seccion">
-                    <h4>Prescripciones</h4>
+                    <h4>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006562" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M10.5 20.5 3.5 13.5a4.95 4.95 0 1 1 7-7l7 7a4.95 4.95 0 1 1-7 7Z" />
+                        <path d="m8.5 8.5 7 7" />
+                      </svg>
+                      Prescripciones
+                    </h4>
                     {consultaActiva.prescripciones.length > 0 ? (
                       <div className="ficha-paciente__prescripciones">
                         {consultaActiva.prescripciones.map((p) => (
@@ -261,7 +281,12 @@ const FichaPaciente = ({ pacienteId }: Props) => {
                   </section>
 
                   <section className="ficha-paciente__seccion">
-                    <h4>Adjuntos</h4>
+                    <h4>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006562" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                      </svg>
+                      Adjuntos
+                    </h4>
                     {consultaActiva.adjuntos.length > 0 ? (
                       <div className="ficha-paciente__adjuntos">
                         {consultaActiva.adjuntos.map((a) => (
