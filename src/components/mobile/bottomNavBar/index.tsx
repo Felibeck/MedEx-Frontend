@@ -23,18 +23,31 @@ const TABS: {
 }[] = [
   { id: 'inicio',    label: 'Inicio',    path: '/patients/inicio',    iconActive: ICON_INICIO_ACTIVE,    iconInactive: ICON_INICIO_INACTIVE    },
   { id: 'familia',   label: 'Familia',   path: '/patients/familia',   iconActive: ICON_FAMILIA_ACTIVE,   iconInactive: ICON_FAMILIA_INACTIVE   },
+<<<<<<< HEAD
   { id: 'cuidados',  label: 'Cuidados',  path: '/patients',           iconActive: ICON_CUIDADOS_ACTIVE,  iconInactive: ICON_CUIDADOS_INACTIVE  },
   { id: 'historial', label: 'Historial', path: '/patients/historial', iconActive: ICON_HISTORIAL_ACTIVE, iconInactive: ICON_HISTORIAL_INACTIVE },
+=======
+  { id: 'cuidados',  label: 'Cuidados',  path: '/patients',  iconActive: ICON_CUIDADOS_ACTIVE,  iconInactive: ICON_CUIDADOS_INACTIVE  },
+  { id: 'historial', label: 'Historial', path: '/patients/historial',           iconActive: ICON_HISTORIAL_ACTIVE, iconInactive: ICON_HISTORIAL_INACTIVE },
+>>>>>>> 7ee4a7a6bb4155dbadabe4bfbf7b7d7666e25bf1
   { id: 'perfil',    label: 'Perfil',    path: '/patients/perfil',    iconActive: ICON_PERFIL_ACTIVE,    iconInactive: ICON_PERFIL_INACTIVE    },
 ]
 
 function getActiveTab(pathname: string): TabId {
+<<<<<<< HEAD
   if (pathname.startsWith('/patients/inicio'))    return 'inicio'
   if (pathname.startsWith('/patients/familia'))   return 'familia'
   if (pathname.startsWith('/patients/historial')) return 'historial'
   if (pathname.startsWith('/patients/perfil'))    return 'perfil'
   if (pathname === '/patients' || pathname.startsWith('/patients/estudio/')) return 'cuidados'
   return 'historial'
+=======
+  if (pathname.startsWith('/patients/inicio'))   return 'inicio'
+  if (pathname.startsWith('/patients/familia'))  return 'familia'
+  if (pathname.startsWith('/patients/historial')) return 'historial'
+  if (pathname.startsWith('/patients/perfil'))   return 'perfil'
+  return 'cuidados'
+>>>>>>> 7ee4a7a6bb4155dbadabe4bfbf7b7d7666e25bf1
 }
 
 const BottomNavBar = () => {

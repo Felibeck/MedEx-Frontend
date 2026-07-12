@@ -1,0 +1,271 @@
+/* ── Overlay ─────────────────────────────────────────────────────────── */
+.rcm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 49, 49, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+/* ── Card ────────────────────────────────────────────────────────────── */
+.rcm-card {
+  background: #f0faf9;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 460px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.rcm-header {
+  background: #1f6f6b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+}
+
+.rcm-header__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rcm-header__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rcm-header__nombre {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.rcm-header__close {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.rcm-header__close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Body ────────────────────────────────────────────────────────────── */
+.rcm-body {
+  padding: 28px 28px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.rcm-body__titulo {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0b3131;
+  margin: 0;
+  text-align: center;
+}
+
+.rcm-body__subtitulo {
+  font-size: 14px;
+  color: #416464;
+  margin: 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ── Field ───────────────────────────────────────────────────────────── */
+.rcm-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rcm-field__label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1f6f6b;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.rcm-field__input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #d4eceb;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #0b3131;
+  background: #fff;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.rcm-field__input::placeholder {
+  color: #bcc9c6;
+}
+
+.rcm-field__input:focus {
+  border-color: #1f6f6b;
+}
+
+/* ── Drop zone ───────────────────────────────────────────────────────── */
+.rcm-dropzone {
+  border: 2px dashed #b0d4d2;
+  border-radius: 14px;
+  background: #fff;
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+  outline: none;
+}
+
+.rcm-dropzone:hover,
+.rcm-dropzone--over {
+  border-color: #1f6f6b;
+  background: #eaf7f5;
+}
+
+.rcm-dropzone--filled {
+  border-color: #1f6f6b;
+  border-style: solid;
+  background: #eaf7f5;
+}
+
+.rcm-dropzone__input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  /* hidden but still triggers via ref click */
+  display: none;
+}
+
+.rcm-dropzone__icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #d4eceb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.rcm-dropzone__pdf-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: #1f6f6b;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 2px 4px;
+  border-radius: 4px;
+  letter-spacing: 0.4px;
+}
+
+.rcm-dropzone__cta {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f6f6b;
+  text-align: center;
+}
+
+.rcm-dropzone__hint {
+  font-size: 12px;
+  color: #657878;
+  text-align: center;
+}
+
+.rcm-dropzone__filename {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0b3131;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* ── Error ───────────────────────────────────────────────────────────── */
+.rcm-error {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #b91c1c;
+  text-align: center;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+.rcm-footer {
+  display: flex;
+  gap: 12px;
+  padding: 0 28px 28px;
+}
+
+.rcm-btn {
+  flex: 1;
+  padding: 13px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, color 0.15s;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rcm-btn--ghost {
+  background: #fff;
+  color: #416464;
+  border: 1.5px solid #d4eceb;
+}
+
+.rcm-btn--ghost:hover {
+  background: #eaf7f5;
+  color: #1f6f6b;
+}
+
+.rcm-btn--primary {
+  background: #1f6f6b;
+  color: #fff;
+}
+
+.rcm-btn--primary:hover {
+  background: #185c59;
+}
