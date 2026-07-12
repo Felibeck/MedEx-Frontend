@@ -1,0 +1,354 @@
+.historial-clinico-page {
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #e8f5f4;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.historial-clinico__content {
+  padding: 0 16px 114px; /* 82px nav + 32px breathing room */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.historial-clinico__estado {
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #3e4948;
+  text-align: center;
+  padding: 24px 0;
+  margin: 24px 0 0;
+}
+
+.historial-clinico__estado--error {
+  color: #ba1a1a;
+}
+
+.historial-clinico__vacio {
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #6e7978;
+  margin: 0;
+}
+
+.historial-clinico__parrafo {
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #3e4948;
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* ── Título ── */
+.historial-clinico__titulo-wrap {
+  padding: 24px 0 0;
+}
+
+.historial-clinico__titulo {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 1.2;
+  color: #131d1d;
+  margin: 0 0 4px;
+}
+
+.historial-clinico__subtitulo {
+  font-family: 'Inter', var(--sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #3e4948;
+  margin: 0;
+}
+
+/* ── Identidad ── */
+.historial-clinico__identidad {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #ffffff;
+  border-left: 4px solid #006562;
+  border-radius: 12px;
+  padding: 24px 24px 24px 28px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.historial-clinico__avatar {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 9999px;
+  background: #dfeae9;
+  border: 2px solid rgba(0, 101, 98, 0.2);
+  color: #006562;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.historial-clinico__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.historial-clinico__nombre {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 26px;
+  color: #131d1d;
+  margin: 0 0 4px;
+}
+
+.historial-clinico__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.historial-clinico__meta-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Inter', var(--sans);
+  font-size: 16px;
+  color: #3e4948;
+}
+
+.historial-clinico__meta-icon {
+  width: 16px;
+  height: 16px;
+  color: #3e4948;
+  flex-shrink: 0;
+}
+
+/* ── Cards (bento grid) ── */
+.historial-clinico__card {
+  background: #ffffff;
+  border: 1px solid rgba(190, 201, 199, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.historial-clinico__card-titulo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.historial-clinico__card-titulo h3 {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25.2px;
+  color: #131d1d;
+  margin: 0;
+}
+
+.historial-clinico__card-icono {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  color: #006562;
+}
+
+.historial-clinico__icono-caja {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background: rgba(0, 101, 98, 0.1);
+  border-radius: 12px;
+}
+
+/* ── Pills (Antecedentes Médicos) ── */
+.historial-clinico__pill {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: rgba(235, 246, 244, 0.5);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.historial-clinico__pill--alerta {
+  background: rgba(186, 26, 26, 0.05);
+}
+
+.historial-clinico__pill-icono {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  margin-top: 4px;
+  color: #006562;
+}
+
+.historial-clinico__pill-icono--alerta {
+  color: #ba1a1a;
+}
+
+.historial-clinico__pill-label {
+  font-family: 'Inter', var(--sans);
+  font-weight: 600;
+  font-size: 16px;
+  color: #131d1d;
+  margin: 0;
+}
+
+.historial-clinico__pill-label--alerta {
+  color: #ba1a1a;
+}
+
+.historial-clinico__pill-detalle {
+  font-family: 'Inter', var(--sans);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  color: #3e4948;
+  margin: 2px 0 0;
+}
+
+/* ── Filas (Gineco-obstétricos) ── */
+.historial-clinico__filas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.historial-clinico__fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(190, 201, 199, 0.1);
+  padding-bottom: 5px;
+}
+
+.historial-clinico__fila-label {
+  font-family: 'Inter', var(--sans);
+  font-weight: 400;
+  font-size: 12px;
+  color: #3e4948;
+}
+
+.historial-clinico__fila-valor {
+  font-family: 'Inter', var(--sans);
+  font-weight: 600;
+  font-size: 12px;
+  color: #131d1d;
+}
+
+/* ── Lista de puntos (Heredofamiliares / Estudios) ── */
+.historial-clinico__lista-puntos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.historial-clinico__lista-puntos li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', var(--sans);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  color: #3e4948;
+}
+
+.historial-clinico__lista-puntos li strong {
+  font-weight: 600;
+  color: #131d1d;
+}
+
+.historial-clinico__punto {
+  width: 6px;
+  height: 6px;
+  min-width: 6px;
+  border-radius: 9999px;
+  background: #006562;
+}
+
+/* ── Estudios Recientes ── */
+.historial-clinico__seccion-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.historial-clinico__seccion-heading h3 {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25.2px;
+  color: #3e4948;
+  margin: 0;
+}
+
+.historial-clinico__seccion-icono {
+  width: 20px;
+  height: 20px;
+  color: #3e4948;
+}
+
+.historial-clinico__card--estudio {
+  gap: 16px;
+}
+
+/* ── Examen Físico tiles ── */
+.historial-clinico__tiles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.historial-clinico__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(235, 246, 244, 0.3);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.historial-clinico__tile-label {
+  font-family: 'Inter', var(--sans);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: #3e4948;
+  text-transform: uppercase;
+}
+
+.historial-clinico__tile-valor {
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 20px;
+  color: #006562;
+  padding-top: 4px;
+}
+
+.historial-clinico__tile-unidad {
+  font-family: 'Inter', var(--sans);
+  font-weight: 400;
+  font-size: 10px;
+  color: #3e4948;
+}
