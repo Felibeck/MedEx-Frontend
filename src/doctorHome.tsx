@@ -8,7 +8,7 @@ import type { medico } from './types/medico'
 import type { turno } from './types/turno'
 import type { paciente } from './types/paciente'
 import type { consulta } from './types/consulta'
-import { getUltimaNotaPorProfesional, postConsulta } from './api/consultas'
+import { getUltimaNotaPorProfesional, postConsulta, type RecetaPayload } from './api/consultas'
 import './doctorHome.css'
 import SearchBar from './components/web/searchBar'
 import { getCurrentMedico } from './utils/session'
@@ -29,10 +29,10 @@ const DoctorHome = () => {
   const [ultimoMotivoConsulta, setUltimoMotivoConsulta] = useState('')
   const [motivoConsultaLoading, setMotivoConsultaLoading] = useState(false)
 
-  const ejecutarGuardado = async (data: consulta) => {
+  const ejecutarGuardado = async (data: consulta, receta?: RecetaPayload) => {
     setEstadoGuardado('guardando')
     try {
-      await postConsulta(data)
+      await postConsulta(data, receta)
       setEstadoGuardado('ok')
     } catch {
       setEstadoGuardado('error')
@@ -76,8 +76,8 @@ const DoctorHome = () => {
 
   if (medico === null) return null
 
-  const handleFinalizar = (data: consulta) => {
-    ejecutarGuardado(data)
+  const handleFinalizar = (data: consulta, receta?: RecetaPayload) => {
+    ejecutarGuardado(data, receta)
   }
 
   const handleReintentar = () => {

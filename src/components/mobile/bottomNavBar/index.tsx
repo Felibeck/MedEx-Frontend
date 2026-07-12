@@ -23,17 +23,17 @@ const TABS: {
 }[] = [
   { id: 'inicio',    label: 'Inicio',    path: '/patients/inicio',    iconActive: ICON_INICIO_ACTIVE,    iconInactive: ICON_INICIO_INACTIVE    },
   { id: 'familia',   label: 'Familia',   path: '/patients/familia',   iconActive: ICON_FAMILIA_ACTIVE,   iconInactive: ICON_FAMILIA_INACTIVE   },
-  { id: 'cuidados',  label: 'Cuidados',  path: '/patients/cuidados',  iconActive: ICON_CUIDADOS_ACTIVE,  iconInactive: ICON_CUIDADOS_INACTIVE  },
-  { id: 'historial', label: 'Historial', path: '/patients',           iconActive: ICON_HISTORIAL_ACTIVE, iconInactive: ICON_HISTORIAL_INACTIVE },
+  { id: 'cuidados',  label: 'Cuidados',  path: '/patients',  iconActive: ICON_CUIDADOS_ACTIVE,  iconInactive: ICON_CUIDADOS_INACTIVE  },
+  { id: 'historial', label: 'Historial', path: '/patients/historial',           iconActive: ICON_HISTORIAL_ACTIVE, iconInactive: ICON_HISTORIAL_INACTIVE },
   { id: 'perfil',    label: 'Perfil',    path: '/patients/perfil',    iconActive: ICON_PERFIL_ACTIVE,    iconInactive: ICON_PERFIL_INACTIVE    },
 ]
 
 function getActiveTab(pathname: string): TabId {
   if (pathname.startsWith('/patients/inicio'))   return 'inicio'
   if (pathname.startsWith('/patients/familia'))  return 'familia'
-  if (pathname.startsWith('/patients/cuidados')) return 'cuidados'
+  if (pathname.startsWith('/patients/historial')) return 'historial'
   if (pathname.startsWith('/patients/perfil'))   return 'perfil'
-  return 'historial'
+  return 'cuidados'
 }
 
 const BottomNavBar = () => {

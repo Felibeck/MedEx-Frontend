@@ -2,6 +2,8 @@ import { useState } from 'react'
 import type { paciente } from '../../../types/paciente'
 import type { consulta } from '../../../types/consulta'
 import { TIPOS_CONSULTA, TIPO_CONSULTA_LABELS, type TipoConsulta } from '../../../config/tiposConsulta'
+import CargarRecetaModal from '../cargarRecetaModal'
+import type { RecetaPayload } from '../../../api/consultas'
 import './consulta.css'
 
 type Props = {
@@ -13,7 +15,7 @@ type Props = {
   antecedentes?: string
   motivoConsultaPrevia?: string
   notaConsultaPrevia?: string
-  onFinalizar?: (data: consulta) => void
+  onFinalizar?: (data: consulta, receta?: RecetaPayload) => void
   onVerHistorial?: () => void
 }
 
@@ -33,6 +35,8 @@ const ConsultaWeb = ({
   const [tipoConsulta, setTipoConsulta] = useState<TipoConsulta | ''>('')
   const [solicitudEstudio, setSolicitudEstudio] = useState(false)
   const [errorFormulario, setErrorFormulario] = useState<string | null>(null)
+  const [modalRecetaAbierto, setModalRecetaAbierto] = useState(false)
+  const [receta, setReceta] = useState<RecetaPayload | null>(null)
 
   const handleToggleSolicitudEstudio = () => {
     setSolicitudEstudio((prev) => !prev)
@@ -44,7 +48,7 @@ const ConsultaWeb = ({
     organizacion_id: organizacionId,
     tipo_consulta: tipoConsulta as TipoConsulta,
     solicitud_estudio: solicitudEstudio,
-    solicitud_receta: false,
+    solicitud_receta: receta !== null,
     solicitud_citaprox: proximaCita,
     notas: otros ? otros.trim() : undefined,
   })
@@ -55,7 +59,7 @@ const ConsultaWeb = ({
       return
     }
     setErrorFormulario(null)
-    onFinalizar?.(buildConsulta())
+    onFinalizar?.(buildConsulta(), receta ?? undefined)
   }
 
   return (
@@ -197,14 +201,20 @@ const ConsultaWeb = ({
 
         {/* Acciones rápidas */}
         <div className="consulta-form-card__acciones">
-          <button type="button" className="consulta-accion-btn">
+          <button
+            type="button"
+            className={`consulta-accion-btn ${receta ? 'consulta-accion-btn--active' : ''}`}
+            onClick={() => setModalRecetaAbierto(true)}
+            aria-pressed={receta !== null}
+            disabled={!paciente}
+          >
             <svg width="22" height="24" viewBox="0 0 24 24" fill="none" stroke="#1f6f6b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
               <polyline points="14 2 14 8 20 8"/>
               <line x1="16" y1="13" x2="8" y2="13"/>
               <line x1="16" y1="17" x2="8" y2="17"/>
             </svg>
-            <span>Cargar Receta</span>
+            <span>{receta ? `Receta: ${receta.titulo || receta.archivo.name}` : 'Cargar Receta'}</span>
           </button>
           <button type="button" className="consulta-accion-btn">
             <svg width="22" height="20" viewBox="0 0 24 24" fill="none" stroke="#1f6f6b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -249,6 +259,16 @@ const ConsultaWeb = ({
         </div>
       </div>
 
+      {modalRecetaAbierto && paciente && (
+        <CargarRecetaModal
+          nombrePaciente={`${paciente.nombre} ${paciente.apellido}`}
+          onSubir={(archivo, titulo) => {
+            setReceta({ archivo, titulo: titulo || undefined })
+            setModalRecetaAbierto(false)
+          }}
+          onCancelar={() => setModalRecetaAbierto(false)}
+        />
+      )}
     </div>
   )
 }
