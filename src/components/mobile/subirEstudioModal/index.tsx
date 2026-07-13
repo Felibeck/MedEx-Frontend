@@ -7,6 +7,7 @@ import './subirEstudioModal.css'
 
 const MAX_SIZE_BYTES = 10 * 1024 * 1024
 const TIPOS_ACEPTADOS = ['image/', 'application/pdf']
+const EXTENSIONES_ACEPTADAS = ['.jpg', '.jpeg', '.png', '.jfif', '.webp', '.heic', '.pdf']
 
 type Props = {
   pacienteId: string
@@ -16,7 +17,10 @@ type Props = {
 
 const validarArchivo = (file: File): string | null => {
   const tipoValido = TIPOS_ACEPTADOS.some((prefijo) => file.type.startsWith(prefijo))
-  if (!tipoValido) return 'Solo se aceptan imágenes o archivos PDF.'
+  const extensionValida = EXTENSIONES_ACEPTADAS.some((ext) =>
+    file.name.toLowerCase().endsWith(ext),
+  )
+  if (!tipoValido && !extensionValida) return 'Solo se aceptan imágenes o archivos PDF.'
   if (file.size > MAX_SIZE_BYTES) return 'El archivo supera el máximo de 10MB.'
   return null
 }
