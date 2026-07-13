@@ -1,7 +1,11 @@
-import type { historialClinico } from '../../../types/historialClinico'
+import { useState } from 'react'
+import type { historialClinico, historialTabla } from '../../../types/historialClinico'
+import FormHistorial from './FormHistorial'
 
 type Props = {
+  pacienteId: string
   historial: historialClinico
+  onHistorialActualizado: (historial: historialTabla) => void
 }
 
 // ── Sección wrapper ──────────────────────────────────────────────
@@ -15,7 +19,6 @@ const Seccion = ({ titulo, icono, children }: { titulo: string; icono: React.Rea
   </div>
 )
 
-// ── Caja de texto con label ──────────────────────────────────────
 const CajaTexto = ({ label, texto }: { label?: string; texto: string }) => (
   <div className="tab-historial__caja">
     {label && <span className="tab-historial__caja-label">{label}</span>}
@@ -68,80 +71,100 @@ const IconoOtros = () => (
   </svg>
 )
 
+const IconoEditar = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+  </svg>
+)
+
 // ────────────────────────────────────────────────────────────────
-const TabHistorial = ({ historial }: Props) => {
+const TabHistorial = ({ pacienteId, historial, onHistorialActualizado }: Props) => {
+  const [editando, setEditando] = useState(false)
   const h = historial.historial
 
-  if (!h) {
-    return (
-      <p className="ficha-paciente__vacio tab-historial__vacio-global">
-        No hay información de historial clínico registrada para este paciente.
-      </p>
-    )
+  const hayDatos = h && (h.ant || h.ago || h.ahf || h.ef || h.mx || h.eco || h.otros)
+
+  const handleGuardado = (nuevoHistorial: historialTabla) => {
+    onHistorialActualizado(nuevoHistorial)
+    setEditando(false)
   }
 
-  const hayAlgo = h.ant || h.ago || h.ahf || h.ef || h.mx || h.eco || h.otros
-
-  if (!hayAlgo) {
+  if (editando) {
     return (
-      <p className="ficha-paciente__vacio tab-historial__vacio-global">
-        No hay información de historial clínico registrada para este paciente.
-      </p>
+      <FormHistorial
+        pacienteId={pacienteId}
+        historialActual={h ?? null}
+        onGuardado={handleGuardado}
+        onCancelar={() => setEditando(false)}
+      />
     )
   }
 
   return (
     <div className="tab-historial">
 
-      {/* Antecedentes patológicos */}
-      {h.ant && (
-        <Seccion titulo="Antecedentes Médicos" icono={<IconoMedico />}>
-          <CajaTexto label="CLÍNICOS" texto={h.ant} />
-        </Seccion>
-      )}
+      {/* Botón editar / crear */}
+      <div className="tab-historial__toolbar">
+        <button
+          type="button"
+          className="tab-historial__btn-editar"
+          onClick={() => setEditando(true)}
+        >
+          <IconoEditar />
+          {hayDatos ? 'Editar historial' : 'Crear historial'}
+        </button>
+      </div>
 
-      {/* Antecedentes gineco-obstétricos */}
-      {h.ago && (
-        <Seccion titulo="Antecedentes Gineco-obstétricos" icono={<IconoGineco />}>
-          <CajaTexto label="OBSERVACIONES GYN/OBS" texto={h.ago} />
-        </Seccion>
-      )}
+      {!hayDatos ? (
+        <p className="ficha-paciente__vacio tab-historial__vacio-global">
+          No hay información de historial clínico registrada para este paciente.
+        </p>
+      ) : (
+        <>
+          {h!.ant && (
+            <Seccion titulo="Antecedentes personales (médicos y clínicos)" icono={<IconoMedico />}>
+              <CajaTexto texto={h!.ant} />
+            </Seccion>
+          )}
 
-      {/* Examen físico */}
-      {h.ef && (
-        <Seccion titulo="Examen Físico & Vitales" icono={<IconoVitales />}>
-          <CajaTexto texto={h.ef} />
-        </Seccion>
-      )}
+          {h!.ago && (
+            <Seccion titulo="Antecedentes gineco-obstétricos" icono={<IconoGineco />}>
+              <CajaTexto texto={h!.ago} />
+            </Seccion>
+          )}
 
-      {/* Antecedentes heredo-familiares */}
-      {h.ahf && (
-        <Seccion titulo="Antecedentes Familiares" icono={<IconoFamilia />}>
-          <CajaTexto texto={h.ahf} />
-        </Seccion>
-      )}
+          {h!.ef && (
+            <Seccion titulo="Examen físico" icono={<IconoVitales />}>
+              <CajaTexto texto={h!.ef} />
+            </Seccion>
+          )}
 
-      {/* Medicación actual */}
-      {h.mx && (
-        <Seccion titulo="Medicación Actual" icono={<IconoPastilla />}>
-          <CajaTexto texto={h.mx} />
-        </Seccion>
-      )}
+          {h!.ahf && (
+            <Seccion titulo="Antecedentes heredofamiliares" icono={<IconoFamilia />}>
+              <CajaTexto texto={h!.ahf} />
+            </Seccion>
+          )}
 
-      {/* Estudios / ecografías */}
-      {h.eco && (
-        <Seccion titulo="Estudios Complementarios" icono={<IconoVitales />}>
-          <CajaTexto texto={h.eco} />
-        </Seccion>
-      )}
+          {h!.mx && (
+            <Seccion titulo="Mamografía" icono={<IconoPastilla />}>
+              <CajaTexto texto={h!.mx} />
+            </Seccion>
+          )}
 
-      {/* Otros */}
-      {h.otros && (
-        <Seccion titulo="Otros" icono={<IconoOtros />}>
-          <CajaTexto texto={h.otros} />
-        </Seccion>
-      )}
+          {h!.eco && (
+            <Seccion titulo="Ecografía" icono={<IconoVitales />}>
+              <CajaTexto texto={h!.eco} />
+            </Seccion>
+          )}
 
+          {h!.otros && (
+            <Seccion titulo="Otros antecedentes o información relevante" icono={<IconoOtros />}>
+              <CajaTexto texto={h!.otros} />
+            </Seccion>
+          )}
+        </>
+      )}
     </div>
   )
 }

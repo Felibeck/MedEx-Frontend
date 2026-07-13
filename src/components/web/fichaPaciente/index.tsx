@@ -330,7 +330,13 @@ const FichaPaciente = ({ pacienteId }: Props) => {
           )}
         </div>
       ) : (
-        <TabHistorial historial={historial} />
+        <TabHistorial
+          pacienteId={pacienteId}
+          historial={historial}
+          onHistorialActualizado={(nuevoHistorial) =>
+            setHistorial((prev) => prev ? { ...prev, historial: nuevoHistorial } : prev)
+          }
+        />
       )}
     </div>
   )

@@ -632,3 +632,159 @@
   color: #bec9c7;
   margin: 4px 0 0;
 }
+
+/* ── Form Historial ── */
+.form-historial {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #ffffff;
+  border: 1px solid #d5e6e4;
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.form-historial__header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-historial__titulo {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 20px;
+  color: #006562;
+  margin: 0;
+}
+
+.form-historial__subtitulo {
+  font-family: 'Inter', var(--sans);
+  font-size: 13px;
+  color: #6e7978;
+  margin: 0;
+}
+
+.form-historial__campos {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-historial__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-historial__label {
+  font-family: 'Inter', var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #3e4948;
+}
+
+.form-historial__textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 72px;
+  border: 1px solid #bec9c7;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #131d1d;
+  background: #f7fbfb;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.form-historial__textarea:focus {
+  border-color: #006562;
+  background: #ffffff;
+}
+
+.form-historial__textarea::placeholder {
+  color: #bec9c7;
+}
+
+.form-historial__error {
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #ba1a1a;
+  margin: 0;
+  padding: 12px 16px;
+  background: #fff8f7;
+  border: 1px solid #f2b8b8;
+  border-radius: 8px;
+}
+
+.form-historial__acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.form-historial__btn {
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s;
+}
+
+.form-historial__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-historial__btn--cancelar {
+  background: transparent;
+  border: 1px solid #bec9c7;
+  color: #3e4948;
+}
+
+.form-historial__btn--cancelar:hover:not(:disabled) {
+  background: #f0fcfa;
+}
+
+.form-historial__btn--guardar {
+  background: #006562;
+  color: #ffffff;
+}
+
+.form-historial__btn--guardar:hover:not(:disabled) {
+  background: #004e4c;
+}
+
+/* ── Tab Historial toolbar ── */
+.tab-historial__toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tab-historial__btn-editar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid #006562;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 14px;
+  color: #006562;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.tab-historial__btn-editar:hover {
+  background: #f0fcfa;
+}
