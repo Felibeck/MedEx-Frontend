@@ -388,6 +388,12 @@
   border: 1px solid #006562;
   border-radius: 12px;
   padding: 16px;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.ficha-paciente__caja--editando {
+  background: #ffffff;
+  border-color: #006562;
 }
 
 .ficha-paciente__caja p {
@@ -396,6 +402,21 @@
   color: #3e4948;
   margin: 0;
   white-space: pre-line;
+}
+
+.ficha-paciente__caja textarea {
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #3e4948;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  resize: vertical;
+  min-height: 60px;
+  width: 100%;
+  outline: none;
+  box-sizing: border-box;
 }
 
 .ficha-paciente__prescripciones {
@@ -787,4 +808,137 @@
 
 .tab-historial__btn-editar:hover {
   background: #f0fcfa;
+}
+
+/* ── Select para tipo de consulta (editable en header) ── */
+.ficha-paciente__select-tipo-consulta {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 20px;
+  color: #006562;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #006562;
+  padding: 4px 8px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23006562' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 20px;
+  padding-right: 28px;
+}
+
+.ficha-paciente__select-tipo-consulta:hover {
+  border-bottom-color: #004e4c;
+}
+
+.ficha-paciente__select-tipo-consulta:focus {
+  border-bottom-color: #004e4c;
+  outline: none;
+}
+
+.ficha-paciente__select-tipo-consulta option {
+  background: #ffffff;
+  color: #131d1d;
+  font-family: 'Inter', var(--sans);
+  font-weight: 400;
+  font-size: 14px;
+  padding: 8px;
+}
+
+/* ── FichaPaciente: Editar consulta controls (visual consistency) ── */
+.ficha-paciente__btn-editar-consulta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid #006562;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  font-size: 14px;
+  color: #006562;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.ficha-paciente__btn-editar-consulta:hover:not(:disabled) {
+  background: #f0fcfa;
+}
+
+.ficha-paciente__btn-guardar {
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: #006562;
+  color: #ffffff;
+  border: none;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ficha-paciente__btn-guardar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ficha-paciente__btn-cancel {
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid #bec9c7;
+  color: #3e4948;
+  font-family: 'Inter', var(--sans);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ficha-paciente__textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 72px;
+  border: 1px solid #bec9c7;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #131d1d;
+  background: #f7fbfb;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.ficha-paciente__textarea:focus {
+  border-color: #006562;
+  background: #ffffff;
+}
+
+/* Textarea inline dentro de .ficha-paciente__caja */
+.ficha-paciente__caja .ficha-paciente__textarea {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.ficha-paciente__caja .ficha-paciente__textarea:focus {
+  outline: none;
+  background: transparent;
+  border: none;
+}
+
+.ficha-paciente__error {
+  font-family: 'Inter', var(--sans);
+  font-size: 14px;
+  color: #ba1a1a;
+  margin: 8px 0 0;
 }

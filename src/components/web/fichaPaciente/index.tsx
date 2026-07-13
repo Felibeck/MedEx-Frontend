@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { historialClinico, consultaHistorial } from '../../../types/historialClinico'
 import type { estudioResumen } from '../../../types/estudio'
 import { getHistorialClinico } from '../../../api/doctors'
+import { patchConsulta } from '../../../api/consultas'
 import { fetchEstudiosPaciente } from '../../../api/estudios'
 import { calcularEdad, formatearFecha, gruposCompatibles } from '../../../utils/paciente'
 import TabHistorial from './TabHistorial'
@@ -33,6 +34,11 @@ const FichaPaciente = ({ pacienteId }: Props) => {
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('consultas')
   const [consultaActivaId, setConsultaActivaId] = useState<string | null>(null)
+  const [editandoNotas, setEditandoNotas] = useState(false)
+  const [notasDraft, setNotasDraft] = useState('')
+  const [tipoConsultaDraft, setTipoConsultaDraft] = useState<string | null>(null)
+  const [savingConsulta, setSavingConsulta] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelado = false
@@ -207,7 +213,7 @@ const FichaPaciente = ({ pacienteId }: Props) => {
                       {i === 0 && <span className="ficha-paciente__pill-reciente">RECIENTE</span>}
                     </div>
                     <p className="ficha-paciente__consulta-especialidad">
-                      {consulta.profesional?.especialidad_medica || 'Consulta general'}
+                      {consulta.tipo_consulta ?? consulta.profesional?.especialidad_medica ?? 'Consulta general'}
                     </p>
                     <p className="ficha-paciente__consulta-profesional">{nombreProfesional(consulta)}</p>
                   </button>
@@ -219,7 +225,25 @@ const FichaPaciente = ({ pacienteId }: Props) => {
               <div className="ficha-paciente__detalle-panel">
                 <div className="ficha-paciente__detalle-header">
                   <div>
-                    <h3>Detalle de Consulta: {consultaActiva.profesional?.especialidad_medica || 'General'}</h3>
+                    {editandoNotas ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <span style={{ fontSize: 14, color: '#6e7978', fontWeight: 700 }}>Tipo de consulta:</span>
+                        <select 
+                          className="ficha-paciente__select-tipo-consulta"
+                          value={tipoConsultaDraft ?? ''} 
+                          onChange={(e) => setTipoConsultaDraft(e.target.value ? e.target.value : consultaActiva.tipo_consulta ?? null)}
+                        >
+                          <option value="">Seleccionar...</option>
+                          <option value="primera_vez">Primera vez</option>
+                          <option value="seguimiento">Seguimiento</option>
+                          <option value="control">Control</option>
+                          <option value="urgencia">Urgencia</option>
+                          <option value="telemedicina">Telemedicina</option>
+                        </select>
+                      </div>
+                    ) : (
+                      <h3>Detalle de Consulta: {consultaActiva.tipo_consulta ?? consultaActiva.profesional?.especialidad_medica ?? 'General'}</h3>
+                    )}
                     <p>{formatearFecha(consultaActiva.fecha)}</p>
                   </div>
                   <div className="ficha-paciente__detalle-estado">
@@ -252,8 +276,90 @@ const FichaPaciente = ({ pacienteId }: Props) => {
                       </svg>
                       Notas
                     </h4>
-                    <div className="ficha-paciente__caja">
-                      <p>{consultaActiva.notas || 'Sin notas registradas.'}</p>
+                    <div className={`ficha-paciente__caja${editandoNotas ? ' ficha-paciente__caja--editando' : ''}`}>
+                      {editandoNotas ? (
+                        <textarea
+                          className="ficha-paciente__textarea"
+                          rows={4}
+                          value={notasDraft}
+                          onChange={(e) => setNotasDraft(e.target.value)}
+                          autoFocus
+                        />
+                      ) : (
+                        <p>{consultaActiva.notas || 'Sin notas registradas.'}</p>
+                      )}
+                    </div>
+
+                    <div style={{ marginTop: 12 }}>
+                      {typeof consultaActiva !== 'undefined' && (
+                        <div>
+                          {!editandoNotas && (
+                            <button
+                              type="button"
+                              className="ficha-paciente__btn-editar-consulta"
+                              onClick={() => {
+                                setEditandoNotas(true)
+                                setNotasDraft(consultaActiva.notas ?? '')
+                                setTipoConsultaDraft(consultaActiva.tipo_consulta ?? null)
+                              }}
+                            >
+                              Editar consulta
+                            </button>
+                          )}
+                        </div>
+                      )}
+
+                      {editandoNotas && (
+                        <div style={{ marginTop: 12 }}>
+                          {saveError && <p className="ficha-paciente__error">{saveError}</p>}
+                          <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
+                            <button
+                              type="button"
+                              className="ficha-paciente__btn-guardar"
+                              onClick={async () => {
+                                if (!consultaActiva) return
+                                setSavingConsulta(true)
+                                setSaveError(null)
+                                try {
+                                  const payload: { notas?: string | null; tipo_consulta?: string | null } = {}
+                                  if (notasDraft !== (consultaActiva.notas ?? '')) payload.notas = notasDraft
+                                  if ((tipoConsultaDraft ?? '') !== (consultaActiva.tipo_consulta ?? '')) payload.tipo_consulta = tipoConsultaDraft ?? null
+                                  if (Object.keys(payload).length === 0) {
+                                    setEditandoNotas(false)
+                                    return
+                                  }
+                                  await patchConsulta(consultaActiva.id, payload)
+                                  setHistorial((prev) => {
+                                    if (!prev) return prev
+                                    const nuevas = prev.consultas.map((c) => c.id === consultaActiva.id ? { ...c, notas: payload.notas ?? c.notas, tipo_consulta: payload.tipo_consulta ?? c.tipo_consulta } : c)
+                                    return { ...prev, consultas: nuevas }
+                                  })
+                                  setEditandoNotas(false)
+                                } catch (err: unknown) {
+                                  setSaveError(err instanceof Error ? err.message : 'Error al guardar')
+                                } finally {
+                                  setSavingConsulta(false)
+                                }
+                              }}
+                              disabled={savingConsulta}
+                            >
+                              {savingConsulta ? 'Guardando...' : 'Guardar'}
+                            </button>
+                            <button
+                              type="button"
+                              className="ficha-paciente__btn-cancel"
+                              onClick={() => {
+                                setEditandoNotas(false)
+                                setNotasDraft(consultaActiva.notas ?? '')
+                                setTipoConsultaDraft(consultaActiva.tipo_consulta ?? null)
+                              }}
+                              disabled={savingConsulta}
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </section>
 

@@ -45,6 +45,7 @@ export type consultaHistorial = {
     fecha: string;
     diagnostico: string | null;
     notas: string | null;
+    tipo_consulta?: string | null;
     solicitud_estudio: boolean;
     solicitud_receta: boolean;
     solicitud_citaprox: boolean;

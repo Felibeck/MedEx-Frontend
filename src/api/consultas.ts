@@ -67,3 +67,25 @@ export const postConsulta = async (data: consulta, receta?: RecetaPayload): Prom
     throw new Error(body?.message ?? `Error ${response.status} al guardar la consulta`)
   }
 }
+
+export const patchConsulta = async (
+  consultaId: string,
+  payload: { notas?: string | null; tipo_consulta?: string | null }
+): Promise<any> => {
+  const token = getToken()
+  const response = await fetch(`${import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api'}/doctors/consultas/${consultaId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}))
+    throw new Error(body?.message ?? `Error ${response.status} al actualizar la consulta`)
+  }
+
+  return response.json().catch(() => ({}))
+}
