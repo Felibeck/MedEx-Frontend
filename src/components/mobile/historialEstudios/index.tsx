@@ -84,23 +84,6 @@ const HistorialEstudios = ({
 
         <div className="historial-seccion-header">
           <h2 className="historial-seccion-titulo">Estudios e Imágenes</h2>
-          <div className="historial-vista-toggle">
-            <button type="button" className="historial-vista-btn historial-vista-btn--active" aria-label="Vista cuadrícula">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="3" y="3" width="7" height="7" rx="1"/>
-                <rect x="14" y="3" width="7" height="7" rx="1"/>
-                <rect x="3" y="14" width="7" height="7" rx="1"/>
-                <rect x="14" y="14" width="7" height="7" rx="1"/>
-              </svg>
-            </button>
-            <button type="button" className="historial-vista-btn" aria-label="Vista lista">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="3" y="4" width="18" height="4" rx="1"/>
-                <rect x="3" y="10" width="18" height="4" rx="1"/>
-                <rect x="3" y="16" width="18" height="4" rx="1"/>
-              </svg>
-            </button>
-          </div>
         </div>
 
         <div className="historial-filtros-wrap">

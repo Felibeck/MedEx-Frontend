@@ -65,7 +65,6 @@
 .historial-seccion-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin: 20px 0 12px;
 }
 
@@ -75,34 +74,6 @@
   color: #0b3131;
   margin: 0;
   text-align: left;
-}
-
-.historial-vista-toggle {
-  display: flex;
-  gap: 4px;
-  background: #fff;
-  border-radius: 8px;
-  padding: 3px;
-  border: 1px solid #bcc9c6;
-}
-
-.historial-vista-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  border-radius: 6px;
-  color: #416464;
-  transition: background 0.15s, color 0.15s;
-}
-
-.historial-vista-btn--active {
-  background: #1f6f6b;
-  color: #fff;
 }
 
 /* ── Filtros chips ── */
