@@ -1,16 +1,15 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import IconInicioActivo from '../../../assets/icons/nav/inicio-activo.svg'
+import IconInicioInactivo from '../../../assets/icons/nav/inicio-inactivo.svg'
+import IconFamiliaActivo from '../../../assets/icons/nav/familia-activo.svg'
+import IconFamiliaInactivo from '../../../assets/icons/nav/familia-inactivo.svg'
+import IconCuidadosActivo from '../../../assets/icons/nav/cuidados-activo.svg'
+import IconCuidadosInactivo from '../../../assets/icons/nav/cuidados-inactivo.svg'
+import IconHistorialActivo from '../../../assets/icons/nav/historial-activo.svg'
+import IconHistorialInactivo from '../../../assets/icons/nav/historial-inactivo.svg'
+import IconPerfilActivo from '../../../assets/icons/nav/perfil-activo.svg'
+import IconPerfilInactivo from '../../../assets/icons/nav/perfil-inactivo.svg'
 import './bottomNavBar.css'
-
-const ICON_INICIO_ACTIVE    = 'https://www.figma.com/api/mcp/asset/94039aa8-f7fb-46ce-a9ed-b4bf3f4c179a'
-const ICON_INICIO_INACTIVE  = 'https://www.figma.com/api/mcp/asset/e6c49f19-8017-4536-b4be-05677505d2ed'
-const ICON_FAMILIA_ACTIVE   = 'https://www.figma.com/api/mcp/asset/7019d102-64d1-47a7-b1cc-d68f29951e5c'
-const ICON_FAMILIA_INACTIVE = 'https://www.figma.com/api/mcp/asset/ddbb40a8-6bbb-42b9-8b60-b4833ec78150'
-const ICON_CUIDADOS_ACTIVE  = 'https://www.figma.com/api/mcp/asset/11117ef5-3c46-49cd-9bcb-038d5bf4f644'
-const ICON_CUIDADOS_INACTIVE= 'https://www.figma.com/api/mcp/asset/bb610824-946a-4881-b0ed-abf3b570f580'
-const ICON_HISTORIAL_ACTIVE = 'https://www.figma.com/api/mcp/asset/18e7aaf4-f986-4f35-8b79-ba79f6481bb4'
-const ICON_HISTORIAL_INACTIVE='https://www.figma.com/api/mcp/asset/2df73337-410b-493b-86c3-48d53afd0b8c'
-const ICON_PERFIL_ACTIVE    = 'https://www.figma.com/api/mcp/asset/9390c5a9-e604-4ddc-a612-a8fb07255768'
-const ICON_PERFIL_INACTIVE  = 'https://www.figma.com/api/mcp/asset/89aaa36f-cb8d-4201-ba31-a7c6b44c9387'
 
 type TabId = 'inicio' | 'familia' | 'cuidados' | 'historial' | 'perfil'
 
@@ -21,11 +20,11 @@ const TABS: {
   iconActive: string
   iconInactive: string
 }[] = [
-  { id: 'inicio',    label: 'Inicio',    path: '/patients/inicio',    iconActive: ICON_INICIO_ACTIVE,    iconInactive: ICON_INICIO_INACTIVE    },
-  { id: 'familia',   label: 'Familia',   path: '/patients/familia',   iconActive: ICON_FAMILIA_ACTIVE,   iconInactive: ICON_FAMILIA_INACTIVE   },
-  { id: 'cuidados',  label: 'Cuidados',  path: '/patients',  iconActive: ICON_CUIDADOS_ACTIVE,  iconInactive: ICON_CUIDADOS_INACTIVE  },
-  { id: 'historial', label: 'Historial', path: '/patients/historial',           iconActive: ICON_HISTORIAL_ACTIVE, iconInactive: ICON_HISTORIAL_INACTIVE },
-  { id: 'perfil',    label: 'Perfil',    path: '/patients/perfil',    iconActive: ICON_PERFIL_ACTIVE,    iconInactive: ICON_PERFIL_INACTIVE    },
+  { id: 'inicio',    label: 'Inicio',    path: '/patients/inicio',    iconActive: IconInicioActivo,    iconInactive: IconInicioInactivo    },
+  { id: 'familia',   label: 'Familia',   path: '/patients/familia',   iconActive: IconFamiliaActivo,   iconInactive: IconFamiliaInactivo   },
+  { id: 'cuidados',  label: 'Cuidados',  path: '/patients',           iconActive: IconCuidadosActivo,  iconInactive: IconCuidadosInactivo  },
+  { id: 'historial', label: 'Historial', path: '/patients/historial', iconActive: IconHistorialActivo, iconInactive: IconHistorialInactivo },
+  { id: 'perfil',    label: 'Perfil',    path: '/patients/perfil',    iconActive: IconPerfilActivo,    iconInactive: IconPerfilInactivo    },
 ]
 
 function getActiveTab(pathname: string): TabId {

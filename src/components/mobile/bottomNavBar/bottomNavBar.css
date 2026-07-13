@@ -34,11 +34,13 @@
   background: transparent;
   cursor: pointer;
   gap: 4px;
+  color: #657878;
   transition: background 0.15s ease;
 }
 
 .bottom-nav-bar__tab--active {
   background: #006a66;
+  color: #ffffff;
 }
 
 /* ── Icon ────────────────────────────────────────────────────────────── */
