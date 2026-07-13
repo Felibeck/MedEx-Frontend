@@ -4,7 +4,6 @@ import './PatientLogin.css'
 import { loginPatient } from '../../api/patientAuth'
 import axios from 'axios'
 
-const LOGO_URL = 'https://www.figma.com/api/mcp/asset/8fef63a7-1b51-484b-8702-c508916c10e1'
 const EYE_ICON_URL = 'https://www.figma.com/api/mcp/asset/2541fda4-daaa-4a00-a80c-9ce56b81bb37'
 const FINGERPRINT_URL = 'https://www.figma.com/api/mcp/asset/6747f183-235c-4b4b-bd1c-24c3b569dc63'
 const SSL_ICON_URL = 'https://www.figma.com/api/mcp/asset/e12b7d71-5b17-4644-86de-1b00b0aca3f8'
@@ -46,7 +45,7 @@ const PatientLogin = () => {
 
         <div className="patient-login__brand">
           <div className="patient-login__logo-wrap">
-            <img src={LOGO_URL} alt="MedEx logo" className="patient-login__logo" />
+            <img src="/medex-logo.png" alt="MedEx logo" className="patient-login__logo" />
           </div>
           <div className="patient-login__brand-text">
             <h1 className="patient-login__brand-name">MedEx</h1>
