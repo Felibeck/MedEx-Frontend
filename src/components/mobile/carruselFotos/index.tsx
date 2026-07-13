@@ -17,7 +17,7 @@ const getTipoCorte = (index: number): string => {
     return `${ordinal} Corte - Axial`;
 };
 
-const CarruselFotos = ({ cortes, nombreEstudio }: CarruselFotosProps) => {
+const CarruselFotos = ({ cortes }: CarruselFotosProps) => {
     const [indexActual, setIndexActual] = useState(0);
 
     if (!cortes || cortes.length === 0) return null;

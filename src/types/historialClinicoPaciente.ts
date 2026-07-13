@@ -39,4 +39,23 @@ export type historialClinicoPaciente = {
     consultas: consultaHistorial[];
     estudios: estudioHistorial[];
     examenFisico: examenFisico | null;
+    ant?: string | null;
+    ago?: string | null;
+    ahf?: string | null;
+    mx?: string | null;
+    eco?: string | null;
+    ef?: string | null;
+    otros?: string | null;
+    historial?: {
+        id?: string;
+        paciente_id?: string;
+        ant?: string | null;
+        ago?: string | null;
+        ahf?: string | null;
+        mx?: string | null;
+        eco?: string | null;
+        ef?: string | null;
+        otros?: string | null;
+        created_at?: string | null;
+    } | null;
 }

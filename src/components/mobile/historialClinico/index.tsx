@@ -5,7 +5,6 @@ import {
   CalendarIcon,
   UserIcon,
   InformationCircleIcon,
-  ExclamationTriangleIcon,
 } from '@heroicons/react/16/solid'
 import {
   ClipboardDocumentCheckIcon as ClipboardDocumentCheckIcon24,
@@ -36,17 +35,6 @@ const IconoVenus = () => (
     <path d="M9 19h6" />
   </svg>
 )
-
-// Separa un bloque de texto libre en líneas — soporta '\n' o ';' como
-// delimitador. Si no encuentra ninguno, devuelve un único elemento (el
-// bloque completo) para que se renderice como párrafo simple.
-const partirEnLineas = (texto: string): string[] => {
-  const porSalto = texto.split('\n').map((l) => l.trim()).filter(Boolean)
-  if (porSalto.length > 1) return porSalto
-  const porPuntoYComa = texto.split(';').map((l) => l.trim()).filter(Boolean)
-  if (porPuntoYComa.length > 1) return porPuntoYComa
-  return [texto.trim()]
-}
 
 const HistorialClinico = () => {
   const [historial, setHistorial] = useState<historialClinicoPaciente | null>(null)
@@ -112,18 +100,109 @@ const HistorialClinicoContenido = ({ historial }: { historial: historialClinicoP
   const paciente = historial.paciente!
   const edad = calcularEdad(paciente.fecha_nacimiento)
 
-  const patologicos = [
-    ...historial.antecedentesPatologicos.map((a) => a.nombre),
-    ...historial.condicionesCronicas.map((c) => c.nombre),
-  ]
-  const alergias = historial.alergias.map((a) => a.nombre)
-
   const gineco = paciente.ginecoObstetrico
-  const ginecoTieneDatos =
-    !!gineco && (gineco.menarcaEdad !== null || gineco.formulaObstetrica !== null || gineco.ultimoPapFecha !== null || gineco.ultimoPapResultado !== null)
 
-  const heredoLineas = paciente.heredofamiliares ? partirEnLineas(paciente.heredofamiliares) : []
-  const heredoEsLista = heredoLineas.length > 1
+  const construirTexto = (valores: Array<string | null | undefined>): string =>
+    valores
+      .map((valor) => valor?.trim())
+      .filter((valor): valor is string => Boolean(valor))
+      .join('\n\n')
+
+  const getTextoHistorial = (keys: string[]): string | null => {
+    const fuentes = [historial, historial.historial ?? null]
+
+    for (const fuente of fuentes) {
+      if (!fuente) continue
+
+      for (const key of keys) {
+        const valor = fuente[key as keyof typeof fuente]
+        if (typeof valor === 'string' && valor.trim()) {
+          return valor.trim()
+        }
+      }
+    }
+
+    return null
+  }
+
+  const textoAnt = construirTexto([
+    getTextoHistorial(['ant', 'antecedentes', 'antecedentes_personales']),
+  ])
+
+  const textoAgo = construirTexto([
+    getTextoHistorial(['ago', 'gineco_obstetrico', 'antecedentes_gineco_obstetricos']),
+    gineco
+      ? [
+          gineco.menarcaEdad !== null ? `Menarca: ${gineco.menarcaEdad} años` : null,
+          gineco.formulaObstetrica ? `Fórmula: ${gineco.formulaObstetrica}` : null,
+          gineco.ultimoPapFecha
+            ? `Último PAP: ${formatearFecha(gineco.ultimoPapFecha)}${gineco.ultimoPapResultado ? ` (${gineco.ultimoPapResultado})` : ''}`
+            : null,
+        ]
+          .filter((valor): valor is string => Boolean(valor))
+          .join('\n')
+      : null,
+  ])
+
+  const textoAhf = construirTexto([
+    getTextoHistorial(['ahf', 'heredofamiliares', 'antecedentes_familiares']),
+    paciente.heredofamiliares ?? null,
+  ])
+
+  const textoMx = construirTexto([getTextoHistorial(['mx', 'mamografia'])])
+  const textoEco = construirTexto([getTextoHistorial(['eco', 'ecografia'])])
+  const textoEf = construirTexto([
+    getTextoHistorial(['ef', 'examen_fisico']),
+    historial.examenFisico
+      ? [
+          historial.examenFisico.presionArterial ? `TA: ${historial.examenFisico.presionArterial}` : null,
+          historial.examenFisico.pesoKg !== null ? `Peso: ${historial.examenFisico.pesoKg} kg` : null,
+          historial.examenFisico.tallaM !== null ? `Talla: ${historial.examenFisico.tallaM} m` : null,
+          historial.examenFisico.imc !== null ? `IMC: ${historial.examenFisico.imc}` : null,
+        ]
+          .filter((valor): valor is string => Boolean(valor))
+          .join('\n')
+      : null,
+  ])
+  const textoOtros = construirTexto([getTextoHistorial(['otros', 'otros_antecedentes'])])
+
+  const secciones = [
+    {
+      titulo: 'Antecedentes personales (médicos y clínicos)',
+      icono: <ClipboardDocumentCheckIcon24 className="historial-clinico__card-icono" />,
+      valor: textoAnt,
+    },
+    {
+      titulo: 'Antecedentes gineco-obstétricos',
+      icono: <IconoVenus />,
+      valor: textoAgo,
+    },
+    {
+      titulo: 'Antecedentes heredofamiliares / antecedentes familiares',
+      icono: <UsersIcon24 className="historial-clinico__card-icono" />,
+      valor: textoAhf,
+    },
+    {
+      titulo: 'Mamografía',
+      icono: <HeartIcon24 className="historial-clinico__card-icono" />,
+      valor: textoMx,
+    },
+    {
+      titulo: 'Ecografía',
+      icono: <DocumentChartBarIcon24 className="historial-clinico__card-icono" />,
+      valor: textoEco,
+    },
+    {
+      titulo: 'Examen físico',
+      icono: <HeartIcon24 className="historial-clinico__card-icono" />,
+      valor: textoEf,
+    },
+    {
+      titulo: 'Otros antecedentes o información relevante',
+      icono: <InformationCircleIcon className="historial-clinico__card-icono" />,
+      valor: textoOtros,
+    },
+  ].filter((seccion) => seccion.valor.trim().length > 0)
 
   return (
     <>
@@ -159,114 +238,15 @@ const HistorialClinicoContenido = ({ historial }: { historial: historialClinicoP
         </div>
       </div>
 
-      {/* ── Antecedentes Médicos ── */}
-      <section className="historial-clinico__card">
-        <div className="historial-clinico__card-titulo">
-          <ClipboardDocumentCheckIcon24 className="historial-clinico__card-icono" />
-          <h3>Antecedentes Médicos</h3>
-        </div>
-
-        <div className="historial-clinico__pill">
-          <InformationCircleIcon className="historial-clinico__pill-icono" />
-          <div>
-            <p className="historial-clinico__pill-label">Patológicos</p>
-            {patologicos.length > 0 ? (
-              patologicos.map((p, i) => <p key={i} className="historial-clinico__pill-detalle">{p}</p>)
-            ) : (
-              <p className="historial-clinico__pill-detalle">Sin antecedentes patológicos registrados.</p>
-            )}
+      {secciones.map((seccion) => (
+        <section key={seccion.titulo} className="historial-clinico__card">
+          <div className="historial-clinico__card-titulo">
+            {seccion.icono}
+            <h3>{seccion.titulo}</h3>
           </div>
-        </div>
-
-        <div className="historial-clinico__pill historial-clinico__pill--alerta">
-          <ExclamationTriangleIcon className="historial-clinico__pill-icono historial-clinico__pill-icono--alerta" />
-          <div>
-            <p className="historial-clinico__pill-label historial-clinico__pill-label--alerta">Alergias</p>
-            {alergias.length > 0 ? (
-              alergias.map((a, i) => <p key={i} className="historial-clinico__pill-detalle">{a}</p>)
-            ) : (
-              <p className="historial-clinico__pill-detalle">Sin alergias registradas.</p>
-            )}
-          </div>
-        </div>
-
-        <div className="historial-clinico__pill">
-          <InformationCircleIcon className="historial-clinico__pill-icono" />
-          <div>
-            <p className="historial-clinico__pill-label">Quirúrgicos</p>
-            <p className="historial-clinico__pill-detalle">
-              {paciente.antecedentesQuirurgicos || 'Sin antecedentes quirúrgicos registrados.'}
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Gineco-obstétricos ── */}
-      <section className="historial-clinico__card">
-        <div className="historial-clinico__card-titulo">
-          <IconoVenus />
-          <h3>Gineco-obstétricos</h3>
-        </div>
-
-        {ginecoTieneDatos && gineco ? (
-          <div className="historial-clinico__filas">
-            <div className="historial-clinico__fila">
-              <span className="historial-clinico__fila-label">Menarca</span>
-              <span className="historial-clinico__fila-valor">{gineco.menarcaEdad !== null ? `${gineco.menarcaEdad} años` : 'No registrado'}</span>
-            </div>
-            <div className="historial-clinico__fila">
-              <span className="historial-clinico__fila-label">Fórmula</span>
-              <span className="historial-clinico__fila-valor">{gineco.formulaObstetrica ?? 'No registrado'}</span>
-            </div>
-            <div className="historial-clinico__fila">
-              <span className="historial-clinico__fila-label">Último PAP</span>
-              <span className="historial-clinico__fila-valor">
-                {gineco.ultimoPapFecha
-                  ? `${formatearFecha(gineco.ultimoPapFecha)}${gineco.ultimoPapResultado ? ` (${gineco.ultimoPapResultado})` : ''}`
-                  : 'No registrado'}
-              </span>
-            </div>
-          </div>
-        ) : (
-          <p className="historial-clinico__vacio">Sin datos gineco-obstétricos registrados.</p>
-        )}
-      </section>
-
-      {/* ── Heredofamiliares ── */}
-      <section className="historial-clinico__card">
-        <div className="historial-clinico__card-titulo">
-          <UsersIcon24 className="historial-clinico__card-icono" />
-          <h3>Heredofamiliares</h3>
-        </div>
-
-        {heredoLineas.length === 0 && (
-          <p className="historial-clinico__vacio">Sin antecedentes heredofamiliares registrados.</p>
-        )}
-
-        {heredoLineas.length > 0 && heredoEsLista && (
-          <ul className="historial-clinico__lista-puntos">
-            {heredoLineas.map((linea, i) => {
-              const idxDosPuntos = linea.indexOf(':')
-              return (
-                <li key={i}>
-                  <span className="historial-clinico__punto" />
-                  {idxDosPuntos > -1 ? (
-                    <span>
-                      <strong>{linea.slice(0, idxDosPuntos + 1)}</strong>{linea.slice(idxDosPuntos + 1)}
-                    </span>
-                  ) : (
-                    <span>{linea}</span>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
-        )}
-
-        {heredoLineas.length > 0 && !heredoEsLista && (
-          <p className="historial-clinico__parrafo">{heredoLineas[0]}</p>
-        )}
-      </section>
+          <p className="historial-clinico__parrafo">{seccion.valor}</p>
+        </section>
+      ))}
 
       {/* ── Estudios Recientes ── */}
       <div className="historial-clinico__seccion-heading">
@@ -300,41 +280,6 @@ const HistorialClinicoContenido = ({ historial }: { historial: historialClinicoP
           </ul>
         </section>
       ))}
-
-      {/* ── Examen Físico ── */}
-      <section className="historial-clinico__card">
-        <div className="historial-clinico__card-titulo">
-          <HeartIcon24 className="historial-clinico__card-icono" />
-          <h3>Examen Físico</h3>
-        </div>
-
-        {historial.examenFisico ? (
-          <div className="historial-clinico__tiles">
-            <div className="historial-clinico__tile">
-              <span className="historial-clinico__tile-label">TA</span>
-              <span className="historial-clinico__tile-valor">{historial.examenFisico.presionArterial ?? '—'}</span>
-              <span className="historial-clinico__tile-unidad">mmHg</span>
-            </div>
-            <div className="historial-clinico__tile">
-              <span className="historial-clinico__tile-label">Peso</span>
-              <span className="historial-clinico__tile-valor">{historial.examenFisico.pesoKg ?? '—'}</span>
-              <span className="historial-clinico__tile-unidad">kg</span>
-            </div>
-            <div className="historial-clinico__tile">
-              <span className="historial-clinico__tile-label">Talla</span>
-              <span className="historial-clinico__tile-valor">{historial.examenFisico.tallaM ?? '—'}</span>
-              <span className="historial-clinico__tile-unidad">m</span>
-            </div>
-            <div className="historial-clinico__tile">
-              <span className="historial-clinico__tile-label">IMC</span>
-              <span className="historial-clinico__tile-valor">{historial.examenFisico.imc ?? '—'}</span>
-              <span className="historial-clinico__tile-unidad">kg/m²</span>
-            </div>
-          </div>
-        ) : (
-          <p className="historial-clinico__vacio">Sin examen físico registrado aún.</p>
-        )}
-      </section>
     </>
   )
 }

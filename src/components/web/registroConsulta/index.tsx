@@ -17,7 +17,7 @@ const RegistroConsulta = ({ pacienteId, onGuardado, organizacionId, profesionalI
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = async (esBorrador: boolean) => {
+    const handleSubmit = async () => {
   setLoading(true)
   setError(null)
 
@@ -95,7 +95,7 @@ const RegistroConsulta = ({ pacienteId, onGuardado, organizacionId, profesionalI
                 <button
                     type="button"
                     className="registro-consulta__btn-borrador"
-                    onClick={() => handleSubmit(true)}
+                    onClick={() => handleSubmit()}
                     disabled={loading}
                 >
                     Guardar como Borrador
@@ -103,7 +103,7 @@ const RegistroConsulta = ({ pacienteId, onGuardado, organizacionId, profesionalI
                 <button
                     type="button"
                     className="registro-consulta__btn-guardar"
-                    onClick={() => handleSubmit(false)}
+                    onClick={() => handleSubmit()}
                     disabled={loading}
                 >
                     {loading ? "Guardando..." : "Finalizar y Guardar Consulta"}
