@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import MobileHeader from '../mobileHeader'
@@ -15,47 +15,45 @@ type Props = {
   subtitulo?: string
 }
 
-const HistorialEstudios = ({
+export type HistorialEstudiosHandle = {
+  refetch: () => void
+}
+
+const HistorialEstudios = forwardRef<HistorialEstudiosHandle, Props>(({
   titulo = 'Analisis Completo',
   subtitulo = 'Un estudio mas profundo de tu salud',
-}: Props) => {
+}, ref) => {
   const navigate = useNavigate()
   const [estudios, setEstudios] = useState<estudioResumen[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [filtro, setFiltro] = useState<FiltroTipo>('TODOS')
 
-  useEffect(() => {
-    let cancelled = false
+  const loadEstudios = useCallback(async () => {
+    setLoading(true)
+    setError(null)
 
-    const loadEstudios = async () => {
-      setLoading(true)
-      setError(null)
-
-      try {
-        const data = await fetchEstudiosPaciente(getPacienteId())
-        if (!cancelled) setEstudios(data)
-      } catch (err: unknown) {
-        if (!cancelled) {
-          if (axios.isAxiosError(err)) {
-            setError(err.response?.data?.message ?? err.message)
-          } else if (err instanceof Error) {
-            setError(err.message)
-          } else {
-            setError('No se pudieron cargar los estudios')
-          }
-        }
-      } finally {
-        if (!cancelled) setLoading(false)
+    try {
+      const data = await fetchEstudiosPaciente(getPacienteId())
+      setEstudios(data)
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message ?? err.message)
+      } else if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('No se pudieron cargar los estudios')
       }
-    }
-
-    loadEstudios()
-
-    return () => {
-      cancelled = true
+    } finally {
+      setLoading(false)
     }
   }, [])
+
+  useImperativeHandle(ref, () => ({ refetch: loadEstudios }), [loadEstudios])
+
+  useEffect(() => {
+    loadEstudios()
+  }, [loadEstudios])
 
   const estudiosFiltrados =
     filtro === 'TODOS'
@@ -119,6 +117,6 @@ const HistorialEstudios = ({
       <BottomNavBar />
     </div>
   )
-}
+})
 
 export default HistorialEstudios

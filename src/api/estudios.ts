@@ -50,6 +50,22 @@ type ApiEstudioResponse = {
   data: ApiEstudioRaw
 }
 
+type ApiUploadEstudioResponse = {
+  success: boolean
+  message?: string
+  data?: ApiEstudioRaw
+}
+
+// Payload interno (camelCase) para subir un estudio nuevo
+export type UploadEstudioPayload = {
+  archivo: File
+  titulo: string
+  tipoEstudioId: number
+  fecha: string
+  institucion?: string
+  notas?: string
+}
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 const normalizeTipo = (tipoEstudio: string) => {
@@ -120,4 +136,26 @@ export const fetchEstudioById = async (
   }
 
   return mapEstudioFromApi(data.data)
+}
+
+export const uploadEstudio = async (
+  pacienteId: string,
+  payload: UploadEstudioPayload,
+): Promise<void> => {
+  const formData = new FormData()
+  formData.append('archivo', payload.archivo)
+  formData.append('titulo', payload.titulo)
+  formData.append('tipo_estudio_id', String(payload.tipoEstudioId))
+  formData.append('fecha', payload.fecha)
+  if (payload.institucion) formData.append('institucion', payload.institucion)
+  if (payload.notas) formData.append('notas', payload.notas)
+
+  const { data } = await api.post<ApiUploadEstudioResponse>(
+    `/patients/${pacienteId}/estudios/upload`,
+    formData,
+  )
+
+  if (!data.success) {
+    throw new Error(data.message || 'No se pudo subir el estudio')
+  }
 }
