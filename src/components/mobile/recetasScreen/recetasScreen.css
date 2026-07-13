@@ -1,0 +1,141 @@
+.recetas-screen {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f7fbfb;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.recetas-screen__header {
+  padding: 16px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e8e6;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.recetas-screen__back-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #006562;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recetas-screen__title {
+  font-family: var(--heading, 'Manrope', sans-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: #00201f;
+  flex: 1;
+}
+
+.recetas-screen__content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.recetas-screen__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: #416464;
+  text-align: center;
+  gap: 8px;
+}
+
+.recetas-screen__empty-icon {
+  font-size: 48px;
+  opacity: 0.5;
+  margin-bottom: 8px;
+}
+
+.recetas-screen__empty-text {
+  font-size: 16px;
+  font-family: var(--sans, 'Inter', sans-serif);
+}
+
+.recetas-screen__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: #416464;
+  gap: 12px;
+}
+
+.recetas-screen__spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #d4eceb;
+  border-top-color: #006562;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.receta-card {
+  background: #ffffff;
+  border: 1px solid #e0e8e6;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.receta-card__title {
+  font-family: var(--heading, 'Manrope', sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: #00201f;
+  line-height: 1.4;
+}
+
+.receta-card__date {
+  font-size: 13px;
+  color: #416464;
+  font-family: var(--sans, 'Inter', sans-serif);
+}
+
+.receta-card__btn {
+  background: #006562;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-family: var(--sans, 'Inter', sans-serif);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.receta-card__btn:active {
+  background: #004d4a;
+}
+
+.receta-card__icon {
+  width: 16px;
+  height: 16px;
+}

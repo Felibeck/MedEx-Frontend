@@ -8,6 +8,7 @@ import PatientLogin from "./pages/mobile/PatientLogin";
 import PatientSignup from "./pages/mobile/PatientSignup";
 import DoctorLogin from "./pages/doctor/DoctorLogin";
 import HistorialClinico from "./components/mobile/historialClinico";
+import RecetasScreen from "./components/mobile/recetasScreen";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       <Route path="/patients/signup" element={<PatientSignup />} />
       <Route path="/patients" element={<PatientHome />} />
       <Route path="/patients/historial" element={<HistorialClinico />} />
+      <Route path="/recetas" element={<RecetasScreen />} />
       <Route path="/patients/estudio/:estudioId" element={<DetalleEstudioPage />} />
       <Route path="/doctors/login" element={<DoctorLogin />} />
       {/* <Route path="/doctors/register" element={<DoctorSignup />} /> */}
