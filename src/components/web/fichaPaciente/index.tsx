@@ -4,13 +4,14 @@ import type { estudioResumen } from '../../../types/estudio'
 import { getHistorialClinico } from '../../../api/doctors'
 import { fetchEstudiosPaciente } from '../../../api/estudios'
 import { calcularEdad, formatearFecha, gruposCompatibles } from '../../../utils/paciente'
+import TabHistorial from './TabHistorial'
 import './fichaPaciente.css'
 
 type Props = {
   pacienteId: string
 }
 
-type Tab = 'consultas' | 'estudios'
+type Tab = 'consultas' | 'estudios' | 'historial'
 
 const IconoFallback = () => (
   <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
@@ -177,6 +178,13 @@ const FichaPaciente = ({ pacienteId }: Props) => {
         >
           Estudios
         </button>
+        <button
+          type="button"
+          className={`ficha-paciente__tab${tab === 'historial' ? ' ficha-paciente__tab--activo' : ''}`}
+          onClick={() => setTab('historial')}
+        >
+          Historial
+        </button>
       </div>
 
       {tab === 'consultas' ? (
@@ -308,7 +316,7 @@ const FichaPaciente = ({ pacienteId }: Props) => {
             )}
           </div>
         )
-      ) : (
+      ) : tab === 'estudios' ? (
         <div className="ficha-paciente__estudios">
           {estudios.length === 0 ? (
             <p className="ficha-paciente__vacio">Este paciente todavía no tiene estudios registrados.</p>
@@ -321,6 +329,8 @@ const FichaPaciente = ({ pacienteId }: Props) => {
             ))
           )}
         </div>
+      ) : (
+        <TabHistorial historial={historial} />
       )}
     </div>
   )

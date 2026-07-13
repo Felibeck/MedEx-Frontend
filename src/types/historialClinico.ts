@@ -70,10 +70,38 @@ export type estudioHistorial = {
     descripcion: string | null;
 }
 
+export type antecedentePatologicoDoc = {
+    id: string;
+    nombre: string;
+}
+
+export type ginecoObstetricoDoc = {
+    menarcaEdad: number | null;
+    formulaObstetrica: string | null;
+    ultimoPapFecha: string | null;
+    ultimoPapResultado: string | null;
+}
+
+export type examenFisicoDoc = {
+    presionArterial: string | null;
+    pesoKg: number | null;
+    tallaM: number | null;
+    imc: number | null;
+    fecha: string | null;
+}
+
+export type fichaPacienteCompleta = fichaPaciente & {
+    antecedentesQuirurgicos: string | null;
+    heredofamiliares: string | null;
+    ginecoObstetrico: ginecoObstetricoDoc | null;
+}
+
 export type historialClinico = {
-    paciente: fichaPaciente | null;
+    paciente: fichaPacienteCompleta | null;
     alergias: alergia[];
     condicionesCronicas: condicionCronica[];
+    antecedentesPatologicos: antecedentePatologicoDoc[];
     consultas: consultaHistorial[];
     estudios: estudioHistorial[];
+    examenFisico: examenFisicoDoc | null;
 }
