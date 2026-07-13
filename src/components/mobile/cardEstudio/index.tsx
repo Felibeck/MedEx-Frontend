@@ -8,7 +8,8 @@ type Props = {
 
 const CardEstudio = ({ estudio }: Props) => {
   const navigate = useNavigate()
-  const { id, tipoEstudio, fecha, institucion } = estudio
+  const { id, tipoEstudio, fecha, institucion, titulo } = estudio
+  const tituloMostrado = titulo ?? tipoEstudio
 
   return (
     <div className="estudio-card">
@@ -17,17 +18,21 @@ const CardEstudio = ({ estudio }: Props) => {
         <span className="estudio-card__label">{tipoEstudio}</span>
       </div>
 
-      <div className="estudio-card__meta">
-        <span className="estudio-card__fecha">
-          {fecha.toLocaleDateString('es-AR', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-          }).toUpperCase()}
-        </span>
-        <span className="estudio-card__institucion">
-          {institucion.toUpperCase()}
-        </span>
+      <div className="estudio-card__body">
+        <h3 className="estudio-card__titulo">{tituloMostrado}</h3>
+
+        <div className="estudio-card__meta">
+          <span className="estudio-card__fecha">
+            {fecha.toLocaleDateString('es-AR', {
+              day: '2-digit',
+              month: 'long',
+              year: 'numeric',
+            }).toUpperCase()}
+          </span>
+          <span className="estudio-card__institucion">
+            {institucion.toUpperCase()}
+          </span>
+        </div>
       </div>
 
       <div className="estudio-card__acciones">

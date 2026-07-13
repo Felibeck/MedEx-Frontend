@@ -25,6 +25,7 @@ type ApiEstudioResumenRaw = {
   tipo_estudio: string
   fecha: string
   institucion: string
+  titulo: string | null
 }
 
 // Forma completa — detalle /:pacienteId/estudios/:estudioId
@@ -97,6 +98,7 @@ export const mapEstudioResumenFromApi = (raw: ApiEstudioResumenRaw): estudioResu
   tipoEstudio: raw.tipo_estudio,
   fecha: new Date(raw.fecha),
   institucion: raw.institucion,
+  titulo: raw.titulo ?? undefined,
 })
 
 export const mapEstudioFromApi = (raw: ApiEstudioRaw): estudio => ({

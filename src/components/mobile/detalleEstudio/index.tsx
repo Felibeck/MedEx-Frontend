@@ -57,7 +57,7 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
         {/* ── Info card ── */}
         <div className="detalle-info-card">
           <span className="detalle-badge">{estudio.tipoEstudio}</span>
-          <h1 className="detalle-titulo">{estudio.tipoEstudio}</h1>
+          <h1 className="detalle-titulo">{estudio.titulo ?? estudio.tipoEstudio}</h1>
           <div className="detalle-meta-row">
             <div className="detalle-meta-item">
               <span className="detalle-meta-label">FECHA</span>
@@ -185,6 +185,23 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* ── Notas adicionales ── */}
+        {estudio.descripcion && (
+          <div className="detalle-informe-card">
+            <h2 className="detalle-informe-titulo">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1f6f6b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/>
+              </svg>
+              Notas adicionales
+            </h2>
+
+            <div className="detalle-informe-texto">
+              <p>{estudio.descripcion}</p>
+            </div>
           </div>
         )}
 
