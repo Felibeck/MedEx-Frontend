@@ -4,7 +4,6 @@ import axios from 'axios'
 import { registerPatient } from '../../api/patientAuth'
 import './PatientSignup.css'
 
-const LOGO_URL = 'https://www.figma.com/api/mcp/asset/9b0d94e4-e4f9-43fd-a2af-eadfe0ee66aa'
 const EYE_ICON_URL = 'https://www.figma.com/api/mcp/asset/bbfacca5-e49c-4901-aefa-6710c50c262b'
 const DNI_SCAN_URL = 'https://www.figma.com/api/mcp/asset/fee5ebb5-0de6-411c-a189-9c954c06ca8a'
 const INFO_ICON_URL = 'https://www.figma.com/api/mcp/asset/638d713e-2e4f-4302-acae-2c6299ff2d15'
@@ -62,7 +61,7 @@ const PatientSignup = () => {
 
         <div className="patient-signup__brand">
           <div className="patient-signup__logo-wrap">
-            <img src={LOGO_URL} alt="MedEx logo" className="patient-signup__logo" />
+            <img src="/medex-logo.png" alt="MedEx logo" className="patient-signup__logo" />
           </div>
           <div className="patient-signup__brand-text">
             <h1 className="patient-signup__brand-name">MedEx</h1>
