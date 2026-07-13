@@ -265,9 +265,9 @@ const FichaPaciente = ({ pacienteId }: Props) => {
                       </svg>
                       Prescripciones
                     </h4>
-                    {consultaActiva.prescripciones.length > 0 ? (
+                    {(consultaActiva.prescripciones ?? []).length > 0 ? (
                       <div className="ficha-paciente__prescripciones">
-                        {consultaActiva.prescripciones.map((p) => (
+                        {(consultaActiva.prescripciones ?? []).map((p) => (
                           <div key={p.id} className="ficha-paciente__prescripcion">
                             <div className="ficha-paciente__prescripcion-icono">
                               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e3fffc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -295,9 +295,9 @@ const FichaPaciente = ({ pacienteId }: Props) => {
                       </svg>
                       Adjuntos
                     </h4>
-                    {consultaActiva.adjuntos.length > 0 ? (
+                    {(consultaActiva.adjuntos ?? []).length > 0 ? (
                       <div className="ficha-paciente__adjuntos">
-                        {consultaActiva.adjuntos.map((a) => (
+                        {(consultaActiva.adjuntos ?? []).map((a) => (
                           <a key={a.id} href={a.url_archivo ?? '#'} target="_blank" rel="noreferrer" className="ficha-paciente__adjunto">
                             <svg width="16" height="20" viewBox="0 0 24 24" fill="none" stroke="#131d1d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />

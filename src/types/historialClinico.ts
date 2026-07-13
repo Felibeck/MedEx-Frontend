@@ -55,8 +55,8 @@ export type consultaHistorial = {
         usuario: { nombre: string; apellido: string } | null;
     } | null;
     organizacion: { nombre: string } | null;
-    prescripciones: prescripcion[];
-    adjuntos: adjuntoConsulta[];
+    prescripciones?: prescripcion[];
+    adjuntos?: adjuntoConsulta[];
 }
 
 export type estudioHistorial = {
@@ -70,38 +70,25 @@ export type estudioHistorial = {
     descripcion: string | null;
 }
 
-export type antecedentePatologicoDoc = {
+// Shape de la tabla `historial` de Supabase
+export type historialTabla = {
     id: string;
-    nombre: string;
-}
-
-export type ginecoObstetricoDoc = {
-    menarcaEdad: number | null;
-    formulaObstetrica: string | null;
-    ultimoPapFecha: string | null;
-    ultimoPapResultado: string | null;
-}
-
-export type examenFisicoDoc = {
-    presionArterial: string | null;
-    pesoKg: number | null;
-    tallaM: number | null;
-    imc: number | null;
-    fecha: string | null;
-}
-
-export type fichaPacienteCompleta = fichaPaciente & {
-    antecedentesQuirurgicos: string | null;
-    heredofamiliares: string | null;
-    ginecoObstetrico: ginecoObstetricoDoc | null;
+    paciente_id: string;
+    ant: string | null;   // antecedentes patológicos (texto libre)
+    ago: string | null;   // antecedentes gineco-obstétricos (texto libre)
+    ahf: string | null;   // antecedentes heredo-familiares (texto libre)
+    mx: string | null;    // mamografía
+    eco: string | null;   // estudios complementarios / ecografías
+    ef: string | null;    // examen físico (texto libre)
+    otros: string | null; // otros datos
+    created_at: string | null;
 }
 
 export type historialClinico = {
-    paciente: fichaPacienteCompleta | null;
+    paciente: fichaPaciente | null;
     alergias: alergia[];
     condicionesCronicas: condicionCronica[];
-    antecedentesPatologicos: antecedentePatologicoDoc[];
     consultas: consultaHistorial[];
     estudios: estudioHistorial[];
-    examenFisico: examenFisicoDoc | null;
+    historial: historialTabla | null;
 }
