@@ -1,0 +1,183 @@
+.inicio-web {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 72px;
+  width: 100%;
+  padding: 48px 24px 32px;
+}
+
+/* ── Bienvenida ── */
+.inicio-web__bienvenida {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  max-width: 560px;
+}
+
+.inicio-web__titulo {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 48px;
+  color: #006562;
+  margin: 0;
+}
+
+.inicio-web__divisor {
+  width: 48px;
+  height: 3px;
+  border-radius: 999px;
+  background: #006562;
+}
+
+.inicio-web__saludo {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  color: #0b3131;
+  margin: 4px 0 0;
+}
+
+.inicio-web__descripcion {
+  font-family: 'Inter', var(--sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #416464;
+  margin: 0;
+}
+
+/* ── Bento grid ── */
+.inicio-web__bento {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.inicio-web__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 40px 32px;
+  border: 1px solid #d9e5e2;
+  border-radius: 32px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s, border-color 0.15s;
+  font-family: inherit;
+}
+
+.inicio-web__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(11, 49, 49, 0.08);
+  background: #006562;
+  border-color: #006562;
+}
+
+.inicio-web__card:hover .inicio-web__card-titulo,
+.inicio-web__card:hover .inicio-web__card-texto {
+  color: #fff;
+}
+
+.inicio-web__card:hover .inicio-web__card-icono {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.inicio-web__card:hover .inicio-web__card-badge {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.inicio-web__card:hover .inicio-web__card-hint {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+/* Ver Agenda — ícono, título+texto y badge repartidos con space-between */
+.inicio-web__card--agenda {
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  gap: 0;
+  min-height: 222px;
+  padding: 24px 32px;
+}
+
+.inicio-web__card-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.inicio-web__card-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: #d4eceb;
+  color: #006562;
+  transition: background 0.15s, color 0.15s;
+}
+
+.inicio-web__card-titulo {
+  font-family: 'Manrope', var(--heading);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  color: #0b3131;
+  transition: color 0.15s;
+}
+
+.inicio-web__card-texto {
+  font-family: 'Inter', var(--sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #416464;
+  transition: color 0.15s;
+}
+
+.inicio-web__card-badge {
+  margin-top: auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #d4eceb;
+  color: #006562;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.inicio-web__card-hint {
+  margin-top: auto;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #f3f6f3;
+  border: 1px solid #d9e5e2;
+  color: #416464;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  font-family: var(--mono);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+@media (max-width: 900px) {
+  .inicio-web__bento {
+    grid-template-columns: 1fr;
+  }
+}

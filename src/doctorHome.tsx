@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Sidebar from './components/web/sidebar'
 import Agenda from './components/web/agenda'
 import ConsultaWeb from './components/web/consulta'
 import RegistroPacientes from './components/web/registroPacientes'
+import InicioWeb from './components/web/inicioWeb'
 import type { medico } from './types/medico'
 import type { turno } from './types/turno'
 import type { paciente } from './types/paciente'
@@ -19,8 +20,10 @@ const DoctorHome = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [activeNav, setActiveNav] = useState(
-    () => (location.state as { activeNav?: string } | null)?.activeNav ?? 'agenda'
+    () => (location.state as { activeNav?: string } | null)?.activeNav ?? 'inicio'
   )
+  const searchWrapRef = useRef<HTMLDivElement>(null)
+  const focusSearchPendingRef = useRef(false)
   const [medico, setMedico] = useState<medico | null>(null)
   const [turnoActivo, setTurnoActivo] = useState<turno | null>(null)
   const [pacienteBuscado, setPacienteBuscado] = useState<paciente | null>(null)
@@ -74,6 +77,13 @@ const DoctorHome = () => {
     setMedico(current)
   }, [navigate])
 
+  useEffect(() => {
+    if (focusSearchPendingRef.current && activeNav !== 'inicio') {
+      searchWrapRef.current?.querySelector('input')?.focus()
+      focusSearchPendingRef.current = false
+    }
+  }, [activeNav])
+
   if (medico === null) return null
 
   const handleFinalizar = (data: consulta, receta?: RecetaPayload) => {
@@ -101,6 +111,15 @@ const DoctorHome = () => {
   const handleSeleccionarTurno = (t: turno) => {
     if (pacienteBuscado) return
     setTurnoActivo(t)
+  }
+
+  const handleBuscarPaciente = () => {
+    if (activeNav === 'inicio') {
+      focusSearchPendingRef.current = true
+      setActiveNav('agenda')
+      return
+    }
+    searchWrapRef.current?.querySelector('input')?.focus()
   }
 
   const renderAreaConsulta = () => {
@@ -189,15 +208,23 @@ const DoctorHome = () => {
       />
 
       <div className="doctor-main">
-        <header className="doctor-topbar">
-          <div className="doctor-search-wrap">
-            <SearchBar onPacienteEncontrado={handlePacienteEncontrado} />
-          </div>
-        </header>
+        {activeNav !== 'inicio' && (
+          <header className="doctor-topbar">
+            <div className="doctor-search-wrap" ref={searchWrapRef}>
+              <SearchBar onPacienteEncontrado={handlePacienteEncontrado} />
+            </div>
+          </header>
+        )}
 
         <div className="doctor-content">
           {activeNav === 'pacientes' ? (
             <RegistroPacientes onVerDetalle={(pacienteId) => navigate(`/doctor/pacientes/${pacienteId}`)} />
+          ) : activeNav === 'inicio' ? (
+            <InicioWeb
+              medico={medico}
+              onIrAgenda={() => setActiveNav('agenda')}
+              onBuscarPaciente={handleBuscarPaciente}
+            />
           ) : (
             <>
               <Agenda
