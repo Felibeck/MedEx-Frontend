@@ -59,7 +59,6 @@ src/
 │   └── Usuario.ts
 │
 ├── App.tsx                 # Definición de rutas
-├── HomePage.tsx            # Pantalla de inicio con selección de vista
 ├── patientHome.tsx         # Entrada a la vista paciente
 ├── doctorHome.tsx          # Entrada a la vista médico
 └── main.tsx                # Bootstrap de la app
@@ -71,7 +70,7 @@ src/
 
 | Ruta | Componente | Descripción |
 |------|-----------|-------------|
-| `/` | `HomePage` | Selección de vista (Paciente / Doctor) |
+| `/` | `RootRedirect` | Redirige según ancho de pantalla: mobile → paciente, desktop → médico |
 | `/patients` | `PatientHome` | Historial de estudios del paciente |
 | `/patients/estudio/:id` | `DetalleEstudioPage` | Detalle de un estudio con visor DICOM |
 | `/doctor` | `DoctorHome` | Dashboard del médico con agenda y consulta |

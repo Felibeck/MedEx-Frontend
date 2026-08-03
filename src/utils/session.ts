@@ -1,4 +1,5 @@
 import type { medico } from '../types/medico'
+import type { DeviceType } from '../hooks/useDeviceType'
 
 type StoredDoctor = Partial<Record<string, any>> | null
 
@@ -42,6 +43,34 @@ export const getCurrentMedico = (): medico | null => {
   }
 
   return mapped
+}
+
+/**
+ * ¿Hay una sesión de médico guardada localmente?
+ * Se apoya en lo que escribe `DoctorLogin`: `medex_doctor` + el JWT en `token`.
+ */
+export const hasDoctorSession = (): boolean =>
+  Boolean(getToken() && getStoredDoctor())
+
+/**
+ * ¿Hay una sesión de paciente guardada localmente?
+ * Se apoya en lo que escribe `PatientLogin`: `medex_user_id` + el JWT en `token`.
+ */
+export const hasPatientSession = (): boolean =>
+  Boolean(getToken() && localStorage.getItem('medex_user_id'))
+
+/**
+ * Ruta de destino para una superficie dada, según haya o no sesión activa.
+ * La usan la redirección de "/" y el DeviceGuard.
+ *
+ * NOTA: es una señal de UX (¿a dónde mando al usuario?), no una verificación de
+ * permisos — la autorización real la resuelve el backend.
+ */
+export const resolveHomePath = (deviceType: DeviceType): string => {
+  if (deviceType === 'mobile') {
+    return hasPatientSession() ? '/patients' : '/patients/login'
+  }
+  return hasDoctorSession() ? '/doctor' : '/doctors/login'
 }
 
 export default {

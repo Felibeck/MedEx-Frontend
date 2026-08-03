@@ -83,7 +83,8 @@ src/
 │   └── Usuario.ts
 │
 ├── App.tsx                   # Definición de rutas
-├── HomePage.tsx               # Selección de vista (Paciente / Doctor)
+├── hooks/
+│   └── useDeviceType.ts      # 'mobile' | 'desktop' según window.innerWidth
 ├── patientHome.tsx
 ├── doctorHome.tsx
 ├── index.css                 # Variables CSS globales, reset base
@@ -101,7 +102,7 @@ Component Organization (regla de oro):
 
 | Ruta | Componente | Descripción |
 |------|-----------|-------------|
-| `/` | `HomePage` | Selección de vista (Paciente / Doctor) |
+| `/` | `RootRedirect` | Redirige según ancho de pantalla (`MOBILE_BREAKPOINT` = 768px): mobile → paciente, desktop → médico. Solo UX, no seguridad |
 | `/patients` | `PatientHome` | Historial de estudios del paciente |
 | `/patients/estudio/:id` | `DetalleEstudioPage` | Detalle de estudio con visor DICOM |
 | `/doctor` | `DoctorHome` | Dashboard del médico: agenda y consulta |
