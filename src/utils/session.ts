@@ -10,6 +10,25 @@ export const getToken = (): string | null => {
 export const clearSession = () => {
   localStorage.removeItem('token')
   localStorage.removeItem('medex_doctor')
+  localStorage.removeItem('medex_user')
+  localStorage.removeItem('medex_user_id')
+}
+
+export const getCurrentPaciente = () => {
+  const raw = localStorage.getItem('medex_user')
+  if (!raw) return null
+
+  try {
+    const parsed = JSON.parse(raw)
+    return {
+      id: String(parsed.id ?? ''),
+      email: parsed.email ?? '',
+      nombre: parsed.nombre ?? '',
+      apellido: parsed.apellido ?? '',
+    }
+  } catch {
+    return null
+  }
 }
 
 export const getStoredDoctor = (): StoredDoctor => {

@@ -3,6 +3,7 @@ import Sidebar from './components/web/sidebar'
 import SearchBar from './components/web/searchBar'
 import FichaPaciente from './components/web/fichaPaciente'
 import type { medico } from './types/medico'
+import { logout } from './api/auth'
 import './doctorHome.css'
 
 const MOCK_MEDICO: medico = {
@@ -23,6 +24,16 @@ const PacienteDetalle = () => {
   const navigate = useNavigate()
   const { pacienteId } = useParams<{ pacienteId: string }>()
 
+  const handleCerrarSesion = async () => {
+    try {
+      await logout()
+      navigate('/doctors/login')
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'No se pudo cerrar sesión'
+      window.alert(message)
+    }
+  }
+
   return (
     <div className="doctor-layout">
       <Sidebar
@@ -30,7 +41,7 @@ const PacienteDetalle = () => {
         activeNav="pacientes"
         onNavChange={(key) => navigate('/doctor', { state: { activeNav: key } })}
         onChatbot={() => console.log('Abrir chatbot')}
-        onCerrarSesion={() => navigate('/')}
+        onCerrarSesion={handleCerrarSesion}
       />
 
       <div className="doctor-main">

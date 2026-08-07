@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { api } from './client'
+import { clearSession } from '../utils/session'
 
 type AuthUser = {
   id: string
@@ -12,6 +13,11 @@ type AuthUser = {
 type LoginResult = {
   user: AuthUser
   token: string
+}
+
+type ApiSimpleResponse = {
+  success: boolean
+  message?: string
 }
 
 export const loginPatient = async (email: string, password: string): Promise<LoginResult> => {
@@ -35,11 +41,23 @@ export type RegisterPayload = {
 }
 
 export const registerPatient = async (payload: RegisterPayload): Promise<void> => {
-  const { data } = await api.post<{ success: boolean; message: string }>(
-    '/patients/register',
-    payload,
-  )
+  const { data } = await api.post<ApiSimpleResponse>('/patients/register', payload)
   if (!data.success) throw new Error(data.message || 'Error al registrarse')
+}
+
+export const logout = async (): Promise<void> => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    clearSession()
+    return
+  }
+
+  const { data } = await api.post<ApiSimpleResponse>('/auth/logout')
+  if (!data.success) {
+    throw new Error(data.message || 'No se pudo cerrar sesión')
+  }
+
+  clearSession()
 }
 
 export const extractErrorMessage = (err: unknown, fallback: string): string => {

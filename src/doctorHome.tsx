@@ -10,6 +10,7 @@ import type { turno } from './types/turno'
 import type { paciente } from './types/paciente'
 import type { consulta } from './types/consulta'
 import { getUltimaNotaPorProfesional, postConsulta, type RecetaPayload } from './api/consultas'
+import { logout } from './api/auth'
 import './doctorHome.css'
 import SearchBar from './components/web/searchBar'
 import { getCurrentMedico } from './utils/session'
@@ -197,6 +198,16 @@ const DoctorHome = () => {
     )
   }
 
+  const handleCerrarSesion = async () => {
+    try {
+      await logout()
+      navigate('/doctors/login')
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'No se pudo cerrar sesión'
+      window.alert(message)
+    }
+  }
+
   return (
     <div className="doctor-layout">
       <Sidebar
@@ -204,7 +215,7 @@ const DoctorHome = () => {
         activeNav={activeNav}
         onNavChange={setActiveNav}
         onChatbot={() => console.log('Abrir chatbot')}
-        onCerrarSesion={() => navigate('/')}
+        onCerrarSesion={handleCerrarSesion}
       />
 
       <div className="doctor-main">
