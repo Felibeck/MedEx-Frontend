@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { estudioResumen } from '../../../types/estudio'
 import './cardEstudio.css'
@@ -8,13 +9,26 @@ type Props = {
 
 const CardEstudio = ({ estudio }: Props) => {
   const navigate = useNavigate()
-  const { id, tipoEstudio, fecha, institucion, titulo } = estudio
+  const { id, tipoEstudio, fecha, institucion, titulo, fotos } = estudio
   const tituloMostrado = titulo ?? tipoEstudio
+  const [imgError, setImgError] = useState(false)
+
+  const fotoPreview = fotos?.[0]
+  const mostrarFoto = Boolean(fotoPreview) && !imgError
 
   return (
     <div className="estudio-card">
       <div className="estudio-card__img-wrap">
-        <div className="estudio-card__placeholder">{tipoEstudio}</div>
+        {mostrarFoto ? (
+          <img
+            className="estudio-card__img"
+            src={fotoPreview}
+            alt={tipoEstudio}
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="estudio-card__placeholder">{tipoEstudio}</div>
+        )}
         <span className="estudio-card__label">{tipoEstudio}</span>
       </div>
 

@@ -15,6 +15,7 @@ export type estudioResumen = {
   fecha: Date
   institucion: string
   titulo?: string
+  fotos?: string[]
 }
 
 // Versión completa que devuelve /:id/estudios/:estudioId
