@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import {
+  EyeIcon,
+  EyeSlashIcon,
+  IdentificationIcon,
+  InformationCircleIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/24/solid'
 import { registerPatient } from '../../api/patientAuth'
 import './PatientSignup.css'
-
-const EYE_ICON_URL = 'https://www.figma.com/api/mcp/asset/bbfacca5-e49c-4901-aefa-6710c50c262b'
-const DNI_SCAN_URL = 'https://www.figma.com/api/mcp/asset/fee5ebb5-0de6-411c-a189-9c954c06ca8a'
-const INFO_ICON_URL = 'https://www.figma.com/api/mcp/asset/638d713e-2e4f-4302-acae-2c6299ff2d15'
-const DROPDOWN_ARROW_URL = 'https://www.figma.com/api/mcp/asset/94f8d3d5-4db0-4f38-bdd5-e868a5f6c1aa'
 
 const PatientSignup = () => {
   const navigate = useNavigate()
@@ -133,8 +135,13 @@ const PatientSignup = () => {
                   type="button"
                   className="patient-signup__eye-btn"
                   onClick={() => setShowPassword(v => !v)}
+                  aria-label={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
                 >
-                  <img src={EYE_ICON_URL} alt="Ver contraseña" className="patient-signup__eye-icon" />
+                  {showPassword ? (
+                    <EyeSlashIcon className="patient-signup__eye-icon" />
+                  ) : (
+                    <EyeIcon className="patient-signup__eye-icon" />
+                  )}
                 </button>
               </div>
             </div>
@@ -198,7 +205,7 @@ const PatientSignup = () => {
                   <option value="galeno">Galeno</option>
                   <option value="particular">Particular</option>
                 </select>
-                <img src={DROPDOWN_ARROW_URL} alt="" className="patient-signup__dropdown-arrow" />
+                <ChevronDownIcon className="patient-signup__dropdown-arrow" aria-hidden="true" />
               </div>
             </div>
 
@@ -215,7 +222,7 @@ const PatientSignup = () => {
                 {/* DNI Scan card */}
                 <div className="patient-signup__dni-card">
                   <div className="patient-signup__dni-icon-wrap">
-                    <img src={DNI_SCAN_URL} alt="Escanear DNI" className="patient-signup__dni-icon" />
+                    <IdentificationIcon className="patient-signup__dni-icon" aria-hidden="true" />
                   </div>
                   <span className="patient-signup__dni-text">Escanear DNI</span>
                 </div>
@@ -237,7 +244,7 @@ const PatientSignup = () => {
 
               {/* Info box */}
               <div className="patient-signup__info-box">
-                <img src={INFO_ICON_URL} alt="" className="patient-signup__info-icon" />
+                <InformationCircleIcon className="patient-signup__info-icon" aria-hidden="true" />
                 <p className="patient-signup__info-text">
                   Validamos su información con las bases oficiales de{' '}
                   <strong className="patient-signup__info-highlight">SISA</strong> y{' '}
