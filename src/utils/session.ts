@@ -7,7 +7,6 @@ export const getToken = (): string | null => {
   return localStorage.getItem('token')
 }
 
-<<<<<<< HEAD
 export const clearSession = () => {
   localStorage.removeItem('token')
   localStorage.removeItem('medex_doctor')
@@ -32,8 +31,6 @@ export const getCurrentPaciente = () => {
   }
 }
 
-=======
->>>>>>> ed1efc14b5922b6843a63a6ace56702ece90b8ec
 export const getStoredDoctor = (): StoredDoctor => {
   const raw = localStorage.getItem('medex_doctor')
   if (!raw) return null
@@ -124,6 +121,7 @@ export const resolveHomePath = (deviceType: DeviceType): string => {
 
 export default {
   getToken,
+  clearSession,
   clearMedicoSession,
   clearPatientSession,
   getCurrentMedico,
