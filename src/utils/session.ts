@@ -7,6 +7,7 @@ export const getToken = (): string | null => {
   return localStorage.getItem('token')
 }
 
+<<<<<<< HEAD
 export const clearSession = () => {
   localStorage.removeItem('token')
   localStorage.removeItem('medex_doctor')
@@ -31,6 +32,8 @@ export const getCurrentPaciente = () => {
   }
 }
 
+=======
+>>>>>>> ed1efc14b5922b6843a63a6ace56702ece90b8ec
 export const getStoredDoctor = (): StoredDoctor => {
   const raw = localStorage.getItem('medex_doctor')
   if (!raw) return null
@@ -79,6 +82,33 @@ export const hasPatientSession = (): boolean =>
   Boolean(getToken() && localStorage.getItem('medex_user_id'))
 
 /**
+ * Limpia la sesión de médico (`medex_doctor`).
+ *
+ * `token` es una clave COMPARTIDA entre médico y paciente — no hay un token
+ * separado por rol, se pisa según quién logueó último. Por eso solo se borra
+ * acá si en este momento no hay una sesión de paciente válida activa: si la
+ * hubiera, borrar el token rompería también esa sesión de paciente.
+ */
+export const clearMedicoSession = () => {
+  localStorage.removeItem('medex_doctor')
+  if (!hasPatientSession()) {
+    localStorage.removeItem('token')
+  }
+}
+
+/**
+ * Limpia la sesión de paciente (`medex_user_id` + `medex_user`).
+ * Mismo criterio que `clearMedicoSession()` para el token compartido.
+ */
+export const clearPatientSession = () => {
+  localStorage.removeItem('medex_user_id')
+  localStorage.removeItem('medex_user')
+  if (!hasDoctorSession()) {
+    localStorage.removeItem('token')
+  }
+}
+
+/**
  * Ruta de destino para una superficie dada, según haya o no sesión activa.
  * La usan la redirección de "/" y el DeviceGuard.
  *
@@ -94,6 +124,7 @@ export const resolveHomePath = (deviceType: DeviceType): string => {
 
 export default {
   getToken,
-  clearSession,
+  clearMedicoSession,
+  clearPatientSession,
   getCurrentMedico,
 }
