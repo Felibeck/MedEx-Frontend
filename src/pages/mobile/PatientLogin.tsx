@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import {
+  EyeIcon,
+  EyeSlashIcon,
+  FingerPrintIcon,
+  LockClosedIcon,
+  ShieldCheckIcon,
+} from '@heroicons/react/24/solid'
 import './PatientLogin.css'
 import { loginPatient } from '../../api/patientAuth'
 import axios from 'axios'
-
-const EYE_ICON_URL = 'https://www.figma.com/api/mcp/asset/2541fda4-daaa-4a00-a80c-9ce56b81bb37'
-const FINGERPRINT_URL = 'https://www.figma.com/api/mcp/asset/6747f183-235c-4b4b-bd1c-24c3b569dc63'
-const SSL_ICON_URL = 'https://www.figma.com/api/mcp/asset/e12b7d71-5b17-4644-86de-1b00b0aca3f8'
-const HIPAA_ICON_URL = 'https://www.figma.com/api/mcp/asset/edb1f948-b255-4f11-b75d-9f12633811ee'
 
 const PatientLogin = () => {
   const navigate = useNavigate()
@@ -92,8 +94,13 @@ const PatientLogin = () => {
                   type="button"
                   className="patient-login__eye-btn"
                   onClick={() => setShowPassword(v => !v)}
+                  aria-label={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
                 >
-                  <img src={EYE_ICON_URL} alt="Ver contraseña" className="patient-login__eye-icon" />
+                  {showPassword ? (
+                    <EyeSlashIcon className="patient-login__eye-icon" />
+                  ) : (
+                    <EyeIcon className="patient-login__eye-icon" />
+                  )}
                 </button>
               </div>
             </div>
@@ -104,8 +111,8 @@ const PatientLogin = () => {
               <button type="submit" className="patient-login__btn-primary" disabled={isLoading}>
                 {isLoading ? 'Iniciando...' : 'Iniciar Sesión'}
               </button>
-              <button type="button" className="patient-login__btn-biometric">
-                <img src={FINGERPRINT_URL} alt="Biométrico" className="patient-login__fingerprint" />
+              <button type="button" className="patient-login__btn-biometric" aria-label="Iniciar sesión con biométrico">
+                <FingerPrintIcon className="patient-login__fingerprint" />
               </button>
             </div>
 
@@ -132,11 +139,11 @@ const PatientLogin = () => {
           </p>
           <div className="patient-login__footer-badges">
             <div className="patient-login__badge">
-              <img src={SSL_ICON_URL} alt="" className="patient-login__badge-icon" />
+              <LockClosedIcon className="patient-login__badge-icon" aria-hidden="true" />
               <span className="patient-login__badge-text">SSL Encriptado</span>
             </div>
             <div className="patient-login__badge">
-              <img src={HIPAA_ICON_URL} alt="" className="patient-login__badge-icon" />
+              <ShieldCheckIcon className="patient-login__badge-icon" aria-hidden="true" />
               <span className="patient-login__badge-text">Privacidad HIPAA</span>
             </div>
           </div>
