@@ -5,6 +5,7 @@ import Agenda from './components/web/agenda'
 import ConsultaWeb from './components/web/consulta'
 import RegistroPacientes from './components/web/registroPacientes'
 import InicioWeb from './components/web/inicioWeb'
+import MedicoChat from './components/web/medicoChat'
 import type { medico } from './types/medico'
 import type { turno } from './types/turno'
 import type { paciente } from './types/paciente'
@@ -33,6 +34,8 @@ const DoctorHome = () => {
   const [otrosConsulta, setOtrosConsulta] = useState('')
   const [ultimoMotivoConsulta, setUltimoMotivoConsulta] = useState('')
   const [motivoConsultaLoading, setMotivoConsultaLoading] = useState(false)
+  const [chatAbierto, setChatAbierto] = useState(false)
+  const [chatConversationId, setChatConversationId] = useState<string | null>(null)
 
   const ejecutarGuardado = async (data: consulta, receta?: RecetaPayload) => {
     setEstadoGuardado('guardando')
@@ -209,6 +212,11 @@ const DoctorHome = () => {
     )
   }
 
+  const handleAbrirChat = () => {
+    setChatConversationId((prev) => prev ?? crypto.randomUUID())
+    setChatAbierto(true)
+  }
+
   const handleCerrarSesion = async () => {
     try {
       await logout()
@@ -225,9 +233,16 @@ const DoctorHome = () => {
         medico={medico}
         activeNav={activeNav}
         onNavChange={setActiveNav}
-        onChatbot={() => console.log('Abrir chatbot')}
+        onChatbot={handleAbrirChat}
         onCerrarSesion={handleCerrarSesion}
       />
+
+      {chatAbierto && chatConversationId && (
+        <MedicoChat
+          conversationId={chatConversationId}
+          onClose={() => setChatAbierto(false)}
+        />
+      )}
 
       <div className="doctor-main">
         {activeNav !== 'inicio' && (
