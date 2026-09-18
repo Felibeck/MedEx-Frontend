@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "nombre": "Hosp. Británico",
+    "distancia_km": 1.2,
+    "espera_min": 15,
+    "imagen": "/assets/hosp-brit.png",
+    "especialidad": "Guardia general"
+  },
+  {
+    "id": "2",
+    "nombre": "Sanatorio Güemes",
+    "distancia_km": 4.1,
+    "espera_min": 45,
+    "imagen": "/assets/sanatorio-guemes.png",
+    "especialidad": "Guardia general"
+  },
+  {
+    "id": "3",
+    "nombre": "Hospital Italiano",
+    "distancia_km": 2.8,
+    "espera_min": 25,
+    "imagen": "/assets/hosp-italiano.png",
+    "especialidad": "Guardia general"
+  }
+]

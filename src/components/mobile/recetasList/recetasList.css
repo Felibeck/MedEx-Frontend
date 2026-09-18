@@ -1,0 +1,130 @@
+.recetas-list {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.recetas-list__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #00201f;
+  margin: 0 0 16px 0;
+}
+
+.recetas-list__items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recetas-list__empty {
+  padding: 20px;
+  text-align: center;
+  color: #416464;
+  font-size: 14px;
+  background: #f3f6f3;
+  border-radius: 8px;
+  border: 1px dashed #d9e5e2;
+}
+
+.receta-item {
+  background: white;
+  border: 1px solid #d9e5e2;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.receta-item:active {
+  background: #f3f6f3;
+  border-color: #5fafa9;
+}
+
+.receta-item__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.receta-item__titulo {
+  font-size: 15px;
+  font-weight: 600;
+  color: #00201f;
+  margin: 0 0 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.receta-item__fecha {
+  font-size: 12px;
+  color: #416464;
+  margin: 0;
+}
+
+.receta-item__download {
+  width: 40px;
+  height: 40px;
+  margin-left: 12px;
+  flex-shrink: 0;
+  background: #d4eceb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1f6f6b;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.receta-item__download:active {
+  background: #5fafa9;
+  color: white;
+}
+
+.receta-item__icon {
+  width: 20px;
+  height: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .recetas-list__title {
+    color: #f3f4f6;
+  }
+
+  .recetas-list__empty {
+    background: #2e303a;
+    color: #9ca3af;
+    border-color: #3d404d;
+  }
+
+  .receta-item {
+    background: #1f2028;
+    border-color: #2e303a;
+  }
+
+  .receta-item:active {
+    background: #2e303a;
+    border-color: #5fafa9;
+  }
+
+  .receta-item__titulo {
+    color: #f3f4f6;
+  }
+
+  .receta-item__fecha {
+    color: #9ca3af;
+  }
+
+  .receta-item__download {
+    background: #0f4a47;
+    color: #5fafa9;
+  }
+
+  .receta-item__download:active {
+    background: #5fafa9;
+    color: #1f2028;
+  }
+}

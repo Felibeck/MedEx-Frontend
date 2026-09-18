@@ -1,0 +1,156 @@
+.guardias-list {
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.guardias-list__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.guardias-list__title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #00201f;
+  margin: 0;
+}
+
+.guardias-list__ver-mas {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #1f6f6b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.guardias-list__ver-mas:active {
+  color: #0b3131;
+}
+
+.guardias-list__arrow {
+  width: 16px;
+  height: 16px;
+}
+
+.guardias-list__container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.guardia-card {
+  background: white;
+  border: 1px solid #d9e5e2;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+.guardia-card__image {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f3f6f3;
+}
+
+.guardia-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.guardia-card__image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  background: #d4eceb;
+}
+
+.guardia-card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.guardia-card__nombre {
+  font-size: 16px;
+  font-weight: 600;
+  color: #00201f;
+  margin: 0 0 8px 0;
+}
+
+.guardia-card__info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.guardia-card__item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.guardia-card__label {
+  font-size: 11px;
+  color: #416464;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.guardia-card__value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f6f6b;
+}
+
+@media (prefers-color-scheme: dark) {
+  .guardias-list {
+    color: #f3f4f6;
+  }
+
+  .guardias-list__title {
+    color: #f3f4f6;
+  }
+
+  .guardia-card {
+    background: #1f2028;
+    border-color: #2e303a;
+  }
+
+  .guardia-card__image {
+    background: #2e303a;
+  }
+
+  .guardia-card__image-placeholder {
+    background: #0f4a47;
+  }
+
+  .guardia-card__nombre {
+    color: #f3f4f6;
+  }
+
+  .guardia-card__label {
+    color: #9ca3af;
+  }
+
+  .guardia-card__value {
+    color: #5fafa9;
+  }
+}

@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import PatientHome from "./patientHome";
+import PatientInicio from "./pages/mobile/PatientInicio";
 import DoctorHome from "./doctorHome";
 import PacienteDetalle from "./pacienteDetalle";
 import DetalleEstudioPage from "./pages/mobile/DetalleEstudioPage";
@@ -7,6 +8,7 @@ import PatientLogin from "./pages/mobile/PatientLogin";
 import PatientSignup from "./pages/mobile/PatientSignup";
 import PatientProfile from "./pages/mobile/PatientProfile";
 import DoctorLogin from "./pages/doctor/DoctorLogin";
+import DoctorSignup from "./pages/doctor/DoctorSignup";
 import HistorialClinico from "./components/mobile/historialClinico";
 import RecetasScreen from "./components/mobile/recetasScreen";
 import DeviceGuard from "./components/deviceGuard";
@@ -30,13 +32,14 @@ const App = () => {
         <Route path="/" element={<RootRedirect />} />
         <Route path="/patients/login" element={<PatientLogin />} />
         <Route path="/patients/signup" element={<PatientSignup />} />
+        <Route path="/patients/inicio" element={<PatientInicio />} />
         <Route path="/patients" element={<PatientHome />} />
         <Route path="/patients/perfil" element={<PatientProfile />} />
         <Route path="/patients/historial" element={<HistorialClinico />} />
         <Route path="/recetas" element={<RecetasScreen />} />
         <Route path="/patients/estudio/:estudioId" element={<DetalleEstudioPage />} />
         <Route path="/doctors/login" element={<DoctorLogin />} />
-        {/* <Route path="/doctors/register" element={<DoctorSignup />} /> */}
+        <Route path="/doctors/register" element={<DoctorSignup />} />
         <Route path="/doctor" element={<DoctorHome />} />
         <Route path="/doctor/pacientes/:pacienteId" element={<PacienteDetalle />} />
       </Routes>

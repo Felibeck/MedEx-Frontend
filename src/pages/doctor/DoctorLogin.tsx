@@ -98,7 +98,9 @@ const DoctorLogin = () => {
 
               <p className="doctor-login__footer-text">
                 ¿No tienes una cuenta aun?{' '}
-                <span className="doctor-login__link">Crea una cuenta</span>
+                <button type="button" className="doctor-login__link" onClick={() => navigate('/doctors/register')}>
+                  Crea una cuenta
+                </button>
               </p>
             </form>
           </div>

@@ -1,0 +1,80 @@
+.resumen-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  padding: 0 24px;
+  margin-bottom: 24px;
+}
+
+.resumen-card {
+  background: white;
+  border: 1px solid #d9e5e2;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.resumen-card:active {
+  background: #f3f6f3;
+  border-color: #5fafa9;
+  transform: scale(0.98);
+}
+
+.resumen-card__icon {
+  width: 40px;
+  height: 40px;
+  background: #d4eceb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1f6f6b;
+  margin-bottom: 8px;
+}
+
+.resumen-card__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #416464;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.resumen-card__count {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f6f6b;
+  margin: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .resumen-card {
+    background: #1f2028;
+    border-color: #2e303a;
+  }
+
+  .resumen-card:active {
+    background: #2e303a;
+    border-color: #5fafa9;
+  }
+
+  .resumen-card__icon {
+    background: #0f4a47;
+    color: #5fafa9;
+  }
+
+  .resumen-card__label {
+    color: #9ca3af;
+  }
+
+  .resumen-card__count {
+    color: #5fafa9;
+  }
+}

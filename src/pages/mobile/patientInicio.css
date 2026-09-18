@@ -1,0 +1,80 @@
+.patient-inicio {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: white;
+}
+
+.patient-inicio__scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 120px; /* Space for bottom nav */
+}
+
+.patient-inicio__loading,
+.patient-inicio__error-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+  color: #416464;
+  font-size: 14px;
+  min-height: 200px;
+}
+
+.patient-inicio__error-details {
+  font-size: 12px;
+  color: #bcc9c6;
+  margin-top: 8px;
+}
+
+.patient-inicio--error {
+  background: #f3f6f3;
+}
+
+/* Scrollbar styling */
+.patient-inicio__scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.patient-inicio__scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.patient-inicio__scroll-container::-webkit-scrollbar-thumb {
+  background: #bcc9c6;
+  border-radius: 3px;
+}
+
+.patient-inicio__scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #5fafa9;
+}
+
+@media (prefers-color-scheme: dark) {
+  .patient-inicio {
+    background: #16171d;
+  }
+
+  .patient-inicio__loading,
+  .patient-inicio__error-message {
+    color: #9ca3af;
+  }
+
+  .patient-inicio__error-details {
+    color: #6b7280;
+  }
+
+  .patient-inicio--error {
+    background: #1f2028;
+  }
+
+  .patient-inicio__scroll-container::-webkit-scrollbar-thumb {
+    background: #4b5563;
+  }
+
+  .patient-inicio__scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #5fafa9;
+  }
+}
