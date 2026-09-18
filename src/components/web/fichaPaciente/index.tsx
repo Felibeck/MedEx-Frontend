@@ -10,6 +10,8 @@ import './fichaPaciente.css'
 
 type Props = {
   pacienteId: string
+  /** Avisa el nombre del paciente una vez cargada la ficha (para el breadcrumb). */
+  onPacienteCargado?: (nombreCompleto: string) => void
 }
 
 type Tab = 'consultas' | 'estudios' | 'historial'
@@ -27,7 +29,7 @@ const nombreProfesional = (consulta: consultaHistorial) => {
   return `${usuario.nombre} ${usuario.apellido}`
 }
 
-const FichaPaciente = ({ pacienteId }: Props) => {
+const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
   const [historial, setHistorial] = useState<historialClinico | null>(null)
   const [estudios, setEstudios] = useState<estudioResumen[]>([])
   const [loading, setLoading] = useState(true)
@@ -55,6 +57,10 @@ const FichaPaciente = ({ pacienteId }: Props) => {
         setHistorial(historialData)
         setEstudios(estudiosData)
         setConsultaActivaId(historialData.consultas[0]?.id ?? null)
+        const p = historialData.paciente
+        if (p) {
+          onPacienteCargado?.(`${p.nombre ?? ''} ${p.apellido ?? ''}`.trim())
+        }
       } catch {
         if (!cancelado) setError('No se pudo cargar la ficha del paciente.')
       } finally {

@@ -1,7 +1,9 @@
+import { useCallback, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Sidebar from './components/web/sidebar'
 import SearchBar from './components/web/searchBar'
 import FichaPaciente from './components/web/fichaPaciente'
+import Breadcrumbs, { type BreadcrumbItem } from './components/web/breadcrumbs'
 import type { medico } from './types/medico'
 import { logout } from './api/auth'
 import './doctorHome.css'
@@ -23,6 +25,20 @@ const MOCK_MEDICO: medico = {
 const PacienteDetalle = () => {
   const navigate = useNavigate()
   const { pacienteId } = useParams<{ pacienteId: string }>()
+  const [nombrePaciente, setNombrePaciente] = useState('')
+
+  // useCallback para no reiniciar el fetch de la ficha en cada render.
+  const handlePacienteCargado = useCallback((nombreCompleto: string) => {
+    setNombrePaciente(nombreCompleto)
+  }, [])
+
+  // "Pacientes" vuelve a /doctor con el estado de navegación ya en 'pacientes'
+  // (doctorHome lee location.state?.activeNav al montar).
+  const breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Inicio', onClick: () => navigate('/doctor') },
+    { label: 'Pacientes', onClick: () => navigate('/doctor', { state: { activeNav: 'pacientes' } }) },
+    { label: `Ficha de ${nombrePaciente || 'Paciente'}` },
+  ]
 
   const handleCerrarSesion = async () => {
     try {
@@ -51,9 +67,11 @@ const PacienteDetalle = () => {
           </div>
         </header>
 
+        <Breadcrumbs items={breadcrumbItems} />
+
         <div className="doctor-content doctor-content--columna">
           {pacienteId ? (
-            <FichaPaciente pacienteId={pacienteId} />
+            <FichaPaciente pacienteId={pacienteId} onPacienteCargado={handlePacienteCargado} />
           ) : (
             <p>Paciente no especificado.</p>
           )}

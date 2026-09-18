@@ -13,6 +13,7 @@ import { getUltimaNotaPorProfesional, postConsulta, type RecetaPayload } from '.
 import { logout } from './api/auth'
 import './doctorHome.css'
 import SearchBar from './components/web/searchBar'
+import Breadcrumbs, { type BreadcrumbItem } from './components/web/breadcrumbs'
 import { getCurrentMedico } from './utils/session'
 
 type EstadoGuardado = 'idle' | 'guardando' | 'ok' | 'error'
@@ -123,6 +124,16 @@ const DoctorHome = () => {
     searchWrapRef.current?.querySelector('input')?.focus()
   }
 
+  // Jerarquía fija del sitio. En 'inicio' no hay nada anterior, así que no se
+  // muestran migas.
+  const breadcrumbItems: BreadcrumbItem[] =
+    activeNav === 'inicio'
+      ? []
+      : [
+          { label: 'Inicio', onClick: () => setActiveNav('inicio') },
+          { label: activeNav === 'pacientes' ? 'Pacientes' : 'Agenda' },
+        ]
+
   const renderAreaConsulta = () => {
     if (!pacienteBuscado) {
       return (
@@ -226,6 +237,8 @@ const DoctorHome = () => {
             </div>
           </header>
         )}
+
+        {breadcrumbItems.length > 0 && <Breadcrumbs items={breadcrumbItems} />}
 
         <div className="doctor-content">
           {activeNav === 'pacientes' ? (
