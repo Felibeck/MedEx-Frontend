@@ -21,6 +21,16 @@ export const formatearFecha = (fecha: string | null): string | null => {
   return new Intl.DateTimeFormat('es-AR', { day: '2-digit', month: 'short', year: 'numeric' }).format(date)
 }
 
+// Igual que formatearFecha, pero las fechas sin hora ('YYYY-MM-DD') se toman como
+// día local: `new Date('YYYY-MM-DD')` es medianoche UTC y en Argentina muestra el día anterior.
+export const formatearFechaDia = (fecha: string | null): string | null => {
+  if (!fecha) return null
+  return formatearFecha(/^\d{4}-\d{2}-\d{2}$/.test(fecha) ? `${fecha}T00:00:00` : fecha)
+}
+
+export const nombreCompleto = (nombre: string | null, apellido: string | null): string =>
+  `${nombre ?? ''} ${apellido ?? ''}`.trim()
+
 export type coberturaBadge = {
   label: string
   color: string

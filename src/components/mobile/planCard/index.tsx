@@ -1,3 +1,6 @@
+import { useNavigate } from 'react-router-dom'
+import IconCobertura from '../../../assets/icons/inicio/cobertura.svg'
+import { getCoberturaBadge } from '../../../utils/paciente'
 import './planCard.css'
 
 interface PlanCardProps {
@@ -5,43 +8,57 @@ interface PlanCardProps {
   coberturaEstado?: string | null
 }
 
+const SIN_INFORMACION = 'sin_informacion'
+
+// Label legible del estado de cobertura que devuelve el backend (snake_case).
+const formatearEstado = (coberturaEstado?: string | null): string | null => {
+  if (!coberturaEstado || coberturaEstado === SIN_INFORMACION) return null
+  const badge = getCoberturaBadge(coberturaEstado)
+  const texto = (badge?.label ?? coberturaEstado).replace(/_/g, ' ').toLowerCase()
+  return texto.charAt(0).toUpperCase() + texto.slice(1)
+}
+
 const PlanCard = ({ obraSocial, coberturaEstado }: PlanCardProps) => {
-  const mostrarCTA = !obraSocial || !coberturaEstado
+  const navigate = useNavigate()
+  const estado = formatearEstado(coberturaEstado)
 
   return (
-    <div className="plan-card">
-      <div className="plan-card__header">
-        <div className="plan-card__icon-check">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2"/>
-            <path d="M10 14.5L7 11.5M10 14.5L17 7.5M10 14.5L17 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-          </svg>
+    <section className="plan-card">
+      <div className="plan-card__top">
+        <h2 className="plan-card__title">
+          <img src={IconCobertura} alt="" className="plan-card__title-icon" />
+          Cobertura Integrada
+        </h2>
+
+        <div className="plan-card__plan">
+          <span className="plan-card__label">Tu plan actual</span>
+          <p className="plan-card__value">{obraSocial || 'Sin plan registrado'}</p>
         </div>
-        <h2 className="plan-card__title">Cobertura Integrada</h2>
       </div>
 
-      <div className="plan-card__content">
-        <div className="plan-card__item">
-          <span className="plan-card__label">PLAN ACTIVO</span>
-          <p className="plan-card__value">
-            {obraSocial || 'Sin plan registrado'}
-          </p>
-        </div>
-
-        {coberturaEstado && (
-          <div className="plan-card__item">
-            <span className="plan-card__label">Estado</span>
-            <p className="plan-card__value">{coberturaEstado}</p>
+      {estado && (
+        <div className="plan-card__rows">
+          <div className="plan-card__row">
+            <span className="plan-card__row-label">Estado de cobertura</span>
+            <span className="plan-card__row-value">{estado}</span>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      {mostrarCTA && (
+      {obraSocial ? (
         <button type="button" className="plan-card__cta">
+          Ver Carnet Digital
+        </button>
+      ) : (
+        <button
+          type="button"
+          className="plan-card__cta"
+          onClick={() => navigate('/patients/perfil')}
+        >
           Completar perfil
         </button>
       )}
-    </div>
+    </section>
   )
 }
 

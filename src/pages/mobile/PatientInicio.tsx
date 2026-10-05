@@ -1,92 +1,86 @@
 import { useEffect, useState } from 'react'
+import MobileHeader from '../../components/mobile/mobileHeader'
 import HomeHeader from '../../components/mobile/homeHeader'
+import HomePendientes from '../../components/mobile/homePendientes'
+import AccesosRapidos from '../../components/mobile/accesosRapidos'
 import PlanCard from '../../components/mobile/planCard'
-import ResumenCards from '../../components/mobile/resumenCards'
 import GuardiasList from '../../components/mobile/guardiasList'
-import RecetasList from '../../components/mobile/recetasList'
 import BottomNavBar from '../../components/mobile/bottomNavBar'
-import { useHistorialPaciente } from '../../hooks/useHistorialPaciente'
-import type { Receta } from '../../api/recetas'
+import { getHomePaciente } from '../../api/home'
+import { getGuardiasCercanas } from '../../api/guardias'
+import { getCurrentPaciente } from '../../utils/session'
+import type { homePaciente } from '../../types/homePaciente'
+import type { guardiasCercanas } from '../../types/guardia'
 import './patientInicio.css'
 
 const PatientInicio = () => {
-  const { historial, recetas, loading, error } = useHistorialPaciente()
-  const [recetasData, setRecetasData] = useState<Receta[]>([])
+  const [home, setHome] = useState<homePaciente | null>(null)
+  const [guardias, setGuardias] = useState<guardiasCercanas | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (recetas && recetas.length > 0) {
-      setRecetasData(recetas)
+    let cancelado = false
+
+    getHomePaciente()
+      .then(data => {
+        if (!cancelado) setHome(data)
+      })
+      .catch(() => {
+        // Sin resumen, los accesos rápidos se muestran igual pero sin datos del paciente.
+      })
+      .finally(() => {
+        if (!cancelado) setLoading(false)
+      })
+
+    return () => {
+      cancelado = true
     }
-  }, [recetas])
+  }, [])
 
-  if (error && !historial) {
-    return (
-      <div className="patient-inicio patient-inicio--error">
-        <div className="patient-inicio__error-message">
-          <p>Error al cargar los datos</p>
-          <p className="patient-inicio__error-details">{error}</p>
-        </div>
-      </div>
-    )
-  }
+  useEffect(() => {
+    let cancelado = false
 
-  const paciente = historial?.paciente
-  const nombre = paciente?.nombre || 'Usuario'
-  const apellido = paciente?.apellido || ''
-  const fotoPerfil = paciente?.foto_perfil
-  const obraSocial = paciente?.obra_social
-  const coberturaEstado = paciente?.cobertura_estado
+    getGuardiasCercanas()
+      .then(data => {
+        if (!cancelado) setGuardias(data)
+      })
+      .catch(() => {
+        // Sin guardias la sección simplemente no se muestra.
+      })
 
-  const recetasCount = recetasData.length
-  const estudiosCount = historial?.estudios?.length || 0
-  const consultasProximas = historial?.consultas?.filter(
-    c => new Date(c.fecha) > new Date()
-  ).length || 0
+    return () => {
+      cancelado = true
+    }
+  }, [])
+
+  // Mientras llega el perfil se muestra el nombre guardado en la sesión.
+  const sesion = getCurrentPaciente()
+  const nombre = home?.paciente.nombre || sesion?.nombre || ''
+  const apellido = home?.paciente.apellido || sesion?.apellido || ''
 
   return (
     <div className="patient-inicio">
-      <div className="patient-inicio__scroll-container">
-        {/* Header con saludo */}
-        {!loading && (
-          <>
-            <HomeHeader 
-              nombre={nombre}
-              apellido={apellido}
-              fotoPerfil={fotoPerfil}
-            />
+      <MobileHeader variant="inicio" />
 
-            {/* Plan Card */}
-            <PlanCard 
-              obraSocial={obraSocial}
-              coberturaEstado={coberturaEstado}
-            />
+      <main className="patient-inicio__main">
+        <HomeHeader nombre={nombre} apellido={apellido} />
 
-            {/* Resumen de Cards */}
-            <ResumenCards 
-              recetasCount={recetasCount}
-              estudiosCount={estudiosCount}
-              consultasProximas={consultasProximas}
-            />
+        {home && <HomePendientes pendientes={home.pendientes} />}
 
-            {/* Guardias Cercanas */}
-            <GuardiasList />
+        <AccesosRapidos home={home} loading={loading} />
 
-            {/* Recetas Recientes */}
-            <RecetasList 
-              recetas={recetasData}
-              loading={loading}
-            />
-          </>
+        {home && (
+          <PlanCard
+            obraSocial={home.paciente.obraSocial}
+            coberturaEstado={home.paciente.coberturaEstado}
+          />
         )}
 
-        {loading && (
-          <div className="patient-inicio__loading">
-            <p>Cargando información...</p>
-          </div>
+        {guardias && (
+          <GuardiasList guardias={guardias.guardias} transito={guardias.transito} />
         )}
-      </div>
+      </main>
 
-      {/* Bottom Navigation */}
       <BottomNavBar />
     </div>
   )

@@ -52,12 +52,15 @@ export const logout = async (): Promise<void> => {
     return
   }
 
-  const { data } = await api.post<ApiSimpleResponse>('/auth/logout')
-  if (!data.success) {
-    throw new Error(data.message || 'No se pudo cerrar sesión')
+  // La sesión local se cierra siempre, aunque el backend rechace el pedido
+  // (ej: token vencido) o no responda: si no, el usuario no podría salir.
+  try {
+    await api.post<ApiSimpleResponse>('/auth/logout')
+  } catch {
+    // Sin respuesta válida del backend no hay nada más que hacer del lado del servidor.
+  } finally {
+    clearSession()
   }
-
-  clearSession()
 }
 
 export const extractErrorMessage = (err: unknown, fallback: string): string => {

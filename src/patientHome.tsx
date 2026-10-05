@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import HistorialEstudios, { type HistorialEstudiosHandle } from './components/mobile/historialEstudios'
 import SubirEstudioModal from './components/mobile/subirEstudioModal'
@@ -7,7 +8,16 @@ import './patientHome.css'
 
 const PatientHome = () => {
   const historialRef = useRef<HistorialEstudiosHandle>(null)
-  const [modalAbierto, setModalAbierto] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
+  // Desde Inicio se puede llegar pidiendo abrir directamente el modal de carga.
+  const pidioSubir = location.state?.subirEstudio === true
+  const [modalAbierto, setModalAbierto] = useState(pidioSubir)
+
+  // Se limpia el state para que el modal no se reabra al volver o recargar.
+  useEffect(() => {
+    if (pidioSubir) navigate(location.pathname, { replace: true, state: null })
+  }, [pidioSubir, navigate, location.pathname])
 
   const handleUploadSuccess = () => {
     setModalAbierto(false)

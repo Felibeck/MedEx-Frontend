@@ -73,3 +73,40 @@
 .mobile-header__icon-btn:active {
   background-color: rgba(95, 175, 169, 0.25);
 }
+
+/* ── Variante Inicio (TopAppBar de Figma) ────────────────────────────── */
+.mobile-header--inicio {
+  height: 98px;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 12px;
+  background-color: #e3fffd;
+}
+
+.mobile-header--inicio .mobile-header__brand {
+  gap: 16px;
+}
+
+.mobile-header--inicio .mobile-header__logo-wrap {
+  width: 66px;
+  height: 66px;
+  background-color: #b8e0de;
+}
+
+.mobile-header--inicio .mobile-header__logo {
+  width: 40px;
+  height: 44px;
+  filter: none;
+}
+
+.mobile-header--inicio .mobile-header__title {
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 28px;
+  color: #247f7b;
+  letter-spacing: 0;
+}
+
+.mobile-header--inicio .mobile-header__actions {
+  gap: 8px;
+}

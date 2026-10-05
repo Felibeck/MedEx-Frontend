@@ -1,80 +1,20 @@
 .patient-inicio {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background: white;
+  width: 100%;
+  min-height: 100svh;
+  background: #e3fffd;
+  box-sizing: border-box;
 }
 
-.patient-inicio__scroll-container {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-bottom: 120px; /* Space for bottom nav */
-}
-
-.patient-inicio__loading,
-.patient-inicio__error-message {
+.patient-inicio__main {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 24px;
-  text-align: center;
-  color: #416464;
-  font-size: 14px;
-  min-height: 200px;
-}
-
-.patient-inicio__error-details {
-  font-size: 12px;
-  color: #bcc9c6;
-  margin-top: 8px;
-}
-
-.patient-inicio--error {
-  background: #f3f6f3;
-}
-
-/* Scrollbar styling */
-.patient-inicio__scroll-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.patient-inicio__scroll-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.patient-inicio__scroll-container::-webkit-scrollbar-thumb {
-  background: #bcc9c6;
-  border-radius: 3px;
-}
-
-.patient-inicio__scroll-container::-webkit-scrollbar-thumb:hover {
-  background: #5fafa9;
-}
-
-@media (prefers-color-scheme: dark) {
-  .patient-inicio {
-    background: #16171d;
-  }
-
-  .patient-inicio__loading,
-  .patient-inicio__error-message {
-    color: #9ca3af;
-  }
-
-  .patient-inicio__error-details {
-    color: #6b7280;
-  }
-
-  .patient-inicio--error {
-    background: #1f2028;
-  }
-
-  .patient-inicio__scroll-container::-webkit-scrollbar-thumb {
-    background: #4b5563;
-  }
-
-  .patient-inicio__scroll-container::-webkit-scrollbar-thumb:hover {
-    background: #5fafa9;
-  }
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  /* 82px de bottom nav + aire */
+  padding: 16px 24px 128px;
+  box-sizing: border-box;
 }
