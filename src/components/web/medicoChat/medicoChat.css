@@ -1,5 +1,9 @@
 /* ── Vista a alto completo ───────────────────────────────────────────── */
 .mc-vista {
+  /* Contenedor de posicionamiento: sin esto los .mc-sr (position: absolute) escapan
+     del overflow del scroll y de los ancestros con overflow: hidden, y su posición
+     estática dentro de los mensajes fuera de pantalla agranda el documento. */
+  position: relative;
   flex: 1;
   min-width: 0;
   min-height: 0;

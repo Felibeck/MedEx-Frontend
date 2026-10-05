@@ -69,6 +69,12 @@
 /* ── Vista de chat: ocupa todo el alto del área de contenido ── */
 .doctor-layout--chat {
   height: 100vh;
+  height: 100dvh;
+}
+
+/* El sidebar sticky mide 100vh; en el chat hereda el alto del layout (100dvh). */
+.doctor-layout--chat .sidebar {
+  height: auto;
 }
 
 .doctor-content--chat {
