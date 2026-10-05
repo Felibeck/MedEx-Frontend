@@ -5,12 +5,12 @@ import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   PaperAirplaneIcon,
-  SparklesIcon,
   XCircleIcon,
 } from '@heroicons/react/24/solid'
 import type { medico } from '../../../types/medico'
 import type { ChatItem, ChatItemConfirmacion } from '../../../types/chatMedico'
 import { TIPO_CONSULTA_LABELS, type TipoConsulta } from '../../../config/tiposConsulta'
+import AsistenteMark from './asistenteMark'
 import './medicoChat.css'
 
 type Props = {
@@ -80,12 +80,6 @@ const filasConfirmacion = (parametros: Record<string, unknown>) => {
     .filter(([, valor]) => valor !== null && valor !== undefined && valor !== '')
     .sort(([a], [b]) => indice(a) - indice(b))
 }
-
-const Avatar = ({ grande = false }: { grande?: boolean }) => (
-  <span className={`mc-avatar${grande ? ' mc-avatar--grande' : ''}`} aria-hidden="true">
-    <SparklesIcon width={grande ? 28 : 16} height={grande ? 28 : 16} />
-  </span>
-)
 
 type TarjetaProps = {
   item: ChatItemConfirmacion
@@ -241,7 +235,7 @@ const MedicoChat = ({ medico, items, enviando, onEnviar, onReintentar, onConfirm
     if (item.autor === 'asistente') {
       return (
         <div key={item.id} className="mc-fila mc-fila--asistente">
-          <Avatar />
+          <AsistenteMark size={32} />
           <div className="mc-md">
             <span className="mc-sr">Asistente: </span>
             <ReactMarkdown components={MD_COMPONENTS} disallowedElements={['img']}>
@@ -280,7 +274,7 @@ const MedicoChat = ({ medico, items, enviando, onEnviar, onReintentar, onConfirm
         <div className="mc-columna">
           {items.length === 0 && !enviando ? (
             <div className="mc-bienvenida">
-              <Avatar grande />
+              <AsistenteMark size={88} showSecondSpark />
               <h1 className="mc-bienvenida__saludo">
                 {saludoSegunHora(hora)}, Dr. {nombreSaludo}
               </h1>
@@ -299,7 +293,7 @@ const MedicoChat = ({ medico, items, enviando, onEnviar, onReintentar, onConfirm
 
               {enviando && (
                 <div className="mc-fila mc-fila--asistente">
-                  <Avatar />
+                  <AsistenteMark size={32} />
                   <div className="mc-escribiendo">
                     <span className="mc-sr">El asistente está escribiendo…</span>
                     <span className="mc-escribiendo__punto" aria-hidden="true" />
