@@ -1,6 +1,7 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { ChevronRightIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 import MobileHeader from '../mobileHeader'
 import ListaEstudios from '../listaEstudios'
 import BottomNavBar from '../bottomNavBar'
@@ -79,6 +80,21 @@ const HistorialEstudios = forwardRef<HistorialEstudiosHandle, Props>(({
           </h1>
           <p className="historial-subtitulo">{subtitulo}</p>
         </div>
+
+        <button
+          type="button"
+          className="historial-acceso"
+          onClick={() => navigate('/recetas')}
+        >
+          <span className="historial-acceso__icon-wrap">
+            <DocumentTextIcon className="historial-acceso__icon" />
+          </span>
+          <span className="historial-acceso__texto">
+            <span className="historial-acceso__titulo">Mis recetas</span>
+            <span className="historial-acceso__detalle">Las recetas que te cargaron tus médicos</span>
+          </span>
+          <ChevronRightIcon className="historial-acceso__chevron" />
+        </button>
 
         <div className="historial-seccion-header">
           <h2 className="historial-seccion-titulo">Estudios e Imágenes</h2>

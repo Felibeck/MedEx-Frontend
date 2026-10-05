@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import MobileHeader from '../mobileHeader'
 import type { estudio as Estudio } from '../../../types/estudio'
 import './detalleEstudio.css'
 import radiografiaTorax from '../../../assets/radiografía_Torax.webp'
@@ -31,26 +32,7 @@ const DetalleEstudio = ({ estudio, onDescargarPdf, onCompartir, onVolver }: Prop
   return (
     <div className="detalle-page">
 
-      {/* ── Header ── */}
-      <header className="detalle-header">
-        <button
-          type="button"
-          className="detalle-header__back"
-          onClick={handleVolver}
-          aria-label="Volver"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 18l-6-6 6-6"/>
-          </svg>
-        </button>
-        <span className="detalle-header__title">MedEx</span>
-        <div className="detalle-header__avatar">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12z"/>
-            <path d="M12 13.6c-4.8 0-8.4 2.4-8.4 5.4v1.2h16.8V19c0-3-3.6-5.4-8.4-5.4z"/>
-          </svg>
-        </div>
-      </header>
+      <MobileHeader titulo="Estudio" onVolver={handleVolver} />
 
       <div className="detalle-content">
 

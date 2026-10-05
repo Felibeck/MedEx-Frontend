@@ -1,27 +1,33 @@
+/* Header único de la vista Paciente — TopAppBar del Figma de Inicio.
+   El fondo es transparente: toma el de la página, como en Inicio. */
 .mobile-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
-  height: 66px;
-  background-color: #ffffff;
+  gap: 12px;
   width: 100%;
+  max-width: 480px;
+  height: 98px;
+  margin: 0 auto;
+  padding: 0 12px;
+  background-color: transparent;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
-/* Lado izquierdo: logo + texto */
+/* Lado izquierdo: logo + marca, o volver + título de sección */
 .mobile-header__brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
+  min-width: 0;
 }
 
-/* Círculo teal que envuelve el logo */
 .mobile-header__logo-wrap {
-  width: 44px;
-  height: 44px;
+  width: 66px;
+  height: 66px;
   border-radius: 50%;
-  background-color: #5fafa9;
+  background-color: #b8e0de;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,26 +36,65 @@
 }
 
 .mobile-header__logo {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 44px;
   object-fit: contain;
-  /* Invertir a blanco para que se vea sobre fondo teal */
-  filter: brightness(0) invert(1);
 }
 
 .mobile-header__title {
   font-family: var(--heading, system-ui, sans-serif);
-  font-size: 22px;
-  font-weight: 700;
-  color: #1f6f6b;
-  letter-spacing: -0.2px;
+  font-size: 30px;
+  font-weight: 900;
+  line-height: 28px;
+  color: #247f7b;
+  letter-spacing: 0;
+}
+
+/* Título de una pantalla hija: misma tipografía y color, un escalón más chico */
+.mobile-header__title--seccion {
+  font-size: 26px;
+  line-height: 32px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Volver: ocupa el lugar del logo, con su mismo color */
+.mobile-header__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-left: 4px;
+  border: none;
+  border-radius: 50%;
+  background-color: #b8e0de;
+  color: #247f7b;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s, transform 0.15s;
+}
+
+.mobile-header__back:hover {
+  background-color: #a6d6d3;
+}
+
+.mobile-header__back:active {
+  transform: scale(0.94);
+}
+
+.mobile-header__back-icon {
+  width: 24px;
+  height: 24px;
 }
 
 /* Lado derecho: iconos */
 .mobile-header__actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .mobile-header__icon-btn {
@@ -74,39 +119,40 @@
   background-color: rgba(95, 175, 169, 0.25);
 }
 
-/* ── Variante Inicio (TopAppBar de Figma) ────────────────────────────── */
-.mobile-header--inicio {
-  height: 98px;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 0 12px;
-  background-color: #e3fffd;
-}
+/* Pantallas angostas: se achica todo un escalón para que no se apriete */
+@media (max-width: 359px) {
+  .mobile-header {
+    height: 82px;
+  }
 
-.mobile-header--inicio .mobile-header__brand {
-  gap: 16px;
-}
+  .mobile-header__brand {
+    gap: 12px;
+  }
 
-.mobile-header--inicio .mobile-header__logo-wrap {
-  width: 66px;
-  height: 66px;
-  background-color: #b8e0de;
-}
+  .mobile-header__logo-wrap {
+    width: 52px;
+    height: 52px;
+  }
 
-.mobile-header--inicio .mobile-header__logo {
-  width: 40px;
-  height: 44px;
-  filter: none;
-}
+  .mobile-header__logo {
+    width: 32px;
+    height: 35px;
+  }
 
-.mobile-header--inicio .mobile-header__title {
-  font-size: 30px;
-  font-weight: 900;
-  line-height: 28px;
-  color: #247f7b;
-  letter-spacing: 0;
-}
+  .mobile-header__title {
+    font-size: 24px;
+  }
 
-.mobile-header--inicio .mobile-header__actions {
-  gap: 8px;
+  .mobile-header__title--seccion {
+    font-size: 22px;
+  }
+
+  .mobile-header__back {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mobile-header__actions {
+    gap: 0;
+  }
 }

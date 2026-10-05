@@ -54,6 +54,73 @@
   opacity: 0.6;
 }
 
+/* ── Acceso a recetas ── */
+.historial-acceso {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid rgba(0, 106, 102, 0.05);
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.historial-acceso:active {
+  background: #f3f6f3;
+}
+
+.historial-acceso__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: #c8f0ee;
+  color: #006a66;
+  flex-shrink: 0;
+}
+
+.historial-acceso__icon {
+  width: 24px;
+  height: 24px;
+}
+
+.historial-acceso__texto {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.historial-acceso__titulo {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #00201f;
+}
+
+.historial-acceso__detalle {
+  font-size: 12px;
+  line-height: 16px;
+  color: #006a63;
+}
+
+.historial-acceso__chevron {
+  width: 20px;
+  height: 20px;
+  color: #416464;
+  flex-shrink: 0;
+}
+
 .historial-subtitulo {
   font-size: 14px;
   color: #416464;

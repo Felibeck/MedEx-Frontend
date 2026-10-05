@@ -32,7 +32,8 @@ function getActiveTab(pathname: string): TabId {
   if (pathname.startsWith('/patients/familia'))   return 'familia'
   if (pathname.startsWith('/patients/historial')) return 'historial' 
   if (pathname.startsWith('/patients/perfil'))    return 'perfil'
-  if (pathname === '/patients' || pathname.startsWith('/patients/estudio/')) return 'cuidados'
+  // Recetas y detalle de estudio son pantallas hijas de Cuidados
+  if (pathname === '/patients' || pathname.startsWith('/patients/estudio/') || pathname.startsWith('/recetas')) return 'cuidados'
   return 'historial'
 }
 

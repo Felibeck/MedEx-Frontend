@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import MobileHeader from '../mobileHeader'
+import BottomNavBar from '../bottomNavBar'
 import './recetasScreen.css'
 import { getRecetas, type Receta } from '../../../api/recetas'
 
 const RecetasScreen = () => {
-  const navigate = useNavigate()
   const [recetas, setRecetas] = useState<Receta[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -33,18 +33,7 @@ const RecetasScreen = () => {
 
   return (
     <div className="recetas-screen">
-      <header className="recetas-screen__header">
-        <button
-          className="recetas-screen__back-btn"
-          onClick={() => navigate(-1)}
-          aria-label="Volver"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 19l-7-7 7-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-        <h1 className="recetas-screen__title">Recetas</h1>
-      </header>
+      <MobileHeader titulo="Recetas" />
 
       <main className="recetas-screen__content">
         {loading && (
@@ -94,6 +83,8 @@ const RecetasScreen = () => {
           </div>
         )}
       </main>
+
+      <BottomNavBar />
     </div>
   )
 }

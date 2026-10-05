@@ -114,7 +114,7 @@ export const clearPatientSession = () => {
  */
 export const resolveHomePath = (deviceType: DeviceType): string => {
   if (deviceType === 'mobile') {
-    return hasPatientSession() ? '/patients' : '/patients/login'
+    return hasPatientSession() ? '/patients/inicio' : '/patients/login'
   }
   return hasDoctorSession() ? '/doctor' : '/doctors/login'
 }

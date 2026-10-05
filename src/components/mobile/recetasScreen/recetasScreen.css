@@ -8,37 +8,10 @@
   width: 100%;
 }
 
-.recetas-screen__header {
-  padding: 16px 24px;
-  background: #ffffff;
-  border-bottom: 1px solid #e0e8e6;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.recetas-screen__back-btn {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  color: #006562;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.recetas-screen__title {
-  font-family: var(--heading, 'Manrope', sans-serif);
-  font-size: 18px;
-  font-weight: 600;
-  color: #00201f;
-  flex: 1;
-}
-
 .recetas-screen__content {
   flex: 1;
-  padding: 16px;
+  /* 82px de bottom nav + aire */
+  padding: 0 16px 114px;
   overflow-y: auto;
 }
 

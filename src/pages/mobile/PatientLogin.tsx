@@ -27,7 +27,7 @@ const PatientLogin = () => {
       const userSession = await loginPatient(email, password)
       localStorage.setItem('medex_user_id', userSession.id)
       localStorage.setItem('medex_user', JSON.stringify(userSession))
-      navigate('/patients')
+      navigate('/patients/inicio')
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message ?? 'Error al iniciar sesión')

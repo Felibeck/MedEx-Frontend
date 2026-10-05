@@ -60,7 +60,7 @@ const PatientInicio = () => {
 
   return (
     <div className="patient-inicio">
-      <MobileHeader variant="inicio" />
+      <MobileHeader />
 
       <main className="patient-inicio__main">
         <HomeHeader nombre={nombre} apellido={apellido} />
