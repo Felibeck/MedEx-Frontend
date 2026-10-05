@@ -16,6 +16,7 @@ import './doctorHome.css'
 import SearchBar from './components/web/searchBar'
 import Breadcrumbs, { type BreadcrumbItem } from './components/web/breadcrumbs'
 import { getCurrentMedico } from './utils/session'
+import { useMedicoChat } from './hooks/useMedicoChat'
 
 type EstadoGuardado = 'idle' | 'guardando' | 'ok' | 'error'
 
@@ -34,8 +35,8 @@ const DoctorHome = () => {
   const [otrosConsulta, setOtrosConsulta] = useState('')
   const [ultimoMotivoConsulta, setUltimoMotivoConsulta] = useState('')
   const [motivoConsultaLoading, setMotivoConsultaLoading] = useState(false)
-  const [chatAbierto, setChatAbierto] = useState(false)
-  const [chatConversationId, setChatConversationId] = useState<string | null>(null)
+  // La conversación vive acá para no perderse al cambiar de sección.
+  const chat = useMedicoChat()
 
   const ejecutarGuardado = async (data: consulta, receta?: RecetaPayload) => {
     setEstadoGuardado('guardando')
@@ -129,8 +130,10 @@ const DoctorHome = () => {
 
   // Jerarquía fija del sitio. En 'inicio' no hay nada anterior, así que no se
   // muestran migas.
+  const esChat = activeNav === 'chat'
+
   const breadcrumbItems: BreadcrumbItem[] =
-    activeNav === 'inicio'
+    activeNav === 'inicio' || esChat
       ? []
       : [
           { label: 'Inicio', onClick: () => setActiveNav('inicio') },
@@ -212,11 +215,6 @@ const DoctorHome = () => {
     )
   }
 
-  const handleAbrirChat = () => {
-    setChatConversationId((prev) => prev ?? crypto.randomUUID())
-    setChatAbierto(true)
-  }
-
   const handleCerrarSesion = async () => {
     try {
       await logout()
@@ -228,24 +226,18 @@ const DoctorHome = () => {
   }
 
   return (
-    <div className="doctor-layout">
+    <div className={`doctor-layout${esChat ? ' doctor-layout--chat' : ''}`}>
       <Sidebar
         medico={medico}
         activeNav={activeNav}
         onNavChange={setActiveNav}
-        onChatbot={handleAbrirChat}
+        onChatbot={() => setActiveNav('chat')}
+        chatActivo={esChat}
         onCerrarSesion={handleCerrarSesion}
       />
 
-      {chatAbierto && chatConversationId && (
-        <MedicoChat
-          conversationId={chatConversationId}
-          onClose={() => setChatAbierto(false)}
-        />
-      )}
-
       <div className="doctor-main">
-        {activeNav !== 'inicio' && (
+        {activeNav !== 'inicio' && !esChat && (
           <header className="doctor-topbar">
             <div className="doctor-search-wrap" ref={searchWrapRef}>
               <SearchBar onPacienteEncontrado={handlePacienteEncontrado} />
@@ -255,8 +247,18 @@ const DoctorHome = () => {
 
         {breadcrumbItems.length > 0 && <Breadcrumbs items={breadcrumbItems} />}
 
-        <div className="doctor-content">
-          {activeNav === 'pacientes' ? (
+        <div className={`doctor-content${esChat ? ' doctor-content--chat' : ''}`}>
+          {esChat ? (
+            <MedicoChat
+              medico={medico}
+              items={chat.items}
+              enviando={chat.enviando}
+              onEnviar={chat.enviar}
+              onReintentar={chat.reintentar}
+              onConfirmar={chat.confirmar}
+              onCancelar={chat.cancelar}
+            />
+          ) : activeNav === 'pacientes' ? (
             <RegistroPacientes onVerDetalle={(pacienteId) => navigate(`/doctor/pacientes/${pacienteId}`)} />
           ) : activeNav === 'inicio' ? (
             <InicioWeb

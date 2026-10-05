@@ -156,6 +156,15 @@
   background: #e8f5f4;
 }
 
+.sidebar__action--active {
+  background: #1f6f6b;
+  color: #fff;
+}
+
+.sidebar__action--active:hover {
+  background: #185c59;
+}
+
 .sidebar__action--danger {
   color: #dc2626;
 }

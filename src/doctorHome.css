@@ -66,6 +66,18 @@
   align-items: stretch;
 }
 
+/* ── Vista de chat: ocupa todo el alto del área de contenido ── */
+.doctor-layout--chat {
+  height: 100vh;
+}
+
+.doctor-content--chat {
+  padding: 0;
+  gap: 0;
+  align-items: stretch;
+  overflow: hidden;
+}
+
 /* Placeholder when no patient is selected */
 .consulta-empty {
   flex: 1;

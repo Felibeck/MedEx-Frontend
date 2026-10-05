@@ -1,263 +1,342 @@
-import { useEffect, useRef, useState } from 'react'
-import { enviarMensajeChat, confirmarAccionChat, type ChatRespuestaConfirmacion } from '../../../api/chatMedico'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import ReactMarkdown, { type Components } from 'react-markdown'
+import {
+  CheckBadgeIcon,
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+  PaperAirplaneIcon,
+  SparklesIcon,
+  XCircleIcon,
+} from '@heroicons/react/24/solid'
+import type { medico } from '../../../types/medico'
+import type { ChatItem, ChatItemConfirmacion } from '../../../types/chatMedico'
+import { TIPO_CONSULTA_LABELS, type TipoConsulta } from '../../../config/tiposConsulta'
 import './medicoChat.css'
 
-type EstadoConfirmacion = 'pendiente' | 'confirmando' | 'resuelta' | 'cancelada'
-
-type ItemBurbuja = {
-  id: string
-  kind: 'burbuja'
-  autor: 'medico' | 'asistente' | 'sistema' | 'error'
-  texto: string
-}
-
-type ItemConfirmacion = {
-  id: string
-  kind: 'confirmacion'
-  mensaje: string
-  accion: string
-  parametros: Record<string, unknown>
-  estado: EstadoConfirmacion
-}
-
-type Item = ItemBurbuja | ItemConfirmacion
-
 type Props = {
-  conversationId: string
-  onClose: () => void
+  medico: medico
+  items: ChatItem[]
+  enviando: boolean
+  onEnviar: (texto: string) => void
+  onReintentar: () => void
+  onConfirmar: (item: ChatItemConfirmacion) => void
+  onCancelar: (item: ChatItemConfirmacion) => void
 }
 
-const crearId = () => crypto.randomUUID()
+// Solo sugieren lo que el backend soporta: buscar paciente por DNI, ver historial y crear consulta.
+const SUGERENCIAS = [
+  'Quiero buscar un paciente por DNI',
+  'Quiero ver el historial de un paciente',
+  'Quiero crear una consulta',
+]
 
-const formatearLabel = (clave: string) =>
-  clave
+const ETIQUETAS_CAMPO: Record<string, string> = {
+  dni: 'Paciente (DNI)',
+  tipo_consulta: 'Tipo de consulta',
+  notas: 'Nota',
+}
+const ORDEN_CAMPOS = Object.keys(ETIQUETAS_CAMPO)
+
+// react-markdown no inyecta HTML crudo (lo ignora) y descarta URLs peligrosas. Además se
+// bloquean las imágenes para que el texto del asistente no dispare pedidos a sitios externos.
+const MD_COMPONENTS: Components = {
+  a: ({ href, children }) => (
+    <a href={href} target="_blank" rel="noopener noreferrer">
+      {children}
+    </a>
+  ),
+}
+
+const saludoSegunHora = (hora: number) => {
+  if (hora < 12) return 'Buenos días'
+  if (hora < 20) return 'Buenas tardes'
+  return 'Buenas noches'
+}
+
+const formatearEtiqueta = (clave: string) => {
+  if (ETIQUETAS_CAMPO[clave]) return ETIQUETAS_CAMPO[clave]
+  const texto = clave
     .replace(/_/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase())
-
-const formatearValor = (valor: unknown): string => {
-  if (valor === null || valor === undefined || valor === '') return '—'
-  if (typeof valor === 'boolean') return valor ? 'Sí' : 'No'
-  return String(valor)
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .toLowerCase()
+  return texto.charAt(0).toUpperCase() + texto.slice(1)
 }
 
-const MedicoChat = ({ conversationId, onClose }: Props) => {
-  const [items, setItems] = useState<Item[]>([
-    {
-      id: crearId(),
-      kind: 'burbuja',
-      autor: 'asistente',
-      texto: '¡Hola! Soy el asistente médico. ¿En qué te puedo ayudar?',
-    },
-  ])
+const formatearValor = (clave: string, valor: unknown): string => {
+  if (typeof valor === 'boolean') return valor ? 'Sí' : 'No'
+  if (typeof valor === 'object') return JSON.stringify(valor)
+  const texto = String(valor)
+  if (clave === 'tipo_consulta') return TIPO_CONSULTA_LABELS[texto as TipoConsulta] ?? texto
+  return texto
+}
+
+// Solo los campos que vienen en `parametros` (sin inventar ninguno), con los conocidos primero.
+const filasConfirmacion = (parametros: Record<string, unknown>) => {
+  const indice = (clave: string) => {
+    const i = ORDEN_CAMPOS.indexOf(clave)
+    return i === -1 ? ORDEN_CAMPOS.length : i
+  }
+  return Object.entries(parametros)
+    .filter(([, valor]) => valor !== null && valor !== undefined && valor !== '')
+    .sort(([a], [b]) => indice(a) - indice(b))
+}
+
+const Avatar = ({ grande = false }: { grande?: boolean }) => (
+  <span className={`mc-avatar${grande ? ' mc-avatar--grande' : ''}`} aria-hidden="true">
+    <SparklesIcon width={grande ? 28 : 16} height={grande ? 28 : 16} />
+  </span>
+)
+
+type TarjetaProps = {
+  item: ChatItemConfirmacion
+  deshabilitado: boolean
+  onConfirmar: () => void
+  onCancelar: () => void
+}
+
+const TarjetaConfirmacion = ({ item, deshabilitado, onConfirmar, onCancelar }: TarjetaProps) => {
+  const filas = filasConfirmacion(item.parametros)
+  const confirmando = item.estado === 'confirmando'
+  const abierta = item.estado === 'pendiente' || confirmando
+
+  return (
+    <section className={`mc-confirmacion mc-confirmacion--${item.estado}`} aria-label="Confirmación requerida">
+      <header className="mc-confirmacion__header">
+        <CheckBadgeIcon className="mc-confirmacion__icono" width={28} height={28} aria-hidden="true" />
+        <h2 className="mc-confirmacion__titulo">Revisá antes de confirmar</h2>
+      </header>
+
+      <dl className="mc-confirmacion__filas">
+        {filas.map(([clave, valor]) => (
+          <div key={clave} className="mc-confirmacion__fila">
+            <dt className="mc-confirmacion__clave">{formatearEtiqueta(clave)}</dt>
+            <dd className="mc-confirmacion__valor">{formatearValor(clave, valor)}</dd>
+          </div>
+        ))}
+      </dl>
+
+      {abierta && (
+        <div className="mc-confirmacion__acciones">
+          <button
+            type="button"
+            className="mc-btn mc-btn--secundario"
+            onClick={onCancelar}
+            disabled={deshabilitado || confirmando}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            className="mc-btn mc-btn--primario"
+            onClick={onConfirmar}
+            disabled={deshabilitado || confirmando}
+          >
+            {confirmando && <span className="mc-spinner" aria-hidden="true" />}
+            {confirmando ? 'Confirmando…' : 'Confirmar'}
+          </button>
+        </div>
+      )}
+
+      {item.estado === 'resuelta' && (
+        <p className="mc-confirmacion__estado mc-confirmacion__estado--resuelta">
+          <CheckCircleIcon width={20} height={20} aria-hidden="true" />
+          Confirmada
+        </p>
+      )}
+
+      {item.estado === 'cancelada' && (
+        <p className="mc-confirmacion__estado mc-confirmacion__estado--cancelada">
+          <XCircleIcon width={20} height={20} aria-hidden="true" />
+          Cancelada
+        </p>
+      )}
+    </section>
+  )
+}
+
+const MedicoChat = ({ medico, items, enviando, onEnviar, onReintentar, onConfirmar, onCancelar }: Props) => {
   const [texto, setTexto] = useState('')
-  const [enviando, setEnviando] = useState(false)
-  const bodyRef = useRef<HTMLDivElement>(null)
+  const [hora] = useState(() => new Date().getHours())
+  const listaRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const primerScrollRef = useRef(true)
+
+  const nombreSaludo = medico.apellido || medico.nombre
+
+  // Auto-scroll al último mensaje (sin animación la primera vez o si el sistema pide reducir movimiento).
+  useEffect(() => {
+    const lista = listaRef.current
+    if (!lista) return
+    const reducir = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    lista.scrollTo({
+      top: lista.scrollHeight,
+      behavior: primerScrollRef.current || reducir ? 'auto' : 'smooth',
+    })
+    primerScrollRef.current = false
+  }, [items, enviando])
+
+  // El textarea crece con el contenido; el tope de ~6 líneas lo pone el CSS (max-height).
+  useLayoutEffect(() => {
+    const input = inputRef.current
+    if (!input) return
+    input.style.height = 'auto'
+    input.style.height = `${input.scrollHeight}px`
+  }, [texto])
 
   useEffect(() => {
-    bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight, behavior: 'smooth' })
-  }, [items])
+    inputRef.current?.focus()
+  }, [])
 
-  const agregarItem = (item: Item) => setItems((prev) => [...prev, item])
+  // Al deshabilitarse el textarea se pierde el foco; se recupera cuando llega la respuesta,
+  // salvo que el médico ya haya puesto el foco en otro lado.
+  useEffect(() => {
+    if (!enviando && document.activeElement === document.body) {
+      inputRef.current?.focus()
+    }
+  }, [enviando])
 
-  const actualizarConfirmacion = (id: string, estado: EstadoConfirmacion) =>
-    setItems((prev) =>
-      prev.map((it) => (it.id === id && it.kind === 'confirmacion' ? { ...it, estado } : it))
-    )
-
-  const handleEnviar = async () => {
+  const enviarActual = () => {
     const mensaje = texto.trim()
     if (!mensaje || enviando) return
-
-    agregarItem({ id: crearId(), kind: 'burbuja', autor: 'medico', texto: mensaje })
     setTexto('')
-    setEnviando(true)
-
-    try {
-      const respuesta = await enviarMensajeChat(conversationId, mensaje)
-
-      agregarItem({ id: crearId(), kind: 'burbuja', autor: 'asistente', texto: respuesta.mensaje })
-
-      if (respuesta.tipo === 'confirmacion_requerida') {
-        const confirmacion = respuesta as ChatRespuestaConfirmacion
-        agregarItem({
-          id: crearId(),
-          kind: 'confirmacion',
-          mensaje: confirmacion.mensaje,
-          accion: confirmacion.accion,
-          parametros: confirmacion.parametros,
-          estado: 'pendiente',
-        })
-      }
-    } catch {
-      agregarItem({
-        id: crearId(),
-        kind: 'burbuja',
-        autor: 'error',
-        texto: 'Hubo un problema, intentá de nuevo.',
-      })
-    } finally {
-      setEnviando(false)
-    }
-  }
-
-  const handleConfirmar = async (item: ItemConfirmacion) => {
-    if (enviando) return
-    actualizarConfirmacion(item.id, 'confirmando')
-    setEnviando(true)
-
-    try {
-      const respuesta = await confirmarAccionChat(conversationId, item.accion, item.parametros)
-      actualizarConfirmacion(item.id, 'resuelta')
-      agregarItem({ id: crearId(), kind: 'burbuja', autor: 'asistente', texto: respuesta.mensaje })
-    } catch {
-      actualizarConfirmacion(item.id, 'pendiente')
-      agregarItem({
-        id: crearId(),
-        kind: 'burbuja',
-        autor: 'error',
-        texto: 'Hubo un problema, intentá de nuevo.',
-      })
-    } finally {
-      setEnviando(false)
-    }
-  }
-
-  const handleCancelar = (item: ItemConfirmacion) => {
-    actualizarConfirmacion(item.id, 'cancelada')
-    agregarItem({ id: crearId(), kind: 'burbuja', autor: 'sistema', texto: 'Acción cancelada' })
+    onEnviar(mensaje)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault()
-      handleEnviar()
+      enviarActual()
     }
   }
 
-  return (
-    <div className="mc-overlay" role="dialog" aria-modal="true" aria-labelledby="mc-title">
-      <div className="mc-card">
-        {/* Header */}
-        <div className="mc-header">
-          <div className="mc-header__avatar" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff">
-              <path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" />
-            </svg>
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    enviarActual()
+  }
+
+  const renderItem = (item: ChatItem, indice: number) => {
+    if (item.kind === 'confirmacion') {
+      return (
+        <TarjetaConfirmacion
+          key={item.id}
+          item={item}
+          deshabilitado={enviando}
+          onConfirmar={() => onConfirmar(item)}
+          onCancelar={() => onCancelar(item)}
+        />
+      )
+    }
+
+    if (item.autor === 'medico') {
+      return (
+        <div key={item.id} className="mc-fila mc-fila--medico">
+          <div className="mc-burbuja">
+            <span className="mc-sr">Vos: </span>
+            {item.texto}
           </div>
-          <div className="mc-header__info">
-            <span className="mc-header__titulo" id="mc-title">Asistente Médico</span>
-          </div>
-          <button className="mc-header__close" onClick={onClose} aria-label="Cerrar chat">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
         </div>
+      )
+    }
 
-        {/* Body */}
-        <div className="mc-body" ref={bodyRef}>
-          {items.map((item) => {
-            if (item.kind === 'burbuja') {
-              return (
-                <div key={item.id} className={`mc-burbuja mc-burbuja--${item.autor}`}>
-                  {item.texto}
-                </div>
-              )
-            }
+    if (item.autor === 'asistente') {
+      return (
+        <div key={item.id} className="mc-fila mc-fila--asistente">
+          <Avatar />
+          <div className="mc-md">
+            <span className="mc-sr">Asistente: </span>
+            <ReactMarkdown components={MD_COMPONENTS} disallowedElements={['img']}>
+              {item.texto}
+            </ReactMarkdown>
+          </div>
+        </div>
+      )
+    }
 
-            return (
-              <div key={item.id} className="mc-confirmacion">
-                <div className="mc-confirmacion__header">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="16" x2="12" y2="12" />
-                    <line x1="12" y1="8" x2="12.01" y2="8" />
-                  </svg>
-                  <span>Confirmación requerida</span>
-                </div>
-
-                <ul className="mc-confirmacion__lista">
-                  {Object.entries(item.parametros).map(([clave, valor]) => (
-                    <li key={clave}>
-                      <span className="mc-confirmacion__clave">{formatearLabel(clave)}:</span>{' '}
-                      <span className="mc-confirmacion__valor">{formatearValor(valor)}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {item.estado === 'pendiente' && (
-                  <div className="mc-confirmacion__acciones">
-                    <button
-                      type="button"
-                      className="mc-btn mc-btn--ghost"
-                      onClick={() => handleCancelar(item)}
-                      disabled={enviando}
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="button"
-                      className="mc-btn mc-btn--primary"
-                      onClick={() => handleConfirmar(item)}
-                      disabled={enviando}
-                    >
-                      Confirmar
-                    </button>
-                  </div>
-                )}
-
-                {item.estado === 'confirmando' && (
-                  <div className="mc-confirmacion__estado">
-                    <span className="mc-spinner" aria-hidden="true" />
-                    Confirmando...
-                  </div>
-                )}
-
-                {item.estado === 'cancelada' && (
-                  <div className="mc-confirmacion__estado mc-confirmacion__estado--cancelada">
-                    Cancelada
-                  </div>
-                )}
-
-                {item.estado === 'resuelta' && (
-                  <div className="mc-confirmacion__estado mc-confirmacion__estado--resuelta">
-                    Confirmada
-                  </div>
-                )}
-              </div>
-            )
-          })}
-
-          {enviando && (
-            <div className="mc-burbuja mc-burbuja--asistente mc-burbuja--loading">
-              <span className="mc-spinner" aria-hidden="true" />
-            </div>
+    if (item.autor === 'error') {
+      const puedeReintentar = item.reintentable && indice === items.length - 1
+      return (
+        <div key={item.id} className="mc-error">
+          <ExclamationCircleIcon className="mc-error__icono" width={20} height={20} aria-hidden="true" />
+          <span>{item.texto}</span>
+          {puedeReintentar && (
+            <button type="button" className="mc-error__reintentar" onClick={onReintentar} disabled={enviando}>
+              Reintentar
+            </button>
           )}
         </div>
+      )
+    }
 
-        {/* Footer */}
-        <div className="mc-footer">
-          <textarea
-            className="mc-input"
-            placeholder="Escribí tu mensaje..."
-            value={texto}
-            onChange={(e) => setTexto(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={enviando}
-            rows={1}
-          />
-          <button
-            type="button"
-            className="mc-enviar"
-            onClick={handleEnviar}
-            disabled={enviando || !texto.trim()}
-            aria-label="Enviar mensaje"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13" />
-              <polygon points="22 2 15 22 11 13 2 9 22 2" />
-            </svg>
-          </button>
+    return (
+      <p key={item.id} className="mc-sistema">
+        {item.texto}
+      </p>
+    )
+  }
+
+  return (
+    <div className="mc-vista">
+      <div className="mc-scroll" ref={listaRef} role="log" aria-live="polite" aria-label="Conversación con el asistente">
+        <div className="mc-columna">
+          {items.length === 0 && !enviando ? (
+            <div className="mc-bienvenida">
+              <Avatar grande />
+              <h1 className="mc-bienvenida__saludo">
+                {saludoSegunHora(hora)}, Dr. {nombreSaludo}
+              </h1>
+              <p className="mc-bienvenida__sub">¿En qué te puedo ayudar hoy?</p>
+              <div className="mc-chips" role="group" aria-label="Sugerencias">
+                {SUGERENCIAS.map((sugerencia) => (
+                  <button key={sugerencia} type="button" className="mc-chip" onClick={() => onEnviar(sugerencia)}>
+                    {sugerencia}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              {items.map(renderItem)}
+
+              {enviando && (
+                <div className="mc-fila mc-fila--asistente">
+                  <Avatar />
+                  <div className="mc-escribiendo">
+                    <span className="mc-sr">El asistente está escribiendo…</span>
+                    <span className="mc-escribiendo__punto" aria-hidden="true" />
+                    <span className="mc-escribiendo__punto" aria-hidden="true" />
+                    <span className="mc-escribiendo__punto" aria-hidden="true" />
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="mc-compositor">
+        <div className="mc-columna">
+          <form className="mc-pildora" onSubmit={handleSubmit}>
+            <textarea
+              ref={inputRef}
+              className="mc-input"
+              placeholder="Escribí tu mensaje…"
+              aria-label="Mensaje para el asistente"
+              value={texto}
+              onChange={(e) => setTexto(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={enviando}
+              rows={1}
+            />
+            <button
+              type="submit"
+              className="mc-enviar"
+              disabled={enviando || !texto.trim()}
+              aria-label="Enviar mensaje"
+            >
+              <PaperAirplaneIcon width={20} height={20} aria-hidden="true" />
+            </button>
+          </form>
+          <p className="mc-ayuda">El asistente puede equivocarse. Revisá siempre antes de confirmar.</p>
         </div>
       </div>
     </div>
