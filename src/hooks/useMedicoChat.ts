@@ -1,8 +1,25 @@
 import { useRef, useState } from 'react'
+import axios from 'axios'
 import { enviarMensajeChat, confirmarAccionChat } from '../api/chatMedico'
 import type { ChatItem, ChatItemConfirmacion, EstadoConfirmacion } from '../types/chatMedico'
 
 const MENSAJE_ERROR = 'Hubo un problema, intentá de nuevo.'
+const MENSAJE_IA_NO_DISPONIBLE = 'El asistente de IA no está disponible en este momento.'
+
+// El backend devuelve 429 (se agotó la cuota diaria de la IA) y 503 (IA saturada) con un message
+// pensado para el médico. Cualquier otro error puede traer un message técnico: nunca se muestra.
+const describirError = (error: unknown): { texto: string; reintentable: boolean } => {
+  if (axios.isAxiosError(error)) {
+    const status = error.response?.status
+    if (status === 429 || status === 503) {
+      const message: unknown = error.response?.data?.message
+      const texto = typeof message === 'string' && message.trim() ? message.trim() : MENSAJE_IA_NO_DISPONIBLE
+      // Con la cuota diaria agotada reintentar no sirve; con la IA saturada sí.
+      return { texto, reintentable: status === 503 }
+    }
+  }
+  return { texto: MENSAJE_ERROR, reintentable: true }
+}
 
 const crearId = () => crypto.randomUUID()
 
@@ -49,13 +66,14 @@ export const useMedicoChat = () => {
           estado: 'pendiente',
         })
       }
-    } catch {
+    } catch (error) {
+      const { texto, reintentable } = describirError(error)
       agregarItem({
         id: crearId(),
         kind: 'burbuja',
         autor: 'error',
-        texto: MENSAJE_ERROR,
-        reintentable: true,
+        texto,
+        reintentable,
       })
     } finally {
       terminar()
