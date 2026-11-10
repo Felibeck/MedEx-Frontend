@@ -2,6 +2,7 @@ import { isTipoEstudio } from '../config/tiposEstudio'
 import type { estudio, estudioResumen } from '../types/estudio'
 import type { medicoEnEstudio } from '../types/medico'
 import { api } from './client'
+import { parseFechaLocal } from '../utils/paciente'
 
 // ── Tipos que devuelve el backend ────────────────────────────────────────────
 
@@ -97,7 +98,7 @@ export const mapEstudioResumenFromApi = (raw: ApiEstudioResumenRaw): estudioResu
   id: raw.id,
   tipo: normalizeTipo(raw.tipo_estudio),
   tipoEstudio: raw.tipo_estudio,
-  fecha: new Date(raw.fecha),
+  fecha: parseFechaLocal(raw.fecha),
   institucion: raw.institucion,
   titulo: raw.titulo ?? undefined,
   fotos: raw.fotos ?? [],

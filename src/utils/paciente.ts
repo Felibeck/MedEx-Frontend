@@ -1,8 +1,13 @@
 // src/utils/paciente.ts
 
+// Las fechas sin hora ('YYYY-MM-DD') se toman como día local: `new Date('YYYY-MM-DD')` es
+// medianoche UTC y en Argentina (UTC-3) mostraría el día anterior.
+export const parseFechaLocal = (fecha: string): Date =>
+  new Date(/^\d{4}-\d{2}-\d{2}$/.test(fecha) ? `${fecha}T00:00:00` : fecha)
+
 export const calcularEdad = (fechaNacimiento: string | null): number | null => {
   if (!fechaNacimiento) return null
-  const nacimiento = new Date(fechaNacimiento)
+  const nacimiento = parseFechaLocal(fechaNacimiento)
   if (isNaN(nacimiento.getTime())) return null
 
   const hoy = new Date()
@@ -16,17 +21,13 @@ export const calcularEdad = (fechaNacimiento: string | null): number | null => {
 
 export const formatearFecha = (fecha: string | null): string | null => {
   if (!fecha) return null
-  const date = new Date(fecha)
+  const date = parseFechaLocal(fecha)
   if (isNaN(date.getTime())) return null
   return new Intl.DateTimeFormat('es-AR', { day: '2-digit', month: 'short', year: 'numeric' }).format(date)
 }
 
-// Igual que formatearFecha, pero las fechas sin hora ('YYYY-MM-DD') se toman como
-// día local: `new Date('YYYY-MM-DD')` es medianoche UTC y en Argentina muestra el día anterior.
-export const formatearFechaDia = (fecha: string | null): string | null => {
-  if (!fecha) return null
-  return formatearFecha(/^\d{4}-\d{2}-\d{2}$/.test(fecha) ? `${fecha}T00:00:00` : fecha)
-}
+// Alias histórico: `formatearFecha` ya trata las fechas 'YYYY-MM-DD' como día local.
+export const formatearFechaDia = formatearFecha
 
 export const nombreCompleto = (nombre: string | null, apellido: string | null): string =>
   `${nombre ?? ''} ${apellido ?? ''}`.trim()
