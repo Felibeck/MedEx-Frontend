@@ -59,8 +59,16 @@ const COMPATIBILIDAD_DONANTE: Record<string, string[]> = {
   'AB+': ['AB+'],
 }
 
-export const gruposCompatibles = (grupoSanguineo: string | null | undefined): string[] | null => {
+// El backend manda el grupo como 'O_Positivo' / 'AB_Negativo'; en pantalla se muestra 'O+' / 'AB-'.
+// Si ya viene en formato corto ('O+') se devuelve igual.
+export const formatearGrupoSanguineo = (grupoSanguineo: string | null | undefined): string | null => {
   if (!grupoSanguineo) return null
-  const normalizado = grupoSanguineo.trim().toUpperCase()
-  return COMPATIBILIDAD_DONANTE[normalizado] ?? null
+  const match = grupoSanguineo.trim().match(/^(AB|A|B|O)[_\s-]?(positivo|negativo)$/i)
+  if (!match) return grupoSanguineo.trim()
+  return `${match[1].toUpperCase()}${match[2].toLowerCase() === 'positivo' ? '+' : '-'}`
+}
+
+export const gruposCompatibles = (grupoSanguineo: string | null | undefined): string[] | null => {
+  const normalizado = formatearGrupoSanguineo(grupoSanguineo)?.toUpperCase()
+  return normalizado ? COMPATIBILIDAD_DONANTE[normalizado] ?? null : null
 }

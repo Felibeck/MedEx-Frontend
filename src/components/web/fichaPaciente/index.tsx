@@ -4,9 +4,13 @@ import type { estudioResumen } from '../../../types/estudio'
 import { getHistorialClinico } from '../../../api/doctors'
 import { patchConsulta } from '../../../api/consultas'
 import { fetchEstudiosPaciente } from '../../../api/estudios'
-import { calcularEdad, formatearFecha, gruposCompatibles } from '../../../utils/paciente'
+import { calcularEdad, formatearFecha, formatearGrupoSanguineo, gruposCompatibles } from '../../../utils/paciente'
+import { TIPO_CONSULTA_LABELS, type TipoConsulta } from '../../../config/tiposConsulta'
 import TabHistorial from './TabHistorial'
 import './fichaPaciente.css'
+
+const etiquetaTipoConsulta = (tipo: string | null | undefined): string | null =>
+  tipo ? TIPO_CONSULTA_LABELS[tipo as TipoConsulta] ?? tipo : null
 
 type Props = {
   pacienteId: string
@@ -145,7 +149,7 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
           </div>
           {paciente.grupo_sanguineo ? (
             <div className="ficha-paciente__sangre">
-              <span className="ficha-paciente__sangre-tipo">{paciente.grupo_sanguineo}</span>
+              <span className="ficha-paciente__sangre-tipo">{formatearGrupoSanguineo(paciente.grupo_sanguineo)}</span>
               {compatibles && (
                 <span className="ficha-paciente__sangre-compat">Compatible con {compatibles.join(', ')}</span>
               )}
@@ -219,7 +223,7 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
                       {i === 0 && <span className="ficha-paciente__pill-reciente">RECIENTE</span>}
                     </div>
                     <p className="ficha-paciente__consulta-especialidad">
-                      {consulta.tipo_consulta ?? consulta.profesional?.especialidad_medica ?? 'Consulta general'}
+                      {etiquetaTipoConsulta(consulta.tipo_consulta) ?? consulta.profesional?.especialidad_medica ?? 'Consulta general'}
                     </p>
                     <p className="ficha-paciente__consulta-profesional">{nombreProfesional(consulta)}</p>
                   </button>
@@ -248,7 +252,7 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
                         </select>
                       </div>
                     ) : (
-                      <h3>Detalle de Consulta: {consultaActiva.tipo_consulta ?? consultaActiva.profesional?.especialidad_medica ?? 'General'}</h3>
+                      <h3>Detalle de Consulta: {etiquetaTipoConsulta(consultaActiva.tipo_consulta) ?? consultaActiva.profesional?.especialidad_medica ?? 'General'}</h3>
                     )}
                     <p>{formatearFecha(consultaActiva.fecha)}</p>
                   </div>
