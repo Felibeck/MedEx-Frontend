@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { HeartIcon } from '@heroicons/react/24/outline'
 import type { historialClinico, historialTabla } from '../../../types/historialClinico'
 import FormHistorial from './FormHistorial'
 
@@ -54,13 +55,6 @@ const IconoFamilia = () => (
     <circle cx="9" cy="7" r="4" />
     <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
     <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-  </svg>
-)
-
-const IconoPastilla = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#006562" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M10.5 20.5 3.5 13.5a4.95 4.95 0 1 1 7-7l7 7a4.95 4.95 0 1 1-7 7Z" />
-    <path d="m8.5 8.5 7 7" />
   </svg>
 )
 
@@ -147,7 +141,7 @@ const TabHistorial = ({ pacienteId, historial, onHistorialActualizado }: Props) 
           )}
 
           {h!.mx && (
-            <Seccion titulo="Mamografía" icono={<IconoPastilla />}>
+            <Seccion titulo="Mamografía" icono={<HeartIcon width={20} height={20} aria-hidden="true" />}>
               <CajaTexto texto={h!.mx} />
             </Seccion>
           )}

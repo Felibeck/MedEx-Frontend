@@ -205,7 +205,7 @@
 .ficha-paciente__ultimo-control {
   font-family: 'Inter', var(--sans);
   font-size: 12px;
-  color: #bec9c7;
+  color: #416464;
   margin: 0;
 }
 
@@ -553,6 +553,7 @@
   width: 36px;
   height: 36px;
   background: #e8f7f6;
+  color: #006562;
   border-radius: 8px;
   flex-shrink: 0;
 }

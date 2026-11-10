@@ -63,8 +63,9 @@ const PatientLogin = () => {
 
           <form className="patient-login__form" onSubmit={handleLogin}>
             <div className="patient-login__field">
-              <label className="patient-login__label">Email o Teléfono</label>
+              <label className="patient-login__label" htmlFor="patient-login-email">Email o Teléfono</label>
               <input
+                id="patient-login-email"
                 className="patient-login__input"
                 type="text"
                 placeholder="ejemplo@correo.com"
@@ -76,13 +77,14 @@ const PatientLogin = () => {
 
             <div className="patient-login__field">
               <div className="patient-login__label-row">
-                <label className="patient-login__label">Contraseña</label>
+                <label className="patient-login__label" htmlFor="patient-login-password">Contraseña</label>
                 <button type="button" className="patient-login__forgot">
                   ¿Olvidó su contraseña?
                 </button>
               </div>
               <div className="patient-login__password-wrap">
                 <input
+                  id="patient-login-password"
                   className="patient-login__input"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"

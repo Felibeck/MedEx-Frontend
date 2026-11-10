@@ -1,0 +1,42 @@
+/* El tamaño llega por la variable --am-size (px). Ancho fijo = size * 1.15, así la columna
+   del avatar mide siempre lo mismo y el texto de los mensajes queda alineado. */
+.am {
+  position: relative;
+  display: block;
+  flex: none;
+  width: calc(var(--am-size) * 1.15);
+  height: var(--am-size);
+}
+
+/* Logo a ~88% del alto, alineado abajo; contain evita deformarlo. */
+.am__logo {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 88%;
+  object-fit: contain;
+  object-position: 50% 100%;
+}
+
+.am__spark {
+  position: absolute;
+  color: #5fafa9;
+}
+
+/* Destello grande: esquina superior derecha, sobre el pico derecho de la "M". */
+.am__spark--grande {
+  top: 0;
+  right: 0;
+  width: calc(var(--am-size) * 0.34);
+  height: calc(var(--am-size) * 0.34);
+}
+
+/* Destello chico: a la izquierda del grande, apenas más arriba. */
+.am__spark--chico {
+  top: calc(var(--am-size) * -0.04);
+  right: calc(var(--am-size) * 0.38);
+  width: calc(var(--am-size) * 0.17);
+  height: calc(var(--am-size) * 0.17);
+  opacity: 0.8;
+}

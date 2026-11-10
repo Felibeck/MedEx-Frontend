@@ -1,0 +1,33 @@
+.patient-familia-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f3f6f3;
+}
+
+.patient-familia-content {
+  flex: 1;
+  padding: 20px 20px 90px;
+}
+
+.patient-familia-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 32px 24px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.patient-familia-title {
+  font-size: 24px;
+  line-height: 1.2;
+  margin: 0 0 8px;
+  color: #0b3131;
+}
+
+.patient-familia-text {
+  margin: 0;
+  color: #416464;
+  font-size: 15px;
+  line-height: 1.5;
+}

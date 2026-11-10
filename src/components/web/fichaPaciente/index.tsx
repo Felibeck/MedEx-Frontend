@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import type { historialClinico, consultaHistorial } from '../../../types/historialClinico'
-import type { estudioResumen } from '../../../types/estudio'
 import { getHistorialClinico } from '../../../api/doctors'
 import { patchConsulta } from '../../../api/consultas'
-import { fetchEstudiosPaciente } from '../../../api/estudios'
-import { calcularEdad, formatearFecha, gruposCompatibles } from '../../../utils/paciente'
+import { calcularEdad, formatearFecha, formatearGrupoSanguineo, gruposCompatibles } from '../../../utils/paciente'
+import { TIPO_CONSULTA_LABELS, type TipoConsulta } from '../../../config/tiposConsulta'
 import TabHistorial from './TabHistorial'
 import './fichaPaciente.css'
+
+const etiquetaTipoConsulta = (tipo: string | null | undefined): string | null =>
+  tipo ? TIPO_CONSULTA_LABELS[tipo as TipoConsulta] ?? tipo : null
 
 type Props = {
   pacienteId: string
@@ -31,7 +33,6 @@ const nombreProfesional = (consulta: consultaHistorial) => {
 
 const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
   const [historial, setHistorial] = useState<historialClinico | null>(null)
-  const [estudios, setEstudios] = useState<estudioResumen[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('consultas')
@@ -49,13 +50,9 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
       setLoading(true)
       setError(null)
       try {
-        const [historialData, estudiosData] = await Promise.all([
-          getHistorialClinico(pacienteId),
-          fetchEstudiosPaciente(pacienteId).catch(() => []),
-        ])
+        const historialData = await getHistorialClinico(pacienteId)
         if (cancelado) return
         setHistorial(historialData)
-        setEstudios(estudiosData)
         setConsultaActivaId(historialData.consultas[0]?.id ?? null)
         const p = historialData.paciente
         if (p) {
@@ -82,7 +79,7 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
     return <p className="ficha-paciente__estado ficha-paciente__estado--error">{error || 'Paciente no encontrado.'}</p>
   }
 
-  const { paciente, alergias, condicionesCronicas, consultas } = historial
+  const { paciente, alergias, condicionesCronicas, consultas, estudios } = historial
   const edad = calcularEdad(paciente.fecha_nacimiento)
   const fechaNacimiento = formatearFecha(paciente.fecha_nacimiento)
   const compatibles = gruposCompatibles(paciente.grupo_sanguineo)
@@ -145,7 +142,7 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
           </div>
           {paciente.grupo_sanguineo ? (
             <div className="ficha-paciente__sangre">
-              <span className="ficha-paciente__sangre-tipo">{paciente.grupo_sanguineo}</span>
+              <span className="ficha-paciente__sangre-tipo">{formatearGrupoSanguineo(paciente.grupo_sanguineo)}</span>
               {compatibles && (
                 <span className="ficha-paciente__sangre-compat">Compatible con {compatibles.join(', ')}</span>
               )}
@@ -219,7 +216,7 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
                       {i === 0 && <span className="ficha-paciente__pill-reciente">RECIENTE</span>}
                     </div>
                     <p className="ficha-paciente__consulta-especialidad">
-                      {consulta.tipo_consulta ?? consulta.profesional?.especialidad_medica ?? 'Consulta general'}
+                      {etiquetaTipoConsulta(consulta.tipo_consulta) ?? consulta.profesional?.especialidad_medica ?? 'Consulta general'}
                     </p>
                     <p className="ficha-paciente__consulta-profesional">{nombreProfesional(consulta)}</p>
                   </button>
@@ -248,7 +245,7 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
                         </select>
                       </div>
                     ) : (
-                      <h3>Detalle de Consulta: {consultaActiva.tipo_consulta ?? consultaActiva.profesional?.especialidad_medica ?? 'General'}</h3>
+                      <h3>Detalle de Consulta: {etiquetaTipoConsulta(consultaActiva.tipo_consulta) ?? consultaActiva.profesional?.especialidad_medica ?? 'General'}</h3>
                     )}
                     <p>{formatearFecha(consultaActiva.fecha)}</p>
                   </div>
@@ -435,8 +432,10 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
           ) : (
             estudios.map((e) => (
               <div key={e.id} className="ficha-paciente__estudio-card">
-                <p className="ficha-paciente__estudio-tipo">{e.tipoEstudio}</p>
-                <p className="ficha-paciente__estudio-meta">{formatearFecha(e.fecha.toISOString())} · {e.institucion}</p>
+                <p className="ficha-paciente__estudio-tipo">{e.tipo_estudio ?? 'Estudio'}</p>
+                <p className="ficha-paciente__estudio-meta">
+                  {[formatearFecha(e.fecha), e.institucion].filter(Boolean).join(' · ')}
+                </p>
               </div>
             ))
           )}
