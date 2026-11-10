@@ -82,8 +82,9 @@ const PatientSignup = () => {
             {/* Nombre + Apellido */}
             <div className="patient-signup__fields-group">
               <div className="patient-signup__field">
-                <label className="patient-signup__label">Nombre</label>
+                <label className="patient-signup__label" htmlFor="patient-signup-nombre">Nombre</label>
                 <input
+                  id="patient-signup-nombre"
                   className="patient-signup__input"
                   type="text"
                   placeholder="Juan"
@@ -94,8 +95,9 @@ const PatientSignup = () => {
               </div>
 
               <div className="patient-signup__field">
-                <label className="patient-signup__label">Apellido</label>
+                <label className="patient-signup__label" htmlFor="patient-signup-apellido">Apellido</label>
                 <input
+                  id="patient-signup-apellido"
                   className="patient-signup__input"
                   type="text"
                   placeholder="García"
@@ -108,8 +110,9 @@ const PatientSignup = () => {
 
             {/* Email */}
             <div className="patient-signup__field">
-              <label className="patient-signup__label">Email</label>
+              <label className="patient-signup__label" htmlFor="patient-signup-email">Email</label>
               <input
+                id="patient-signup-email"
                 className="patient-signup__input"
                 type="email"
                 placeholder="ejemplo@correo.com"
@@ -121,9 +124,10 @@ const PatientSignup = () => {
 
             {/* Contraseña */}
             <div className="patient-signup__field">
-              <label className="patient-signup__label">Contraseña</label>
+              <label className="patient-signup__label" htmlFor="patient-signup-password">Contraseña</label>
               <div className="patient-signup__password-wrap">
                 <input
+                  id="patient-signup-password"
                   className="patient-signup__input"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Mín. 8 caracteres, mayúscula y número"
@@ -148,8 +152,9 @@ const PatientSignup = () => {
 
             {/* Teléfono */}
             <div className="patient-signup__field">
-              <label className="patient-signup__label">Teléfono</label>
+              <label className="patient-signup__label" htmlFor="patient-signup-telefono">Teléfono</label>
               <input
+                id="patient-signup-telefono"
                 className="patient-signup__input"
                 type="tel"
                 placeholder="+54 11 1234-5678"
@@ -161,8 +166,9 @@ const PatientSignup = () => {
 
             {/* Fecha de nacimiento */}
             <div className="patient-signup__field">
-              <label className="patient-signup__label">Fecha de nacimiento</label>
+              <label className="patient-signup__label" htmlFor="patient-signup-fecha-nacimiento">Fecha de nacimiento</label>
               <input
+                id="patient-signup-fecha-nacimiento"
                 className="patient-signup__input"
                 type="date"
                 value={fechaNacimiento}
@@ -173,9 +179,10 @@ const PatientSignup = () => {
 
             {/* Sexo biológico */}
             <div className="patient-signup__field">
-              <label className="patient-signup__label">Sexo biológico / género</label>
+              <label className="patient-signup__label" htmlFor="patient-signup-sexo">Sexo biológico / género</label>
               <div className="patient-signup__input patient-signup__input--bordered patient-signup__select-wrap">
                 <select
+                  id="patient-signup-sexo"
                   className="patient-signup__select"
                   value={sexo}
                   onChange={e => setSexo(e.target.value)}
@@ -192,9 +199,10 @@ const PatientSignup = () => {
 
             {/* Obra Social / Prepaga */}
             <div className="patient-signup__field">
-              <label className="patient-signup__label">Obra Social/Prepaga</label>
+              <label className="patient-signup__label" htmlFor="patient-signup-obra-social">Obra Social/Prepaga</label>
               <div className="patient-signup__input patient-signup__input--bordered patient-signup__select-wrap">
                 <select
+                  id="patient-signup-obra-social"
                   className="patient-signup__select"
                   value={obraSocial}
                   onChange={e => setObraSocial(e.target.value)}
@@ -229,9 +237,10 @@ const PatientSignup = () => {
 
                 {/* CUIL card */}
                 <div className="patient-signup__cuil-card">
-                  <label className="patient-signup__cuil-label">INGRESO MANUAL</label>
+                  <label className="patient-signup__cuil-label" htmlFor="patient-signup-cuil">INGRESO MANUAL</label>
                   <div className="patient-signup__cuil-input-wrap">
                     <input
+                      id="patient-signup-cuil"
                       className="patient-signup__cuil-input"
                       type="text"
                       placeholder="CUIL (20-XXXXXXXX-X)"
