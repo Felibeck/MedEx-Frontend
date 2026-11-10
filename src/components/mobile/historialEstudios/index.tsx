@@ -20,8 +20,8 @@ export type HistorialEstudiosHandle = {
 }
 
 const HistorialEstudios = forwardRef<HistorialEstudiosHandle, Props>(({
-  titulo = 'Analisis Completo',
-  subtitulo = 'Un estudio mas profundo de tu salud',
+  titulo = 'Análisis Completo',
+  subtitulo = 'Un estudio más profundo de tu salud',
 }, ref) => {
   const navigate = useNavigate()
   const [estudios, setEstudios] = useState<estudioResumen[]>([])
