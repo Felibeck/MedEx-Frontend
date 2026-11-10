@@ -1,31 +1,19 @@
 import { useCallback, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import Sidebar from './components/web/sidebar'
 import SearchBar from './components/web/searchBar'
 import FichaPaciente from './components/web/fichaPaciente'
 import Breadcrumbs, { type BreadcrumbItem } from './components/web/breadcrumbs'
-import type { medico } from './types/medico'
 import { logout } from './api/auth'
+import { getCurrentMedico } from './utils/session'
 import './doctorHome.css'
-
-const MOCK_MEDICO: medico = {
-  id: 1,
-  nombre: 'Dr. Julian',
-  apellido: 'Rivera',
-  email: 'julian@medex.com',
-  password: '',
-  esMedico: true,
-  usuarioId: '7c4f0c93-2b4c-4c79-a5f6-1e8d4f6a9d21',
-  organizacionId: '02e27451-a22b-40ae-b080-9f924b861495',
-  matricula: '12345',
-  especialidad: 'Cirujano',
-  fotoPerfil: '',
-}
 
 const PacienteDetalle = () => {
   const navigate = useNavigate()
   const { pacienteId } = useParams<{ pacienteId: string }>()
   const [nombrePaciente, setNombrePaciente] = useState('')
+  // Médico logueado (el mismo que usa doctorHome); se lee una sola vez al montar.
+  const [medico] = useState(getCurrentMedico)
 
   // useCallback para no reiniciar el fetch de la ficha en cada render.
   const handlePacienteCargado = useCallback((nombreCompleto: string) => {
@@ -50,10 +38,12 @@ const PacienteDetalle = () => {
     }
   }
 
+  if (!medico) return <Navigate to="/doctors/login" replace />
+
   return (
     <div className="doctor-layout">
       <Sidebar
-        medico={MOCK_MEDICO}
+        medico={medico}
         activeNav="pacientes"
         onNavChange={(key) => navigate('/doctor', { state: { activeNav: key } })}
         onChatbot={() => console.log('Abrir chatbot')}
