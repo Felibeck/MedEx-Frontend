@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { historialClinico, consultaHistorial } from '../../../types/historialClinico'
-import type { estudioResumen } from '../../../types/estudio'
 import { getHistorialClinico } from '../../../api/doctors'
 import { patchConsulta } from '../../../api/consultas'
-import { fetchEstudiosPaciente } from '../../../api/estudios'
 import { calcularEdad, formatearFecha, formatearGrupoSanguineo, gruposCompatibles } from '../../../utils/paciente'
 import { TIPO_CONSULTA_LABELS, type TipoConsulta } from '../../../config/tiposConsulta'
 import TabHistorial from './TabHistorial'
@@ -35,7 +33,6 @@ const nombreProfesional = (consulta: consultaHistorial) => {
 
 const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
   const [historial, setHistorial] = useState<historialClinico | null>(null)
-  const [estudios, setEstudios] = useState<estudioResumen[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('consultas')
@@ -53,13 +50,9 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
       setLoading(true)
       setError(null)
       try {
-        const [historialData, estudiosData] = await Promise.all([
-          getHistorialClinico(pacienteId),
-          fetchEstudiosPaciente(pacienteId).catch(() => []),
-        ])
+        const historialData = await getHistorialClinico(pacienteId)
         if (cancelado) return
         setHistorial(historialData)
-        setEstudios(estudiosData)
         setConsultaActivaId(historialData.consultas[0]?.id ?? null)
         const p = historialData.paciente
         if (p) {
@@ -86,7 +79,7 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
     return <p className="ficha-paciente__estado ficha-paciente__estado--error">{error || 'Paciente no encontrado.'}</p>
   }
 
-  const { paciente, alergias, condicionesCronicas, consultas } = historial
+  const { paciente, alergias, condicionesCronicas, consultas, estudios } = historial
   const edad = calcularEdad(paciente.fecha_nacimiento)
   const fechaNacimiento = formatearFecha(paciente.fecha_nacimiento)
   const compatibles = gruposCompatibles(paciente.grupo_sanguineo)
@@ -439,8 +432,10 @@ const FichaPaciente = ({ pacienteId, onPacienteCargado }: Props) => {
           ) : (
             estudios.map((e) => (
               <div key={e.id} className="ficha-paciente__estudio-card">
-                <p className="ficha-paciente__estudio-tipo">{e.tipoEstudio}</p>
-                <p className="ficha-paciente__estudio-meta">{formatearFecha(e.fecha.toISOString())} · {e.institucion}</p>
+                <p className="ficha-paciente__estudio-tipo">{e.tipo_estudio ?? 'Estudio'}</p>
+                <p className="ficha-paciente__estudio-meta">
+                  {[formatearFecha(e.fecha), e.institucion].filter(Boolean).join(' · ')}
+                </p>
               </div>
             ))
           )}
